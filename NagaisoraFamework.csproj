@@ -1,0 +1,537 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\EntityFramework.6.5.1\build\EntityFramework.props" Condition="Exists('..\packages\EntityFramework.6.5.1\build\EntityFramework.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{A38C6B17-C57B-4CD7-9371-48B63C5586B8}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>NagaisoraFamework</RootNamespace>
+    <AssemblyName>NagaisoraFamework</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <PreferNativeArm64>false</PreferNativeArm64>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PreferNativeArm64>false</PreferNativeArm64>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Unity|AnyCPU'">
+    <OutputPath>bin\Unity\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;UNITY</DefineConstants>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Optimize>true</Optimize>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.5.1\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.5.1\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="Melanchall.DryWetMidi, Version=8.0.0.0, Culture=neutral, PublicKeyToken=83d0ffad275219ad, processorArchitecture=MSIL">
+      <HintPath>..\packages\Melanchall.DryWetMidi.8.0.0\lib\net45\Melanchall.DryWetMidi.dll</HintPath>
+    </Reference>
+    <Reference Include="Mono.Data.Sqlite">
+      <HintPath>E:\UnityEidor\2022.3.37f1c1\Editor\Data\MonoBleedingEdge\lib\mono\unityjit-win32\Mono.Data.Sqlite.dll</HintPath>
+    </Reference>
+    <Reference Include="System">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System.ComponentModel.DataAnnotations">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System.Core">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System.Data.SQLite, Version=1.0.119.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
+      <HintPath>..\packages\Stub.System.Data.SQLite.Core.NetFramework.1.0.119.0\lib\net46\System.Data.SQLite.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Data.SQLite.EF6, Version=1.0.119.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Data.SQLite.EF6.1.0.119.0\lib\net46\System.Data.SQLite.EF6.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Data.SQLite.Linq, Version=1.0.119.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Data.SQLite.Linq.1.0.119.0\lib\net46\System.Data.SQLite.Linq.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Drawing">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System.Xml.Linq">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System.Data.DataSetExtensions">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.CSharp">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System.Data">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System.Net.Http">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System.Xml">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Unity.Cecil">
+      <HintPath>E:\UnityEidor\2022.3.37f1c1\Editor\Data\Managed\UnityEngine\Unity.Cecil.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Unity.Cecil.Mdb">
+      <HintPath>E:\UnityEidor\2022.3.37f1c1\Editor\Data\Managed\UnityEngine\Unity.Cecil.Mdb.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Unity.Cecil.Pdb">
+      <HintPath>E:\UnityEidor\2022.3.37f1c1\Editor\Data\Managed\UnityEngine\Unity.Cecil.Pdb.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine">
+      <HintPath>E:\UnityEidor\2022.3.37f1c1\Editor\Data\Managed\UnityEngine\UnityEngine.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.AccessibilityModule">
+      <HintPath>E:\UnityEidor\2022.3.37f1c1\Editor\Data\Managed\UnityEngine\UnityEngine.AccessibilityModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.AIModule">
+      <HintPath>E:\UnityEidor\2022.3.37f1c1\Editor\Data\Managed\UnityEngine\UnityEngine.AIModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.AndroidJNIModule">
+      <HintPath>E:\UnityEidor\2022.3.37f1c1\Editor\Data\Managed\UnityEngine\UnityEngine.AndroidJNIModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.AnimationModule">
+      <HintPath>E:\UnityEidor\2022.3.37f1c1\Editor\Data\Managed\UnityEngine\UnityEngine.AnimationModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.ARModule">
+      <HintPath>E:\UnityEidor\2022.3.37f1c1\Editor\Data\Managed\UnityEngine\UnityEngine.ARModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.AssetBundleModule">
+      <HintPath>E:\UnityEidor\2022.3.37f1c1\Editor\Data\Managed\UnityEngine\UnityEngine.AssetBundleModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.AudioModule">
+      <HintPath>E:\UnityEidor\2022.3.37f1c1\Editor\Data\Managed\UnityEngine\UnityEngine.AudioModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.ClothModule">
+      <HintPath>E:\UnityEidor\2022.3.37f1c1\Editor\Data\Managed\UnityEngine\UnityEngine.ClothModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.ClusterInputModule">
+      <HintPath>E:\UnityEidor\2022.3.37f1c1\Editor\Data\Managed\UnityEngine\UnityEngine.ClusterInputModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.ClusterRendererModule">
+      <HintPath>E:\UnityEidor\2022.3.37f1c1\Editor\Data\Managed\UnityEngine\UnityEngine.ClusterRendererModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.ContentLoadModule">
+      <HintPath>E:\UnityEidor\2022.3.37f1c1\Editor\Data\Managed\UnityEngine\UnityEngine.ContentLoadModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.CoreModule">
+      <HintPath>E:\UnityEidor\2022.3.37f1c1\Editor\Data\Managed\UnityEngine\UnityEngine.CoreModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.CrashReportingModule">
+      <HintPath>E:\UnityEidor\2022.3.37f1c1\Editor\Data\Managed\UnityEngine\UnityEngine.CrashReportingModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.DirectorModule">
+      <HintPath>E:\UnityEidor\2022.3.37f1c1\Editor\Data\Managed\UnityEngine\UnityEngine.DirectorModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.DSPGraphModule">
+      <HintPath>E:\UnityEidor\2022.3.37f1c1\Editor\Data\Managed\UnityEngine\UnityEngine.DSPGraphModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.GameCenterModule">
+      <HintPath>E:\UnityEidor\2022.3.37f1c1\Editor\Data\Managed\UnityEngine\UnityEngine.GameCenterModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.GIModule">
+      <HintPath>E:\UnityEidor\2022.3.37f1c1\Editor\Data\Managed\UnityEngine\UnityEngine.GIModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.GridModule">
+      <HintPath>E:\UnityEidor\2022.3.37f1c1\Editor\Data\Managed\UnityEngine\UnityEngine.GridModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.HotReloadModule">
+      <HintPath>E:\UnityEidor\2022.3.37f1c1\Editor\Data\Managed\UnityEngine\UnityEngine.HotReloadModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.ImageConversionModule">
+      <HintPath>E:\UnityEidor\2022.3.37f1c1\Editor\Data\Managed\UnityEngine\UnityEngine.ImageConversionModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.IMGUIModule">
+      <HintPath>E:\UnityEidor\2022.3.37f1c1\Editor\Data\Managed\UnityEngine\UnityEngine.IMGUIModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.InputLegacyModule">
+      <HintPath>E:\UnityEidor\2022.3.37f1c1\Editor\Data\Managed\UnityEngine\UnityEngine.InputLegacyModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.InputModule">
+      <HintPath>E:\UnityEidor\2022.3.37f1c1\Editor\Data\Managed\UnityEngine\UnityEngine.InputModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.JSONSerializeModule">
+      <HintPath>E:\UnityEidor\2022.3.37f1c1\Editor\Data\Managed\UnityEngine\UnityEngine.JSONSerializeModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.LocalizationModule">
+      <HintPath>E:\UnityEidor\2022.3.37f1c1\Editor\Data\Managed\UnityEngine\UnityEngine.LocalizationModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.NVIDIAModule">
+      <HintPath>E:\UnityEidor\2022.3.37f1c1\Editor\Data\Managed\UnityEngine\UnityEngine.NVIDIAModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.ParticleSystemModule">
+      <HintPath>E:\UnityEidor\2022.3.37f1c1\Editor\Data\Managed\UnityEngine\UnityEngine.ParticleSystemModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.PerformanceReportingModule">
+      <HintPath>E:\UnityEidor\2022.3.37f1c1\Editor\Data\Managed\UnityEngine\UnityEngine.PerformanceReportingModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.Physics2DModule">
+      <HintPath>E:\UnityEidor\2022.3.37f1c1\Editor\Data\Managed\UnityEngine\UnityEngine.Physics2DModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.PhysicsModule">
+      <HintPath>E:\UnityEidor\2022.3.37f1c1\Editor\Data\Managed\UnityEngine\UnityEngine.PhysicsModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.ProfilerModule">
+      <HintPath>E:\UnityEidor\2022.3.37f1c1\Editor\Data\Managed\UnityEngine\UnityEngine.ProfilerModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.PropertiesModule">
+      <HintPath>E:\UnityEidor\2022.3.37f1c1\Editor\Data\Managed\UnityEngine\UnityEngine.PropertiesModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.RuntimeInitializeOnLoadManagerInitializerModule">
+      <HintPath>E:\UnityEidor\2022.3.37f1c1\Editor\Data\Managed\UnityEngine\UnityEngine.RuntimeInitializeOnLoadManagerInitializerModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.ScreenCaptureModule">
+      <HintPath>E:\UnityEidor\2022.3.37f1c1\Editor\Data\Managed\UnityEngine\UnityEngine.ScreenCaptureModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.SharedInternalsModule">
+      <HintPath>E:\UnityEidor\2022.3.37f1c1\Editor\Data\Managed\UnityEngine\UnityEngine.SharedInternalsModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.SpriteMaskModule">
+      <HintPath>E:\UnityEidor\2022.3.37f1c1\Editor\Data\Managed\UnityEngine\UnityEngine.SpriteMaskModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.SpriteShapeModule">
+      <HintPath>E:\UnityEidor\2022.3.37f1c1\Editor\Data\Managed\UnityEngine\UnityEngine.SpriteShapeModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.StreamingModule">
+      <HintPath>E:\UnityEidor\2022.3.37f1c1\Editor\Data\Managed\UnityEngine\UnityEngine.StreamingModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.SubstanceModule">
+      <HintPath>E:\UnityEidor\2022.3.37f1c1\Editor\Data\Managed\UnityEngine\UnityEngine.SubstanceModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.SubsystemsModule">
+      <HintPath>E:\UnityEidor\2022.3.37f1c1\Editor\Data\Managed\UnityEngine\UnityEngine.SubsystemsModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.TerrainModule">
+      <HintPath>E:\UnityEidor\2022.3.37f1c1\Editor\Data\Managed\UnityEngine\UnityEngine.TerrainModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.TerrainPhysicsModule">
+      <HintPath>E:\UnityEidor\2022.3.37f1c1\Editor\Data\Managed\UnityEngine\UnityEngine.TerrainPhysicsModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.TextCoreFontEngineModule">
+      <HintPath>E:\UnityEidor\2022.3.37f1c1\Editor\Data\Managed\UnityEngine\UnityEngine.TextCoreFontEngineModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.TextCoreTextEngineModule">
+      <HintPath>E:\UnityEidor\2022.3.37f1c1\Editor\Data\Managed\UnityEngine\UnityEngine.TextCoreTextEngineModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.TextRenderingModule">
+      <HintPath>E:\UnityEidor\2022.3.37f1c1\Editor\Data\Managed\UnityEngine\UnityEngine.TextRenderingModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.TilemapModule">
+      <HintPath>E:\UnityEidor\2022.3.37f1c1\Editor\Data\Managed\UnityEngine\UnityEngine.TilemapModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.TLSModule">
+      <HintPath>E:\UnityEidor\2022.3.37f1c1\Editor\Data\Managed\UnityEngine\UnityEngine.TLSModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.UI">
+      <HintPath>..\..\..\..\..\Unity\Touhou Star Sky Dream\Library\ScriptAssemblies\UnityEngine.UI.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.UIElementsModule">
+      <HintPath>E:\UnityEidor\2022.3.37f1c1\Editor\Data\Managed\UnityEngine\UnityEngine.UIElementsModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.UIModule">
+      <HintPath>E:\UnityEidor\2022.3.37f1c1\Editor\Data\Managed\UnityEngine\UnityEngine.UIModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.UmbraModule">
+      <HintPath>E:\UnityEidor\2022.3.37f1c1\Editor\Data\Managed\UnityEngine\UnityEngine.UmbraModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.UnityAnalyticsCommonModule">
+      <HintPath>E:\UnityEidor\2022.3.37f1c1\Editor\Data\Managed\UnityEngine\UnityEngine.UnityAnalyticsCommonModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.UnityAnalyticsModule">
+      <HintPath>E:\UnityEidor\2022.3.37f1c1\Editor\Data\Managed\UnityEngine\UnityEngine.UnityAnalyticsModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.UnityConnectModule">
+      <HintPath>E:\UnityEidor\2022.3.37f1c1\Editor\Data\Managed\UnityEngine\UnityEngine.UnityConnectModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.UnityCurlModule">
+      <HintPath>E:\UnityEidor\2022.3.37f1c1\Editor\Data\Managed\UnityEngine\UnityEngine.UnityCurlModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.UnityTestProtocolModule">
+      <HintPath>E:\UnityEidor\2022.3.37f1c1\Editor\Data\Managed\UnityEngine\UnityEngine.UnityTestProtocolModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.UnityWebRequestAssetBundleModule">
+      <HintPath>E:\UnityEidor\2022.3.37f1c1\Editor\Data\Managed\UnityEngine\UnityEngine.UnityWebRequestAssetBundleModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.UnityWebRequestAudioModule">
+      <HintPath>E:\UnityEidor\2022.3.37f1c1\Editor\Data\Managed\UnityEngine\UnityEngine.UnityWebRequestAudioModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.UnityWebRequestModule">
+      <HintPath>E:\UnityEidor\2022.3.37f1c1\Editor\Data\Managed\UnityEngine\UnityEngine.UnityWebRequestModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.UnityWebRequestTextureModule">
+      <HintPath>E:\UnityEidor\2022.3.37f1c1\Editor\Data\Managed\UnityEngine\UnityEngine.UnityWebRequestTextureModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.UnityWebRequestWWWModule">
+      <HintPath>E:\UnityEidor\2022.3.37f1c1\Editor\Data\Managed\UnityEngine\UnityEngine.UnityWebRequestWWWModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.VehiclesModule">
+      <HintPath>E:\UnityEidor\2022.3.37f1c1\Editor\Data\Managed\UnityEngine\UnityEngine.VehiclesModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.VFXModule">
+      <HintPath>E:\UnityEidor\2022.3.37f1c1\Editor\Data\Managed\UnityEngine\UnityEngine.VFXModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.VideoModule">
+      <HintPath>E:\UnityEidor\2022.3.37f1c1\Editor\Data\Managed\UnityEngine\UnityEngine.VideoModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.VirtualTexturingModule">
+      <HintPath>E:\UnityEidor\2022.3.37f1c1\Editor\Data\Managed\UnityEngine\UnityEngine.VirtualTexturingModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.VRModule">
+      <HintPath>E:\UnityEidor\2022.3.37f1c1\Editor\Data\Managed\UnityEngine\UnityEngine.VRModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.WindModule">
+      <HintPath>E:\UnityEidor\2022.3.37f1c1\Editor\Data\Managed\UnityEngine\UnityEngine.WindModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.XRModule">
+      <HintPath>E:\UnityEidor\2022.3.37f1c1\Editor\Data\Managed\UnityEngine\UnityEngine.XRModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="CoreSystem\AssemblySystem.cs" />
+    <Compile Include="CoreSystem\BGMPackData.cs" />
+    <Compile Include="CoreSystem\BitArrayBool.cs" />
+    <Compile Include="CoreSystem\BlendManager.cs" />
+    <Compile Include="CoreSystem\Componment\ClockSystem.cs" />
+    <Compile Include="CoreSystem\Componment\CoroutineManager.cs" />
+    <Compile Include="CoreSystem\Componment\EventTriggerListener.cs" />
+    <Compile Include="CoreSystem\Componment\InputModule.cs" />
+    <Compile Include="CoreSystem\Componment\SystemControler.cs" />
+    <Compile Include="CoreSystem\Componment\SystemStart.cs" />
+    <Compile Include="CoreSystem\DataPathDefine.cs" />
+    <Compile Include="CoreSystem\RenderTextureHelper.cs" />
+    <Compile Include="CoreSystem\SFCSystem.cs" />
+    <Compile Include="GenericComponment\TimeLineControler.cs" />
+    <Compile Include="CoreSystem\SerializationDictionary.cs" />
+    <Compile Include="CoreSystem\TimeControler.cs" />
+    <Compile Include="CoreSystem\TimeLineSystem.cs" />
+    <Compile Include="CoreSystem\ConfigData.cs" />
+    <Compile Include="CoreSystem\Famework Common.cs" />
+    <Compile Include="CoreSystem\FlagSystem.cs" />
+    <Compile Include="CoreSystem\KeyConfig.cs" />
+    <Compile Include="CoreSystem\MainSystem.cs" />
+    <Compile Include="CoreSystem\ManagementObject.cs" />
+    <Compile Include="CoreSystem\MemoryMappedViewAccessorStream.cs" />
+    <Compile Include="CoreSystem\PlayerData.cs" />
+    <Compile Include="CoreSystem\ProgramSystem.cs" />
+    <Compile Include="CoreSystem\ReplayData.cs" />
+    <Compile Include="CoreSystem\ScoreData.cs" />
+    <Compile Include="CoreSystem\SerializeSystem.cs" />
+    <Compile Include="CoreSystem\SQLite.cs" />
+    <Compile Include="CoreSystem\ThreadManager.cs" />
+    <Compile Include="CoreSystem\Timer.cs" />
+    <Compile Include="CoreSystem\WindowsAPI.cs" />
+    <Compile Include="DataSystem\Animation\AnimationDataSystem.cs" />
+    <Compile Include="DataSystem\ConfigFileSystem.cs" />
+    <Compile Include="DataSystem\Meida\BGMPackDataCollection.cs" />
+    <Compile Include="DataSystem\Meida\MediaPack.cs" />
+    <Compile Include="DataSystem\PlayerDataSystem.cs" />
+    <Compile Include="DataSystem\ReplayDataSystem.cs" />
+    <Compile Include="DataSystem\ScoreDataSystem.cs" />
+    <Compile Include="DiskSystem\DiskStream.cs" />
+    <Compile Include="DiskSystem\DiskSystemObj.cs" />
+    <Compile Include="DiskSystem\IDiskInfo.cs" />
+    <Compile Include="FileSystem\FileHelper.cs" />
+    <Compile Include="FileSystem\FileSystem.cs" />
+    <Compile Include="FileSystem\Partition.cs" />
+    <Compile Include="FileSystem\RTA.cs" />
+    <Compile Include="GenericComponment\BackGroundLoop.cs" />
+    <Compile Include="GenericComponment\BackGroundSetData.cs" />
+    <Compile Include="GenericComponment\CameraMove.cs" />
+    <Compile Include="GenericComponment\DontDestory.cs" />
+    <Compile Include="GenericComponment\LoadingEffect.cs" />
+    <Compile Include="GenericComponment\ObjectRotate.cs" />
+    <Compile Include="GenericComponment\ObjectRotateFixed.cs" />
+    <Compile Include="GenericComponment\PositionofSize.cs" />
+    <Compile Include="GenericComponment\RawImageUV.cs" />
+    <Compile Include="GenericComponment\RotatePoint.cs" />
+    <Compile Include="GenericComponment\RunTimeView.cs" />
+    <Compile Include="GenericComponment\TimerControler.cs" />
+    <Compile Include="GenericFunctions\CommMonoScriptObject.cs" />
+    <Compile Include="GenericFunctions\Cryptography.cs" />
+    <Compile Include="GenericFunctions\FixedLengthQueue.cs" />
+    <Compile Include="GenericFunctions\MapDictionary.cs" />
+    <Compile Include="GenericFunctions\MemoryManagerSystem.cs" />
+    <Compile Include="GenericFunctions\NRtype.cs" />
+    <Compile Include="GenericFunctions\PoolManager.cs" />
+    <Compile Include="GenericFunctions\RASMActuator.cs" />
+    <Compile Include="GenericFunctions\Script Compiler.cs" />
+    <Compile Include="GenericFunctions\Watch.cs" />
+    <Compile Include="MiediaSystem\AudioControl.cs" />
+    <Compile Include="MiediaSystem\BGMControl.cs" />
+    <Compile Include="MiediaSystem\DisplayComponment\MidiPianoControl.cs" />
+    <Compile Include="MiediaSystem\DisplayComponment\MidiPianoForm.cs" />
+    <Compile Include="MiediaSystem\DisplayComponment\MidiPianoFormControl.cs" />
+    <Compile Include="MiediaSystem\DisplayComponment\MidiPianoFormShow.cs" />
+    <Compile Include="MiediaSystem\MidiControl.cs" />
+    <Compile Include="MiediaSystem\SEManager.cs" />
+    <Compile Include="NetworkSystem\NetworkClient.cs" />
+    <Compile Include="NetworkSystem\NetworkServer.cs" />
+    <Compile Include="NetworkSystem\NetworkSocket.cs" />
+    <Compile Include="NetworkSystem\Protocol.cs" />
+    <Compile Include="PluginSystem\IPlugin.cs" />
+    <Compile Include="PluginSystem\PluginInfo.cs" />
+    <Compile Include="PluginSystem\Plugins.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="STGSystem\DataComponment\STGSystemData.cs" />
+    <Compile Include="STGSystem\Functional Componments\ReplaySystem.cs" />
+    <Compile Include="STGSystem\Functional Componments\STGManager.cs" />
+    <Compile Include="STGSystem\Generic Componment\BendLaserMesh.cs" />
+    <Compile Include="STGSystem\Generic Componment\ECLControler.cs" />
+    <Compile Include="STGSystem\Generic Componment\STGComponment.cs" />
+    <Compile Include="STGSystem\Generic Componment\STGManagerTimeLineControler.cs" />
+    <Compile Include="STGSystem\OverrideComponment\BulletControl.cs" />
+    <Compile Include="STGSystem\OverrideComponment\BulletMontage.cs" />
+    <Compile Include="STGSystem\OverrideComponment\EffectControl.cs" />
+    <Compile Include="STGSystem\OverrideComponment\EnemyBulletControl.cs" />
+    <Compile Include="STGSystem\OverrideComponment\EnemyControl.cs" />
+    <Compile Include="STGSystem\OverrideComponment\LaserControl.cs" />
+    <Compile Include="STGSystem\OverrideComponment\PlayerBulletControl.cs" />
+    <Compile Include="STGSystem\OverrideComponment\PlayerControl.cs" />
+    <Compile Include="StorySytem\StoryBalloon.cs" />
+    <Compile Include="StorySytem\StoryControl.cs" />
+    <Compile Include="StorySytem\StoryData.cs" />
+    <Compile Include="StorySytem\StoryFaceBox.cs" />
+    <Compile Include="StorySytem\StoryFaceControl.cs" />
+    <Compile Include="StorySytem\StoryFaceInfo.cs" />
+    <Compile Include="StorySytem\StoryTextViewer.cs" />
+    <Compile Include="SystemDemo.cs" />
+    <Compile Include="UISystem\ActionDataViwer.cs" />
+    <Compile Include="UISystem\CanvasControl.cs" />
+    <Compile Include="UISystem\ColorImageButton.cs" />
+    <Compile Include="UISystem\ColorSettingForm.cs" />
+    <Compile Include="UISystem\Dock\ImageDrap.cs" />
+    <Compile Include="UISystem\Form.cs" />
+    <Compile Include="UISystem\MessageBox.cs" />
+    <Compile Include="UISystem\TextSlider.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="Melanchall_DryWetMidi_Native64.dylib">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Melanchall_DryWetMidi_Native32.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Melanchall_DryWetMidi_Native64.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>这台计算机上缺少此项目引用的 NuGet 程序包。使用“NuGet 程序包还原”可下载这些程序包。有关更多信息，请参见 http://go.microsoft.com/fwlink/?LinkID=322105。缺少的文件是 {0}。</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Stub.System.Data.SQLite.Core.NetFramework.1.0.119.0\build\net46\Stub.System.Data.SQLite.Core.NetFramework.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Stub.System.Data.SQLite.Core.NetFramework.1.0.119.0\build\net46\Stub.System.Data.SQLite.Core.NetFramework.targets'))" />
+    <Error Condition="!Exists('..\packages\EntityFramework.6.5.1\build\EntityFramework.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.5.1\build\EntityFramework.props'))" />
+    <Error Condition="!Exists('..\packages\EntityFramework.6.5.1\build\EntityFramework.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.5.1\build\EntityFramework.targets'))" />
+    <Error Condition="!Exists('..\packages\Melanchall.DryWetMidi.8.0.0\build\Melanchall.DryWetMidi.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Melanchall.DryWetMidi.8.0.0\build\Melanchall.DryWetMidi.targets'))" />
+  </Target>
+  <Import Project="..\packages\Stub.System.Data.SQLite.Core.NetFramework.1.0.119.0\build\net46\Stub.System.Data.SQLite.Core.NetFramework.targets" Condition="Exists('..\packages\Stub.System.Data.SQLite.Core.NetFramework.1.0.119.0\build\net46\Stub.System.Data.SQLite.Core.NetFramework.targets')" />
+  <Import Project="..\packages\EntityFramework.6.5.1\build\EntityFramework.targets" Condition="Exists('..\packages\EntityFramework.6.5.1\build\EntityFramework.targets')" />
+  <Import Project="..\packages\Melanchall.DryWetMidi.8.0.0\build\Melanchall.DryWetMidi.targets" Condition="Exists('..\packages\Melanchall.DryWetMidi.8.0.0\build\Melanchall.DryWetMidi.targets')" />
+</Project>
