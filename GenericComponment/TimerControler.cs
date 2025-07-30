@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace NagaisoraFamework
+namespace NagaisoraFramework
 {
 	[Serializable]
 	public class TimerControler<T> : CommMonoScriptObject

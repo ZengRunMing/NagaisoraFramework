@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
 
-namespace NagaisoraFamework
+namespace NagaisoraFramework
 {
 	using Cryptography;
 	using NetworkSystem;

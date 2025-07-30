@@ -5,7 +5,7 @@ using System.IO;
 using UnityEngine;
 
 
-namespace NagaisoraFamework
+namespace NagaisoraFramework
 {
 	using Miedia;
 	using STGSystem;

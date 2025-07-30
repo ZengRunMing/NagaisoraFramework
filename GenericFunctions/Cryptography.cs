@@ -4,7 +4,7 @@ using System.IO;
 using System;
 using System.Collections.Generic;
 
-namespace NagaisoraFamework.Cryptography
+namespace NagaisoraFramework.Cryptography
 {
 	public struct EnigmaObject
 	{

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace NagaisoraFamework
+namespace NagaisoraFramework
 {
 	[Serializable]
 	public class StoryFaceInfo

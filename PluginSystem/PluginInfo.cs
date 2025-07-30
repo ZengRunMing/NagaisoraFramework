@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Drawing;
 
-namespace NagaisoraFamework.Plugins
+namespace NagaisoraFramework.Plugins
 {
 	public class PluginInfo
 	{

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace NagaisoraFamework.Miedia
+namespace NagaisoraFramework.Miedia
 {
 	using Miedia;
 	using System;

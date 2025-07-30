@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace NagaisoraFamework
+namespace NagaisoraFramework
 {
 	public class FixedLengthQueue<T> : Queue<T>
 	{

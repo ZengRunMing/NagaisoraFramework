@@ -4,7 +4,7 @@ using System.Text;
 
 using UnityEngine;
 
-namespace NagaisoraFamework
+namespace NagaisoraFramework
 {
 	[Serializable]
 	public struct KeyConfig

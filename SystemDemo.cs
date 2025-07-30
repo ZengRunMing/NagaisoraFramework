@@ -16,14 +16,14 @@ using Melanchall.DryWetMidi.Common;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace NagaisoraFamework
+namespace NagaisoraFramework
 {
 	using Miedia;
 	using DataFileSystem;
 	using Underlyingsystem;
 
 	using static MainSystem;
-	using NagaisoraFamework.NetworkSystem;
+	using NagaisoraFramework.NetworkSystem;
 
 	public class NagaisoraSystemDemo : CommMonoScriptObject
 	{

@@ -2,7 +2,7 @@
 
 using System.Runtime.Serialization.Formatters.Binary;
 
-namespace NagaisoraFamework
+namespace NagaisoraFramework
 {
 	public static class SerializeSystem
 	{

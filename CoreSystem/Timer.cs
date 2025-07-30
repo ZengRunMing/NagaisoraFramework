@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace NagaisoraFamework
+namespace NagaisoraFramework
 {
 	public class Timer<T> : TimeControler
 	{

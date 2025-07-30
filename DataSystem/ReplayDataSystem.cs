@@ -2,7 +2,7 @@
 using System.Text;
 using System.IO;
 
-namespace NagaisoraFamework.DataFileSystem
+namespace NagaisoraFramework.DataFileSystem
 {
 	using static MainSystem;
 

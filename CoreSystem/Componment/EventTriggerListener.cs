@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-namespace NagaisoraFamework
+namespace NagaisoraFramework
 {
 	public class EventTriggerListener : EventTrigger
 	{

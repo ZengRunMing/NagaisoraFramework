@@ -6,7 +6,7 @@ using UnityEngine;
 using Melanchall.DryWetMidi.Interaction;
 using Melanchall.DryWetMidi.Multimedia;
 
-namespace NagaisoraFamework
+namespace NagaisoraFramework
 {
     public class MidiPianoFormShow : CommMonoScriptObject
     {

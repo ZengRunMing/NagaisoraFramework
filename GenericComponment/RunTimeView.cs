@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace NagaisoraFamework
+namespace NagaisoraFramework
 {
 	using static MainSystem;
 

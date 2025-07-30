@@ -6,12 +6,12 @@ using System.Runtime.InteropServices;
 // 有关程序集的一般信息由以下
 // 控制。更改这些特性值可修改
 // 与程序集关联的信息。
-[assembly: AssemblyTitle("NagaisoraFamework")]
+[assembly: AssemblyTitle("NagaisoraFramework")]
 [assembly: AssemblyDescription("长空架构(UnityEngine Edition)")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Makira Automation E.E.S.")]
-[assembly: AssemblyProduct("NagaisoraFamework")]
-[assembly: AssemblyCopyright("Copyright © Makira Automation E.E.S. 2019~2025")]
+[assembly: AssemblyCompany("Makira Automation E.E.T.")]
+[assembly: AssemblyProduct("NagaisoraFramework")]
+[assembly: AssemblyCopyright("Copyright © Makira Automation E.E.T. All Right Reserved")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

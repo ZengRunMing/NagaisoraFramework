@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using UnityEngine;
 
-namespace NagaisoraFamework
+namespace NagaisoraFramework
 {
 	public class SystemControler : CommMonoScriptObject
 	{

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace NagaisoraFamework
+namespace NagaisoraFramework
 {
 	[Serializable]
 	public class ManagementObject

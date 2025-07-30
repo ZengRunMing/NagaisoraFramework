@@ -1,4 +1,4 @@
-using NagaisoraFamework;
+using NagaisoraFramework;
 
 public class DontDestory : CommMonoScriptObject
 {

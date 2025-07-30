@@ -15,7 +15,7 @@ using System.Threading;
  * 保留基本的著作权利
 */
 
-namespace NagaisoraFamework.Underlyingsystem
+namespace NagaisoraFramework.Underlyingsystem
 {
 	using static WindowsAPI;
 
@@ -50,7 +50,7 @@ namespace NagaisoraFamework.Underlyingsystem
 
 		public override string ToString()
 		{
-			return $"{Name.TrimStart(new char[] { '\\', '.' }),-15} {Model,-35} {InterfaceType,-20} ({Size / 1024 / 1024 / 1024,-5} GB)";
+			return $"{Name.TrimStart(new char[] { '\\', '.' }),-15} {Model,-35} {InterfaceType,-20} ({Size / 1024f / 1024f / 1024f,-5} GB)";
 		}
 	}
 

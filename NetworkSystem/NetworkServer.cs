@@ -4,7 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 
-namespace NagaisoraFamework.NetworkSystem
+namespace NagaisoraFramework.NetworkSystem
 {
 
 	public class NetworkServer : NetworkSocket

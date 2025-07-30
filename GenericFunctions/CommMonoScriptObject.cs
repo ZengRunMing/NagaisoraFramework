@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace NagaisoraFamework
+namespace NagaisoraFramework
 {
 	using Cryptography;
 

@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.UIElements;
 
-namespace NagaisoraFamework
+namespace NagaisoraFramework
 {
     public class StoryFaceControl : CommMonoScriptObject
 	{

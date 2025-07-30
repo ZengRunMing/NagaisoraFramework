@@ -4,7 +4,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-namespace NagaisoraFamework
+namespace NagaisoraFramework
 {
 	using static MainSystem;
 

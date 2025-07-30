@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace NagaisoraFamework.Plugins
+namespace NagaisoraFramework.Plugins
 {
 	public interface IPlugin : IDisposable
 	{

@@ -2,7 +2,7 @@
 using System.IO;
 using System.Text;
 
-namespace NagaisoraFamework
+namespace NagaisoraFramework
 {
 	using Cryptography;
 	using System.Linq;

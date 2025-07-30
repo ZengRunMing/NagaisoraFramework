@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace NagaisoraFamework.STGSystem
+namespace NagaisoraFramework.STGSystem
 {
 	using static MainSystem;
 	using static UnityEngine.GraphicsBuffer;

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 
-namespace NagaisoraFamework
+namespace NagaisoraFramework
 {
 	public class ClockSystem : CommMonoScriptObject
 	{

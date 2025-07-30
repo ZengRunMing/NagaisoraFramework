@@ -2,7 +2,7 @@
 using System.Net;
 using System.Net.Sockets;
 
-namespace NagaisoraFamework.NetworkSystem
+namespace NagaisoraFramework.NetworkSystem
 {
 	public enum NetWorkType
 	{

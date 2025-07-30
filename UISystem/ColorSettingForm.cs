@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System;
-using NagaisoraFamework;
+using NagaisoraFramework;
 
-namespace NagaisoraFamework
+namespace NagaisoraFramework
 {
 	public class ColorSettingForm : CommMonoScriptObject
 	{

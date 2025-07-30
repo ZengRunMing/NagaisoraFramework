@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
 
-namespace NagaisoraFamework.Miedia
+namespace NagaisoraFramework.Miedia
 {
 	public class SEManager : CommMonoScriptObject
 	{

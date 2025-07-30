@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reflection;
 
-namespace NagaisoraFamework
+namespace NagaisoraFramework
 {
 	public class AssemblySystem
 	{

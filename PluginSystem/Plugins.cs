@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 
-namespace NagaisoraFamework.Plugins
+namespace NagaisoraFramework.Plugins
 {
 	public class Plugins
 	{

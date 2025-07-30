@@ -1,6 +1,6 @@
 using UnityEngine;
 
-using NagaisoraFamework;
+using NagaisoraFramework;
 
 public class BackGroundLoop : CommMonoScriptObject
 {

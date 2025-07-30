@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace NagaisoraFamework
+namespace NagaisoraFramework
 {
     public class StoryFaceBox : CommMonoScriptObject
     {

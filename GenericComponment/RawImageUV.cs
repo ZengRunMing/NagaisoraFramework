@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-using NagaisoraFamework;
+using NagaisoraFramework;
 
 public class RawImageUV : CommMonoScriptObject
 {

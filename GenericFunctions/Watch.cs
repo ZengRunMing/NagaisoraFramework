@@ -1,7 +1,7 @@
 using System.Diagnostics;
 using System.Threading;
 
-namespace NagaisoraFamework
+namespace NagaisoraFramework
 {
 	public class Watch
 	{

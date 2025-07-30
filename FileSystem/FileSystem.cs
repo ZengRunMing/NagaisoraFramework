@@ -13,7 +13,7 @@ using System.Linq;
  * 保留基本的著作权利
 */
 
-namespace NagaisoraFamework
+namespace NagaisoraFramework
 {
 
 	public interface TRFileSystemObj : DiskSystemObj

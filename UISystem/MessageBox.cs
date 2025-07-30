@@ -4,7 +4,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace NagaisoraFamework
+namespace NagaisoraFramework
 {
 	public class MessageBox : CommMonoScriptObject
 	{

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace NagaisoraFamework
+namespace NagaisoraFramework
 {
 	public class SerializationDictionary<TKey, TValue> : ISerializationCallbackReceiver
 	{

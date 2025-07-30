@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Collections.Generic;
 
-namespace NagaisoraFamework
+namespace NagaisoraFramework
 {
 	[Serializable]
 	public class TimeLineSystem<T> : TimeControler

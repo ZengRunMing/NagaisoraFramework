@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using UnityEngine.UI;
 
-namespace NagaisoraFamework
+namespace NagaisoraFramework
 {
 	public class ActionDataViwer : CommMonoScriptObject
 	{

@@ -7,7 +7,7 @@ using UnityEngine;
 using System.Linq;
 using UnityEngine.UI;
 
-namespace NagaisoraFamework.STGSystem
+namespace NagaisoraFramework.STGSystem
 {
 	using static MainSystem;
 
@@ -22,6 +22,8 @@ namespace NagaisoraFamework.STGSystem
 		public BlendManager BlendManager;
 
 		public PlayerControl Player;
+
+		public ECLControler ECLControler;
 
 		public RawImage BackgroundImage;
 
@@ -387,6 +389,11 @@ namespace NagaisoraFamework.STGSystem
 
 		public void Awake()
 		{
+			ECLControler = new ECLControler()
+			{
+				Object = this
+			};
+
 			ConditionFlags = new Dictionary<string, ISTGManagerFlag>();
 			RemovedConditionFlags = new List<ISTGManagerFlag>();
 			RunningFlags = new Dictionary<string, ISTGManagerFlag>();
@@ -495,6 +502,8 @@ namespace NagaisoraFamework.STGSystem
 			FlagCheck();
 
 			CallKeyDown(DownKey);
+
+			ECLControler?.OnUpdate();
 
 			OnUpdate?.Invoke();
 
@@ -642,12 +651,26 @@ namespace NagaisoraFamework.STGSystem
 
 		public virtual void Run()
 		{
+			if (IsRunning)
+			{
+				return;
+			}
+
 			IsRunning = true;
+
+			ECLControler.Run();
 		}
 
 		public virtual void Stop()
 		{
+			if (!IsRunning)
+			{
+				return;
+			}
+
 			IsRunning = false;
+
+			ECLControler.Stop();
 		}
 
 		public virtual void AddFlags(params ISTGManagerFlag[] flags)

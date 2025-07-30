@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace NagaisoraFamework
+namespace NagaisoraFramework
 {
 	using STGSystem;
 

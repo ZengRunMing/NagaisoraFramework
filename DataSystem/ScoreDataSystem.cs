@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using UnityEngine;
 
-namespace NagaisoraFamework.DataFileSystem
+namespace NagaisoraFramework.DataFileSystem
 {
 	using static MainSystem;
 

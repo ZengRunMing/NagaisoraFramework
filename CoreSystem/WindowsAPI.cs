@@ -2,7 +2,7 @@
 using System.Runtime.InteropServices;
 using System;
 
-namespace NagaisoraFamework
+namespace NagaisoraFramework
 {
 	public enum AccessFlag : uint
 	{

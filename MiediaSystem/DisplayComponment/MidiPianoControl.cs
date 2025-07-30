@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 using Melanchall.DryWetMidi.Interaction;
 
-namespace NagaisoraFamework.Miedia
+namespace NagaisoraFramework.Miedia
 {
 	public enum DisplayMode
 	{

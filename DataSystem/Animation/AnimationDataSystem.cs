@@ -7,7 +7,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 
 
-namespace NagaisoraFamework
+namespace NagaisoraFramework
 {
 	//动画序列化系统
 	//因为特殊原因暂时不可使用

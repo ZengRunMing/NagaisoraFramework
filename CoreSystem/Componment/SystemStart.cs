@@ -3,7 +3,7 @@ using System.IO;
 
 using UnityEngine;
 
-namespace NagaisoraFamework
+namespace NagaisoraFramework
 {
 	using Miedia;
 	using DataFileSystem;
@@ -24,7 +24,7 @@ namespace NagaisoraFamework
 
 		public long MaxBullet;
 
-		public void Awake()
+		public virtual void Awake()
 		{
 			MainSystem.Name = Name;
 			

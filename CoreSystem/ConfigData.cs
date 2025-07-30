@@ -4,7 +4,7 @@ using System.Text;
 using System.Linq;
 using System;
 
-namespace NagaisoraFamework
+namespace NagaisoraFramework
 {
 	[Serializable]
 	public struct ConfigData

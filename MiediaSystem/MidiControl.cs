@@ -7,11 +7,12 @@ using Melanchall.DryWetMidi.Multimedia;
 using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Interaction;
 
-namespace NagaisoraFamework.Miedia
+namespace NagaisoraFramework.Miedia
 {
 	public class MidiControl : CommMonoScriptObject
 	{
-		//public int OutputDeviceID = 0;
+		public int OutputDeviceID = 0;
+		public string OutputDeviceName = "";
 
 		public MidiFile MidiFile;
 		public Playback Playback;
@@ -30,7 +31,7 @@ namespace NagaisoraFamework.Miedia
 				return TimeSpan.Zero;
 			}
 
-			return Playback.GetDuration(type) as MetricTimeSpan;
+			return Playback.GetCurrentTime(type) as MetricTimeSpan;
 		}
 
 		public TimeSpan DurationTime(TimeSpanType type)
@@ -95,7 +96,7 @@ namespace NagaisoraFamework.Miedia
 		public void SetOutputDevice(int DeviceID)
 		{
 			OutputDevice?.Dispose();
-
+			OutputDeviceID = DeviceID;
 			if (DeviceID < 0)
 			{
 				OutputDevice = null;
@@ -108,7 +109,7 @@ namespace NagaisoraFamework.Miedia
 		public void SetOutputDevice(string name)
 		{
 			OutputDevice?.Dispose();
-
+			OutputDeviceName = name;
 			if (name == "")
 			{
 				OutputDevice = null;
@@ -187,7 +188,7 @@ namespace NagaisoraFamework.Miedia
 			ReadingSettings readingSettings = new ReadingSettings()
 			{
 				InvalidChannelEventParameterValuePolicy = InvalidChannelEventParameterValuePolicy.SnapToLimits,
-				TextEncoding = Encoding.GetEncoding("Shift-JIS"),
+				TextEncoding = Encoding.UTF8,
 			};
 
 			MemoryStream memory = new MemoryStream(Stream.ToArray());

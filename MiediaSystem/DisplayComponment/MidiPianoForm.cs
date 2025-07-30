@@ -4,7 +4,7 @@ using Melanchall.DryWetMidi.Interaction;
 using System.Collections.Generic;
 using Melanchall.DryWetMidi.Multimedia;
 
-namespace NagaisoraFamework.Miedia
+namespace NagaisoraFramework.Miedia
 {
 	public class MidiPianoForm : CommMonoScriptObject
 	{

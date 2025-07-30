@@ -2,7 +2,7 @@
 
 using UnityEngine;
 
-namespace NagaisoraFamework
+namespace NagaisoraFramework
 {
 	public class CoroutineManager : CommMonoScriptObject
 	{

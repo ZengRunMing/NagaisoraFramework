@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace NagaisoraFamework.STGSystem
+namespace NagaisoraFramework.STGSystem
 {
 	//Effect控制系统
 	public class EffectControl : STGComponment

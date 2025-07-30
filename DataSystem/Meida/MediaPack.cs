@@ -7,7 +7,7 @@ using AOT;
 
 using UnityEngine;
 
-namespace NagaisoraFamework.Miedia
+namespace NagaisoraFramework.Miedia
 {
     using static MainSystem;
 
@@ -161,7 +161,7 @@ namespace NagaisoraFamework.Miedia
                 BR.ReadString();
 				ECM[i] = BR.ReadString();
 
-                wavBGMDatas[i] = new NagaisoraFamework.WaveBGMData()
+                wavBGMDatas[i] = new NagaisoraFramework.WaveBGMData()
                 {
                     Name = ECM[i],
                     Text = BR.ReadString(),

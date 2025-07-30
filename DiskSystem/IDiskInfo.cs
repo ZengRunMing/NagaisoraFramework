@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using System.Linq;
 
-namespace NagaisoraFamework
+namespace NagaisoraFramework
 {
 	public abstract class IDiskInfo
 	{

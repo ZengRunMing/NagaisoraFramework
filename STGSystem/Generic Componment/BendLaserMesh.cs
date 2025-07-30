@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace NagaisoraFamework.STGSystem
+namespace NagaisoraFramework.STGSystem
 {
 	public class BendLaserMesh : CommMonoScriptObject
 	{

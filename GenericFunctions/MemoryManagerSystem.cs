@@ -2,7 +2,7 @@
 using System.IO;
 using System;
 
-namespace NagaisoraFamework.VirtualMemorySystem
+namespace NagaisoraFramework.VirtualMemorySystem
 {
 	public class MemoryManagerSystem
 	{

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace NagaisoraFamework
+namespace NagaisoraFramework
 {
 	public enum BlendMode
 	{

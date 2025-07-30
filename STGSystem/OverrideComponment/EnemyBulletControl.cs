@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace NagaisoraFamework.STGSystem
+namespace NagaisoraFramework.STGSystem
 {
 	using static MainSystem;
 
@@ -89,7 +89,7 @@ namespace NagaisoraFamework.STGSystem
 
 			if (GrazeCheck(Target))                                          //判断指定对象(玩家)是否在Graze判定范围内
 			{
-				if (ThisTime % 2 == 0)										//每间隔一次更新执行一次
+				if (ThisTime % 2 == 0)                                      //每间隔一次更新执行一次
 				{
 					SEManager.PlaySE("Graze");								//调用播放音效方法
 				}

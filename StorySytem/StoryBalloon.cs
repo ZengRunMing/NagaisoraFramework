@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace NagaisoraFamework
+namespace NagaisoraFramework
 {
     public class StoryBalloon : CommMonoScriptObject
     {

@@ -12,7 +12,7 @@ using System;
 using System.Reflection;
 using UnityEngine;
 
-namespace NagaisoraFamework
+namespace NagaisoraFramework
 {
 	public static class ScriptCompiler
 	{

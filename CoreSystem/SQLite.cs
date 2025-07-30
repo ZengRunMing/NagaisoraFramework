@@ -6,7 +6,7 @@ using Mono.Data.Sqlite;
 using System.Data.SQLite;
 #endif
 
-namespace NagaisoraFamework
+namespace NagaisoraFramework
 {
 	public class SQLite
 	{

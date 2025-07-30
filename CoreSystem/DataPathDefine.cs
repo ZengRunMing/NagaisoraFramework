@@ -1,4 +1,4 @@
-﻿namespace NagaisoraFamework
+﻿namespace NagaisoraFramework
 {
 	public static class DataPathDefine
 	{

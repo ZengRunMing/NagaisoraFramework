@@ -3,7 +3,7 @@ using System.IO;
 
 using UnityEngine;
 
-namespace NagaisoraFamework
+namespace NagaisoraFramework
 {
 	public interface IBGMPackData
 	{

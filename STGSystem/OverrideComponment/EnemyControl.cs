@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace NagaisoraFamework.STGSystem
+namespace NagaisoraFramework.STGSystem
 {
 	public class EnemyControl : STGComponment
 	{
@@ -13,8 +13,6 @@ namespace NagaisoraFamework.STGSystem
 		public bool Delete_Effect = false;
 
 		public Animator Animator;
-
-		public float LastMoveVectorX;
 
 		public override void Init()
 		{
@@ -78,7 +76,8 @@ namespace NagaisoraFamework.STGSystem
 			{
 				return;
 			}
-			Animator.SetBool("Moveing", false);
+			Animator.SetBool("MoveingL", false);
+			Animator.SetBool("MoveingR", false);
 		}
 
 		public virtual void SetAnimatorMoveLeft()
@@ -87,8 +86,8 @@ namespace NagaisoraFamework.STGSystem
 			{
 				return;
 			}
-			Animator.SetBool("MoveR", false);
-			Animator.SetBool("Moveing", true);
+			Animator.SetBool("MoveingL", true);
+			Animator.SetBool("MoveingR", false);
 		}
 
 		public virtual void SetAnimatorMoveRight()
@@ -97,8 +96,8 @@ namespace NagaisoraFamework.STGSystem
 			{
 				return;
 			}
-			Animator.SetBool("MoveR", true);
-			Animator.SetBool("Moveing", true);
+			Animator.SetBool("MoveingL", false);
+			Animator.SetBool("MoveingR", true);
 		}
 
 		public override void BaseDelete()

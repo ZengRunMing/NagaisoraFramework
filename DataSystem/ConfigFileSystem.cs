@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using System.Text;
 
-namespace NagaisoraFamework.DataFileSystem
+namespace NagaisoraFramework.DataFileSystem
 {
 	public class ConfigFileSystem
 	{

@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace NagaisoraFamework.Miedia
+namespace NagaisoraFramework.Miedia
 {
 	public class AudioControl : CommMonoScriptObject
 	{

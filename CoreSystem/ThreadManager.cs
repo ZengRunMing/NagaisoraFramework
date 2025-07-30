@@ -2,7 +2,7 @@
 using System.Threading;
 using System;
 
-namespace NagaisoraFamework
+namespace NagaisoraFramework
 {
 	public class ThreadManager
 	{

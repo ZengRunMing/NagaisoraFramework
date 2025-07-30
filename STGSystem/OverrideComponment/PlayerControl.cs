@@ -1,14 +1,7 @@
-﻿using System;
-using System.Linq;
+﻿using UnityEngine;
 
-using UnityEngine;
-
-namespace NagaisoraFamework.STGSystem
+namespace NagaisoraFramework.STGSystem
 {
-	using DataFileSystem;
-
-	using static MainSystem;
-
 	public class PlayerControl : STGComponment
 	{
 		[Header("系统引用 (PlayerControl)")]
@@ -63,8 +56,8 @@ namespace NagaisoraFamework.STGSystem
 		{
 			base.OnUpdate();
 
-			SlowEffectL.transform.Rotate(new Vector3(0, 0, RD) * Time.fixedDeltaTime, Space.Self);
-			SlowEffectR.transform.Rotate(new Vector3(0, 0, -RD) * Time.fixedDeltaTime, Space.Self);
+			SlowEffectL.transform.Rotate(new Vector3(0, 0, RD), Space.Self);
+			SlowEffectR.transform.Rotate(new Vector3(0, 0, -RD), Space.Self);
 
 			Velocity = HighSpeed;
 
@@ -172,20 +165,20 @@ namespace NagaisoraFamework.STGSystem
 
 			if (x < 0)
 			{
-				Animator.SetBool("LI", true);
+				Animator.SetBool("MoveingL", true);
 			}
 			else
 			{
-				Animator.SetBool("LI", false);
+				Animator.SetBool("MoveingL", false);
 			}
 
 			if (x > 0)
 			{
-				Animator.SetBool("RI", true);
+				Animator.SetBool("MoveingR", true);
 			}
 			else
 			{
-				Animator.SetBool("RI", false);
+				Animator.SetBool("MoveingR", false);
 			}
 
 			if ((TransformPosition.y >= STGManager.PlayerMaxPosition.y && Vector.y > 0) || (TransformPosition.y <= -STGManager.PlayerMaxPosition.y && Vector.y < 0))
