@@ -8,7 +8,7 @@ namespace NagaisoraFramework.STGSystem
 	{
 		public string ECLName;
 
-		public object Object;
+		public STGControler STGControler;
 
 		public Assembly Assembly;
 		public BlockControler BlockControler;
@@ -23,8 +23,10 @@ namespace NagaisoraFramework.STGSystem
 			BlockControler.Stop();
 		}
 
-		public void Init(Assembly assembly)
+		public void Init(Assembly assembly, STGControler controler)
 		{
+			STGControler = controler;
+
 			Assembly = assembly;
 			ECLName = Assembly.FullName;
 			Type[] type = Assembly.GetExportedTypes();
@@ -38,12 +40,12 @@ namespace NagaisoraFramework.STGSystem
 				}
 			}
 
-			BlockControler = new BlockControler(Object, blocks.ToArray());
+			BlockControler = new BlockControler(STGControler, blocks.ToArray());
 		}
 
 		public void Init(IBlock[] blocks)
 		{
-			BlockControler = new BlockControler(Object, blocks);
+			BlockControler = new BlockControler(STGControler, blocks);
 		}
 
 		public void GetAssemblyMethod(string name)

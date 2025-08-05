@@ -32,7 +32,7 @@ namespace NagaisoraFramework.STGSystem
 				Animator = gameObject.AddComponent<Animator>();
 			}
 
-			if (!STGManager.IsReplaying)
+			if (!STGControler.IsReplaying)
 			{
 				BindKeyEvent();
 			}
@@ -80,22 +80,22 @@ namespace NagaisoraFramework.STGSystem
 
 			Vector2 position = Transform.localPosition;
 
-			if (position.y >= STGManager.PlayerMaxPosition.y)
+			if (position.y >= STGControler.PlayerMaxPosition.y)
 			{
-				position.y = STGManager.PlayerMaxPosition.y;
+				position.y = STGControler.PlayerMaxPosition.y;
 			}
-			if (position.y <= -STGManager.PlayerMaxPosition.y)
+			if (position.y <= -STGControler.PlayerMaxPosition.y)
 			{
-				position.y = -STGManager.PlayerMaxPosition.y;
+				position.y = -STGControler.PlayerMaxPosition.y;
 			}
 
-			if (position.x >= STGManager.PlayerMaxPosition.x)
+			if (position.x >= STGControler.PlayerMaxPosition.x)
 			{
-				position.x = STGManager.PlayerMaxPosition.x;
+				position.x = STGControler.PlayerMaxPosition.x;
 			}
-			if (position.x <= -STGManager.PlayerMaxPosition.x)
+			if (position.x <= -STGControler.PlayerMaxPosition.x)
 			{
-				position.x = -STGManager.PlayerMaxPosition.x;
+				position.x = -STGControler.PlayerMaxPosition.x;
 			}
 
 			Transform.localPosition = position;
@@ -103,7 +103,7 @@ namespace NagaisoraFramework.STGSystem
 
 		public override void KeyDown(bool[] keys)
 		{
-			if (!STGManager.IsRunning)
+			if (!STGControler.IsRunning)
 			{
 				return;
 			}
@@ -181,11 +181,11 @@ namespace NagaisoraFramework.STGSystem
 				Animator.SetBool("MoveingR", false);
 			}
 
-			if ((TransformPosition.y >= STGManager.PlayerMaxPosition.y && Vector.y > 0) || (TransformPosition.y <= -STGManager.PlayerMaxPosition.y && Vector.y < 0))
+			if ((TransformPosition.y >= STGControler.PlayerMaxPosition.y && Vector.y > 0) || (TransformPosition.y <= -STGControler.PlayerMaxPosition.y && Vector.y < 0))
 			{
 				Vector.y = 0;
 			}
-			if ((TransformPosition.x >= STGManager.PlayerMaxPosition.x && Vector.x > 0) || (TransformPosition.x <= -STGManager.PlayerMaxPosition.x && Vector.x < 0))
+			if ((TransformPosition.x >= STGControler.PlayerMaxPosition.x && Vector.x > 0) || (TransformPosition.x <= -STGControler.PlayerMaxPosition.x && Vector.x < 0))
 			{
 				Vector.x = 0;
 			}

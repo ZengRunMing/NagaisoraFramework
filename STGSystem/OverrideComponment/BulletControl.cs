@@ -20,7 +20,7 @@ namespace NagaisoraFramework.STGSystem
 			SpriteRender.drawMode = SpriteDrawMode.Sliced;
 			SpriteRender.sortingLayerName = "StageMain";
 			SpriteRender.sortingOrder = Order;
-			SpriteRender.material = STGManager.BlendManager.Blends[BlendMode];       //设定SpriteRender材质
+			SpriteRender.material = STGControler.BlendManager.Blends[BlendMode];       //设定SpriteRender材质
 		}
 
 		public virtual void Check(STGComponment Target)

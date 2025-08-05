@@ -11,7 +11,7 @@ namespace NagaisoraFramework.STGSystem
 {
 	using static MainSystem;
 
-	public class STGManager : CommMonoScriptObject
+	public class STGControler : CommMonoScriptObject
 	{
 		public PoolManager PoolManager;
 
@@ -31,7 +31,10 @@ namespace NagaisoraFramework.STGSystem
 
 		[Header("系统引用 (选用)")]
 		public ClockSystem ClockSystem;
-		public STGManager Master;
+		public STGControler Master;
+
+		[Header("预制体设定")]
+		public GameObject EnemyEndPrefab;
 
 		//系统参数
 		public ClockMode ClockMode
@@ -375,10 +378,10 @@ namespace NagaisoraFramework.STGSystem
 		public List<PlayerBulletControl> PlayerBullets;
 
 		//Flags
-		public Dictionary<string, ISTGManagerFlag> ConditionFlags;
-		public List<ISTGManagerFlag> RemovedConditionFlags;
-		public Dictionary<string, ISTGManagerFlag> RunningFlags;
-		public List<ISTGManagerFlag> RemovedRunningFlags;
+		public Dictionary<string, ISTGControlerFlag> ConditionFlags;
+		public List<ISTGControlerFlag> RemovedConditionFlags;
+		public Dictionary<string, ISTGControlerFlag> RunningFlags;
+		public List<ISTGControlerFlag> RemovedRunningFlags;
 
 		//Events
 		public delegate void ComponentUpdate();
@@ -391,13 +394,13 @@ namespace NagaisoraFramework.STGSystem
 		{
 			ECLControler = new ECLControler()
 			{
-				Object = this
+				STGControler = this
 			};
 
-			ConditionFlags = new Dictionary<string, ISTGManagerFlag>();
-			RemovedConditionFlags = new List<ISTGManagerFlag>();
-			RunningFlags = new Dictionary<string, ISTGManagerFlag>();
-			RemovedRunningFlags = new List<ISTGManagerFlag>();
+			ConditionFlags = new Dictionary<string, ISTGControlerFlag>();
+			RemovedConditionFlags = new List<ISTGControlerFlag>();
+			RunningFlags = new Dictionary<string, ISTGControlerFlag>();
+			RemovedRunningFlags = new List<ISTGControlerFlag>();
 
 			if (ClockSystem != null)
 			{
@@ -416,7 +419,7 @@ namespace NagaisoraFramework.STGSystem
 				ReplaySystem = gameObject.AddComponent<ReplaySystem>();
 			}
 
-			ReplaySystem.STGManager = this;
+			ReplaySystem.STGControler = this;
 
 			DefLife = 2;
 			DefBomb = 2;
@@ -439,7 +442,7 @@ namespace NagaisoraFramework.STGSystem
 		{
 			if (IsGolbal)
 			{
-				GolbalSTGManager = this;
+				GolbalSTGControler = this;
 			}
 
 			STGSystemData = MainSystem.STGSystemData;
@@ -450,7 +453,7 @@ namespace NagaisoraFramework.STGSystem
 		{
 			if (!IsMaster && Master == null)
 			{
-				Debug.LogWarning(new NullReferenceException($"STGManager::[ID = {GUIDMD5String}]设定为从动体模式，但没有为该从动体指定必要的驱动体, 从动体无驱动体将无法正常工作"));
+				Debug.LogWarning(new NullReferenceException($"STGControler::[ID = {GUIDMD5String}]设定为从动体模式，但没有为该从动体指定必要的驱动体, 从动体无驱动体将无法正常工作"));
 			}
 
 			KeyDown += ReplaySystem.KeyDown;
@@ -524,7 +527,7 @@ namespace NagaisoraFramework.STGSystem
 				return;
 			}
 
-			ISTGManagerFlag[] ConditionFlagsArray = ConditionFlags.Values.ToArray();
+			ISTGControlerFlag[] ConditionFlagsArray = ConditionFlags.Values.ToArray();
 			RemovedConditionFlags.Clear();
 			foreach (var flag in ConditionFlagsArray)
 			{
@@ -537,13 +540,13 @@ namespace NagaisoraFramework.STGSystem
 				RemovedConditionFlags.Add(flag);
 			}
 
-			ISTGManagerFlag[] RemovedConditionFlagsArray = RemovedConditionFlags.ToArray();
+			ISTGControlerFlag[] RemovedConditionFlagsArray = RemovedConditionFlags.ToArray();
 			foreach (var flag in RemovedConditionFlagsArray)
 			{
 				RemoveFlags(flag);
 			}
 
-			ISTGManagerFlag[] RunningFlagsArray = RunningFlags.Values.ToArray();
+			ISTGControlerFlag[] RunningFlagsArray = RunningFlags.Values.ToArray();
 			RemovedRunningFlags.Clear();
 			foreach (var flag in RunningFlagsArray)
 			{
@@ -555,7 +558,7 @@ namespace NagaisoraFramework.STGSystem
 				}
 			}
 
-			ISTGManagerFlag[] RemovedRunningFlagsArray = RemovedRunningFlags.ToArray();
+			ISTGControlerFlag[] RemovedRunningFlagsArray = RemovedRunningFlags.ToArray();
 			foreach (var flag in RemovedRunningFlagsArray)
 			{
 				RemoveRunningFlags(flag);
@@ -673,7 +676,7 @@ namespace NagaisoraFramework.STGSystem
 			ECLControler.Stop();
 		}
 
-		public virtual void AddFlags(params ISTGManagerFlag[] flags)
+		public virtual void AddFlags(params ISTGControlerFlag[] flags)
 		{
 			foreach (var flag in flags)
 			{
@@ -681,12 +684,12 @@ namespace NagaisoraFramework.STGSystem
 				{
 					throw new Exception($"ConditionFlag {flag.FlagName} already exists in {name}.");
 				}
-				flag.STGManager = this;
+				flag.STGControler = this;
 				ConditionFlags.Add(flag.FlagName, flag);
 			}
 		}
 
-		public virtual void RemoveFlags(params ISTGManagerFlag[] flags)
+		public virtual void RemoveFlags(params ISTGControlerFlag[] flags)
 		{
 			foreach (var flag in flags)
 			{
@@ -694,7 +697,7 @@ namespace NagaisoraFramework.STGSystem
 			}
 		}
 
-		public virtual void AddRunningFlags(params ISTGManagerFlag[] flags)
+		public virtual void AddRunningFlags(params ISTGControlerFlag[] flags)
 		{
 			foreach (var flag in flags)
 			{
@@ -702,12 +705,12 @@ namespace NagaisoraFramework.STGSystem
 				{
 					throw new Exception($"RunningFlag {flag.FlagName} already exists in {name}.");
 				}
-				flag.STGManager = this;
+				flag.STGControler = this;
 				RunningFlags.Add(flag.FlagName, flag);
 			}
 		}
 
-		public virtual void RemoveRunningFlags(params ISTGManagerFlag[] flags)
+		public virtual void RemoveRunningFlags(params ISTGControlerFlag[] flags)
 		{
 			foreach (var flag in flags)
 			{
@@ -731,6 +734,22 @@ namespace NagaisoraFramework.STGSystem
 			return Object;
 		}
 
+		public GameObject NewObjectOfPrefab(Type type, string name, GameObject parent, GameObject prefab)
+		{
+			GameObject Object = PoolManager.NewObjectOfPrefab(type, prefab);
+
+			if (Object.transform.parent != parent.transform)
+			{
+				Object.transform.SetParent(parent.transform);
+			}
+
+			Object.name = name;
+			Object.layer = parent.layer;
+			Object.transform.localScale = new Vector3(1, 1, 1);
+
+			return Object;
+		}
+
 		public (GameObject, T) NewEnemy<T>(int type, int color, string name, int order, Vector2 position, bool init = true, BlendMode blendMode = BlendMode.AlphaBlend) where T : EnemyControl
 		{
 			EnemyInfo EnemyInfo = STGSystemData.Enemy[type];
@@ -740,7 +759,7 @@ namespace NagaisoraFramework.STGSystem
 			if (!Object.TryGetComponent(out T component))
 			{
 				component = Object.AddComponent<T>();
-				component.STGManager = this;
+				component.STGControler = this;
 			}
 
 			component.TransformPosition = position;
@@ -772,7 +791,7 @@ namespace NagaisoraFramework.STGSystem
 			if (!Object.TryGetComponent(out T component))
 			{
 				component = Object.AddComponent<T>();
-				component.STGManager = this;
+				component.STGControler = this;
 			}
 
 			component.TransformPosition = position;
@@ -803,7 +822,7 @@ namespace NagaisoraFramework.STGSystem
 			if (!Object.TryGetComponent(out T component))
 			{
 				component = Object.AddComponent<T>();
-				component.STGManager = this;
+				component.STGControler = this;
 			}
 
 			component.TransformPosition = Vector2.zero;
@@ -823,7 +842,6 @@ namespace NagaisoraFramework.STGSystem
 			return (Object, component);
 		}
 
-
 		public (GameObject, T) NewPlayerBullet<T>(int type, string name, int order, Vector2 position, float angle, bool init = true, BlendMode blendMode = BlendMode.AlphaBlend) where T : PlayerBulletControl
 		{
 			GameObject Object = NewObject(typeof(T), name, Parent);
@@ -831,7 +849,7 @@ namespace NagaisoraFramework.STGSystem
 			if (!Object.TryGetComponent(out T component))
 			{
 				component = Object.AddComponent<T>();
-				component.STGManager = this;
+				component.STGControler = this;
 			}
 
 			component.TransformPosition = position;
@@ -848,14 +866,14 @@ namespace NagaisoraFramework.STGSystem
 			return (Object, component);
 		}
 
-		public (GameObject, T) NewEffect<T>(int color, int order, Vector3 position, bool init = true, BlendMode blendMode = BlendMode.AlphaBlend) where T : EffectControl
+		public (GameObject, T) NewEnemyShootEffect<T>(int color, int order, Vector3 position, bool init = true, BlendMode blendMode = BlendMode.AlphaBlend) where T : EnemyShootEffectControl
 		{
-			GameObject Object = NewObject(typeof(T), "Effect", Parent);
+			GameObject Object = NewObject(typeof(T), "EnemyShootEffect", Parent);
 
 			if (!Object.TryGetComponent(out T component))
 			{
 				component = Object.AddComponent<T>();
-				component.STGManager = this;
+				component.STGControler = this;
 			}
 
 			component.TransformPosition = position;
@@ -871,6 +889,38 @@ namespace NagaisoraFramework.STGSystem
 			}
 
 			return (Object, component);
+		}
+
+		public (GameObject, EnemyEndEffectControl) NewEnemyEndEffect(int order, Vector3 position, bool init = true)
+		{
+			GameObject Object = NewObjectOfPrefab(typeof(EnemyEndEffectControl), "EnemyEndEffect", Parent, EnemyEndPrefab);
+
+			if (!Object.TryGetComponent(out EnemyEndEffectControl component))
+			{
+				component = Object.AddComponent<EnemyEndEffectControl>();
+			}
+
+			if (component.STGControler is null || component.STGControler != this)
+			{
+				component.STGControler = this;
+			}
+
+			component.TransformPosition = position;
+			component.Order = 21 + order;
+
+			BulletEffectCount++;
+
+			if (init)
+			{
+				component.Init();
+			}
+
+			return (Object, component);
+		}
+
+		public void SpellCardAttack(string name, uint score)
+		{
+
 		}
 	}
 }

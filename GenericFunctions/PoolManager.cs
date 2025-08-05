@@ -30,6 +30,27 @@ namespace NagaisoraFramework
 			}
 		}
 
+		public GameObject NewObjectOfPrefab(Type Type, GameObject prefab)
+		{
+			GameObject Object;
+
+			if (Stack.ContainsKey(Type))
+			{
+				if (Stack[Type].Count == 0)
+				{
+					return GameObject.Instantiate(prefab);
+				}
+				Object = Stack[Type][0];
+				Stack[Type].Remove(Object);
+				return Object;
+			}
+			else
+			{
+				Stack.Add(Type, new List<GameObject>());
+				return GameObject.Instantiate(prefab);
+			}
+		}
+
 		public void DeleteObject(Type Type, GameObject Object)
 		{
 			if (!Stack.ContainsKey(Type))

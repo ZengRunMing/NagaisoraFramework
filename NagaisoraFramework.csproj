@@ -8,8 +8,8 @@
     <ProjectGuid>{A38C6B17-C57B-4CD7-9371-48B63C5586B8}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>NagaisoraFamework</RootNamespace>
-    <AssemblyName>NagaisoraFamework</AssemblyName>
+    <RootNamespace>NagaisoraFramework</RootNamespace>
+    <AssemblyName>NagaisoraFramework</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -28,6 +28,7 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <PreferNativeArm64>false</PreferNativeArm64>
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <UseWinFormsOutOfProcDesigner>True</UseWinFormsOutOfProcDesigner>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -38,12 +39,14 @@
     <WarningLevel>4</WarningLevel>
     <PreferNativeArm64>false</PreferNativeArm64>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <UseWinFormsOutOfProcDesigner>True</UseWinFormsOutOfProcDesigner>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Unity|AnyCPU'">
     <OutputPath>bin\Unity\</OutputPath>
     <DefineConstants>TRACE;DEBUG;UNITY</DefineConstants>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <Optimize>false</Optimize>
+    <UseWinFormsOutOfProcDesigner>True</UseWinFormsOutOfProcDesigner>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
@@ -492,21 +495,26 @@
     <Compile Include="PluginSystem\PluginInfo.cs" />
     <Compile Include="PluginSystem\Plugins.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="STGSystem\Controler\StageControlSystem.cs" />
     <Compile Include="STGSystem\DataComponment\STGSystemData.cs" />
-    <Compile Include="STGSystem\Functional Componments\ReplaySystem.cs" />
-    <Compile Include="STGSystem\Functional Componments\STGManager.cs" />
-    <Compile Include="STGSystem\Generic Componment\BendLaserMesh.cs" />
+    <Compile Include="STGSystem\FunctionalComponments\ReplaySystem.cs" />
+    <Compile Include="STGSystem\FunctionalComponments\STGControler.cs" />
+    <Compile Include="STGSystem\GenericComponment\BendLaserMesh.cs" />
     <Compile Include="STGSystem\Controler\ECLControler.cs" />
-    <Compile Include="STGSystem\Generic Componment\STGComponment.cs" />
-    <Compile Include="STGSystem\Controler\STGManagerTimeLineControler.cs" />
+    <Compile Include="STGSystem\GenericComponment\STGComponment.cs" />
+    <Compile Include="STGSystem\Controler\STGControlerTimeLineControler.cs" />
+    <Compile Include="STGSystem\OverrideComponment\BossControl.cs" />
     <Compile Include="STGSystem\OverrideComponment\BulletControl.cs" />
     <Compile Include="STGSystem\OverrideComponment\BulletMontage.cs" />
     <Compile Include="STGSystem\OverrideComponment\EffectControl.cs" />
     <Compile Include="STGSystem\OverrideComponment\EnemyBulletControl.cs" />
     <Compile Include="STGSystem\OverrideComponment\EnemyControl.cs" />
+    <Compile Include="STGSystem\OverrideComponment\EnemyEndEffectControl.cs" />
     <Compile Include="STGSystem\OverrideComponment\LaserControl.cs" />
     <Compile Include="STGSystem\OverrideComponment\PlayerBulletControl.cs" />
     <Compile Include="STGSystem\OverrideComponment\PlayerControl.cs" />
+    <Compile Include="STGSystem\OverrideComponment\ShootEffectControl.cs" />
+    <Compile Include="STGSystem\SpecialComponents\SpellCardTitle.cs" />
     <Compile Include="StorySytem\StoryBalloon.cs" />
     <Compile Include="StorySytem\StoryControl.cs" />
     <Compile Include="StorySytem\StoryData.cs" />
@@ -514,12 +522,12 @@
     <Compile Include="StorySytem\StoryFaceControl.cs" />
     <Compile Include="StorySytem\StoryFaceInfo.cs" />
     <Compile Include="StorySytem\StoryTextViewer.cs" />
-    <Compile Include="SystemDemo.cs" />
     <Compile Include="UISystem\ActionDataViwer.cs" />
     <Compile Include="UISystem\CanvasControl.cs" />
     <Compile Include="UISystem\ColorImageButton.cs" />
     <Compile Include="UISystem\ColorSettingForm.cs" />
     <Compile Include="UISystem\Dock\ImageDrap.cs" />
+    <Compile Include="UISystem\DoubleLayeredText.cs" />
     <Compile Include="UISystem\Form.cs" />
     <Compile Include="UISystem\MessageBox.cs" />
     <Compile Include="UISystem\TextSlider.cs" />
@@ -542,6 +550,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

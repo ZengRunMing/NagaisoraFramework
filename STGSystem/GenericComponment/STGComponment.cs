@@ -12,7 +12,7 @@ namespace NagaisoraFramework.STGSystem
 	public class STGComponment : CommMonoScriptObject
 	{
 		[Header("系统引用 (必须)")]
-		public STGManager STGManager;
+		public STGControler STGControler;
 
 		public Transform Transform;
 		public SpriteRenderer SpriteRender;
@@ -411,7 +411,7 @@ namespace NagaisoraFramework.STGSystem
 		{
 			get
 			{
-				return STGManager.GameTime;
+				return STGControler.GameTime;
 			}
 		}
 
@@ -419,7 +419,7 @@ namespace NagaisoraFramework.STGSystem
 		{
 			get
 			{
-				return STGManager.EnemyBullets;
+				return STGControler.EnemyBullets;
 			}
 		}
 
@@ -427,7 +427,7 @@ namespace NagaisoraFramework.STGSystem
 		{
 			get
 			{
-				return STGManager.PlayerBullets;
+				return STGControler.PlayerBullets;
 			}
 		}
 
@@ -435,7 +435,7 @@ namespace NagaisoraFramework.STGSystem
 		{
 			get
 			{
-				return STGManager.Enemys;
+				return STGControler.Enemys;
 			}
 		}
 
@@ -519,11 +519,11 @@ namespace NagaisoraFramework.STGSystem
 			{
 				if (BlendMode == BlendMode.Additive)
 				{
-					SpriteRender.material = STGManager.BlendManager.Blends[BlendMode.Additive];
+					SpriteRender.material = STGControler.BlendManager.Blends[BlendMode.Additive];
 				}
 				else
 				{
-					SpriteRender.material = STGManager.BlendManager.Blends[BlendMode.AlphaBlend];
+					SpriteRender.material = STGControler.BlendManager.Blends[BlendMode.AlphaBlend];
 				}
 			}
 			if (m_FlipXChanged)
@@ -687,8 +687,8 @@ namespace NagaisoraFramework.STGSystem
 			float dy = TransformPosition.y - Target.TransformPosition.y - DetermineOffset.y;
 			float dx = TransformPosition.x - Target.TransformPosition.x - DetermineOffset.x;
 
-			float py = fy + STGManager.DetermineVector;
-			float px = fx + STGManager.DetermineVector;
+			float py = fy + STGControler.DetermineVector;
+			float px = fx + STGControler.DetermineVector;
 
 			float ady = Mathf.Abs(dy);
 			float adx = Mathf.Abs(dx);
@@ -717,7 +717,7 @@ namespace NagaisoraFramework.STGSystem
 
 		public virtual bool OutSizeCheck()
 		{
-			if (TransformPosition.x > STGManager.MaxPosition.x || TransformPosition.x < -STGManager.MaxPosition.x || TransformPosition.y > STGManager.MaxPosition.y || TransformPosition.y < -STGManager.MaxPosition.y)
+			if (TransformPosition.x > STGControler.MaxPosition.x || TransformPosition.x < -STGControler.MaxPosition.x || TransformPosition.y > STGControler.MaxPosition.y || TransformPosition.y < -STGControler.MaxPosition.y)
 			{
 				return true;
 			}
@@ -775,22 +775,22 @@ namespace NagaisoraFramework.STGSystem
 
 		public void BindUpdateEvent()
 		{
-			STGManager.OnUpdate += OnUpdate;
+			STGControler.OnUpdate += OnUpdate;
 		}
 
 		public void UnBindUpdateEvent()
 		{
-			STGManager.OnUpdate -= OnUpdate;
+			STGControler.OnUpdate -= OnUpdate;
 		}
 
 		public void BindKeyEvent()
 		{
-			STGManager.KeyDown += KeyDown;
+			STGControler.KeyDown += KeyDown;
 		}
 
 		public void UnBindKeyEvent()
 		{
-			STGManager.KeyDown -= KeyDown;
+			STGControler.KeyDown -= KeyDown;
 		}
 
 		public virtual void AddFlags(params ISTGComponmentFlag[] flags)
@@ -839,7 +839,7 @@ namespace NagaisoraFramework.STGSystem
 		{
 			UnBindUpdateEvent();
 
-			TransformPosition = STGManager.DisablePosition;
+			TransformPosition = STGControler.DisablePosition;
 
 			UpdateUnityProperty();
 			ClearUnityPropertyUpdateFlags();
@@ -847,7 +847,7 @@ namespace NagaisoraFramework.STGSystem
 			ALLReset();
 			Disposed = true;
 
-			STGManager.PoolManager.DeleteObject(GetType(), gameObject);
+			STGControler.PoolManager.DeleteObject(GetType(), gameObject);
 		}
 
 		public virtual void ALLReset()

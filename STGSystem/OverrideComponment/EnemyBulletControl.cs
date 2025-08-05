@@ -45,13 +45,13 @@ namespace NagaisoraFramework.STGSystem
 		{
 			base.Init();                                                    //调用父类的初始化方法
 
-			STGManager.EnemyBullets.Add(this);
+			STGControler.EnemyBullets.Add(this);
 		}
 
 		public override void OnUpdate()                                     //基于父类派生重写的逻辑更新方法
 		{
 			base.OnUpdate();                                                //调用父类的逻辑更新方法
-			Check(STGManager.Player);                                       //调用判定检查方法
+			Check(STGControler.Player);                                       //调用判定检查方法
 		}
 
 		public override void UpdateUnityProperty()
@@ -102,7 +102,7 @@ namespace NagaisoraFramework.STGSystem
 
 			if (HitCheck(Target))											//判断指定对象(玩家)是否在判定范围内
 			{																
-				STGManager.LifeSub();                                       //调用STG管理器玩家残机减一函数
+				STGControler.LifeSub();                                       //调用STG管理器玩家残机减一函数
 				BaseDelete();												//销毁自身 (入列对象池)
 				return;														//执行无条件返回
 			}
@@ -126,8 +126,8 @@ namespace NagaisoraFramework.STGSystem
 			float dy = TransformPosition.y - Target.TransformPosition.y - DetermineOffset.y;
 			float dx = TransformPosition.x - Target.TransformPosition.x - DetermineOffset.x;
 
-			float ey = fy + STGManager.GrazeVector;						//在此添加了Graze判定半径向量
-			float ex = fx + STGManager.GrazeVector;                        //在此添加了Graze判定半径向量
+			float ey = fy + STGControler.GrazeVector;						//在此添加了Graze判定半径向量
+			float ex = fx + STGControler.GrazeVector;                        //在此添加了Graze判定半径向量
 
 			float ady = Mathf.Abs(dy);
 			float adx = Mathf.Abs(dx);
@@ -144,9 +144,9 @@ namespace NagaisoraFramework.STGSystem
 		{
 			if (Delete_Effect)
 			{
-				STGManager.NewEffect<EffectControl>(Color, Order - 21, TransformPosition);
+				STGControler.NewEnemyShootEffect<EnemyShootEffectControl>(Color, Order - 21, TransformPosition);
 			}
-			STGManager.EnemyBullets.Remove(this);
+			STGControler.EnemyBullets.Remove(this);
 
 			base.BaseDelete();
 		}

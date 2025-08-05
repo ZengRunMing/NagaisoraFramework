@@ -11,7 +11,7 @@ namespace NagaisoraFramework.STGSystem
 
 	public class ReplaySystem : CommMonoScriptObject
 	{
-		public STGManager STGManager;
+		public STGControler STGControler;
 
 		public bool IsGolbal;
 
@@ -53,7 +53,7 @@ namespace NagaisoraFramework.STGSystem
 					DownKeys = data.DownKeys;
 				}
 
-				STGManager.CallKeyDown(DownKeys);
+				STGControler.CallKeyDown(DownKeys);
 			}
 		}
 

@@ -13,9 +13,9 @@ namespace NagaisoraFramework
 		void Action();
 	}
 
-	public interface ISTGManagerFlag : IFlag
+	public interface ISTGControlerFlag : IFlag
 	{
-		STGManager STGManager { get; set; }
+		STGControler STGControler { get; set; }
 	}
 
 	public interface ISTGComponmentFlag : IFlag

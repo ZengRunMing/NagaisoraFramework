@@ -29,14 +29,14 @@ namespace NagaisoraFramework.STGSystem
 		public override void Init()
 		{
 			base.Init();
-			STGManager.PlayerBullets.Add(this);
+			STGControler.PlayerBullets.Add(this);
 		}
 
 		public override void OnUpdate()
 		{
 			base.OnUpdate();
 
-			EnemyControl[] enemys = STGManager.Enemys.ToArray();
+			EnemyControl[] enemys = STGControler.Enemys.ToArray();
 			foreach (var enemy in enemys)
 			{
 				Check(enemy);
@@ -85,7 +85,7 @@ namespace NagaisoraFramework.STGSystem
 
 		public override void BaseDelete()
 		{
-			STGManager.PlayerBullets.Remove(this);
+			STGControler.PlayerBullets.Remove(this);
 
 			base.BaseDelete();
 		}

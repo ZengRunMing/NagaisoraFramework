@@ -4,11 +4,11 @@ using System.Collections.Generic;
 namespace NagaisoraFramework.STGSystem
 {
 	[Serializable]
-	public class STGManagerTimeLineControler : TimeLineControler<STGManager>
+	public class STGControlerTimeLineControler : TimeLineControler<STGControler>
 	{
-		public STGManager STGManager;
+		public STGControler STGControler;
 
-		public List<ITimeLineFlag<STGManager>> Flags;
+		public List<ITimeLineFlag<STGControler>> Flags;
 
 		public bool Running = false;
 
@@ -19,12 +19,12 @@ namespace NagaisoraFramework.STGSystem
 
 		public virtual void Start()
 		{
-			if (STGManager == null)
+			if (STGControler == null)
 			{
-				STGManager = GetComponent<STGManager>();
+				STGControler = GetComponent<STGControler>();
 			}
 
-			Init(STGManager);
+			Init(STGControler);
 
 			if (Flags != null && Flags.Count > 0)
 			{

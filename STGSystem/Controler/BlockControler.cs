@@ -8,7 +8,7 @@ namespace NagaisoraFramework.STGSystem
 	{
 		public bool IsRunning = false;
 
-		public object Object;
+		public STGControler STGControler;
 
 		public IBlock[] Blocks;
 
@@ -19,9 +19,9 @@ namespace NagaisoraFramework.STGSystem
 
 		public Queue<InterruptOrganizationBlock> InterruptingOrganizationBlocks;
 		
-		public BlockControler(object obj, IBlock[] blocks)
+		public BlockControler(STGControler controler, IBlock[] blocks)
 		{
-			Object = obj;
+			STGControler = controler;
 
 			Blocks = blocks;
 

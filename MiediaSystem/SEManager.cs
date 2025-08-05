@@ -17,7 +17,7 @@ namespace NagaisoraFramework.Miedia
 		public IDictionary<string, SEAudio> ACD = new Dictionary<string, SEAudio>();
 		public List<AudioSource> AS;
 
-		void Awake()
+		public void Awake()
 		{
 			MainSystem.SEManager = this;
 
@@ -43,31 +43,41 @@ namespace NagaisoraFramework.Miedia
 
 		public void PlaySE(string name)
 		{
-			if (!ACD.ContainsKey(name))
+			if (!ACD.ContainsKey(name)) // 检查音效名称是否存在于字典中
 			{
 				return;
 			}
 
-			AudioClip clip = ACD[name].AudioClip;
+			AudioClip clip = ACD[name].AudioClip; // 获取音频剪辑
 
 			foreach (AudioSource audio in AS)
 			{
-				if (!audio.isPlaying)
+				if (!(audio.clip is null)) // 检查音频源的音频剪辑是否为 null
 				{
-					audio.clip = clip;
-					MainSystem.SetAudioSourceScale(audio, 1f);
-					if (ACD[name].TimeScale)
+					if (audio.clip != clip) // 如果当前音频源的音频剪辑不是要播放的剪辑
 					{
-						MainSystem.SetAudioSourceScale(audio, Time.timeScale);
+						continue; // 跳过当前音频源
 					}
-
-					audio.volume = Volume;
-					audio.Play();
-					return;
 				}
+
+				if (audio.isPlaying) // 如果音频源正在播放
+				{
+					audio.Stop(); // 停止当前音频源的播放
+				}
+
+				audio.clip = clip; // 设置音频源的音频剪辑为要播放的剪辑
+				MainSystem.SetAudioSourceScale(audio, 1f); // 设置音频源的时间缩放为 1（正常速度）
+				if (ACD[name].TimeScale) // 如果音频剪辑需要时间缩放
+				{
+					MainSystem.SetAudioSourceScale(audio, Time.timeScale); // 设置音频源的时间缩放为当前时间缩放
+				}
+
+				audio.volume = Volume; // 设置音频源的音量为 SEManager 的音量
+				audio.Play(); // 播放音频源
+				return; // 成功播放音效后直接返回
 			}
 
-			AddAudioScource(AS.Count - 1);
+			AddAudioScource(AS.Count - 1); // 如果没有可用的音频源，则添加一个新的音频源
 		}
 
 		public void AddAudioScource(int a)

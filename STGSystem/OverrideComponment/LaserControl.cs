@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
+
 using UnityEngine;
 
 namespace NagaisoraFramework.STGSystem
@@ -33,9 +33,9 @@ namespace NagaisoraFramework.STGSystem
 		{
 			base.Init();
 
-			STGManager.EnemyBullets.Add(this);
+			STGControler.EnemyBullets.Add(this);
 
-			DetermineRadius = STGManager.STGSystemData.EnemyLongLaser.DetermineRadius;
+			DetermineRadius = STGControler.STGSystemData.EnemyLongLaser.DetermineRadius;
 
 			if (Type == LaserType.Long)
 			{
@@ -52,11 +52,11 @@ namespace NagaisoraFramework.STGSystem
 				InitSpriteRender();
 
 				SpriteRender.drawMode = SpriteDrawMode.Sliced;
-				SpriteRender.sprite = STGManager.STGSystemData.EnemyLongLaser.Info[Color].Sprite;
-				SpriteRender.size = STGManager.STGSystemData.EnemyLongLaser.Normoal_Size;
+				SpriteRender.sprite = STGControler.STGSystemData.EnemyLongLaser.Info[Color].Sprite;
+				SpriteRender.size = STGControler.STGSystemData.EnemyLongLaser.Normoal_Size;
 				SpriteRender.sortingLayerName = "StageMain";
 				SpriteRender.sortingOrder = Order;
-				SpriteRender.material = STGManager.BlendManager.Blends[BlendMode];
+				SpriteRender.material = STGControler.BlendManager.Blends[BlendMode];
 
 				Transform.localPosition = HeadPosition;
 
@@ -115,13 +115,13 @@ namespace NagaisoraFramework.STGSystem
 				return;
 			}
 
-			if (HitCheck(STGManager.Player))
+			if (HitCheck(STGControler.Player))
 			{
 				Debug.Log($"[{name}] >> HitCheck() -> True");
 				return;
 			}
 
-			if (GrazeCheck(STGManager.Player))
+			if (GrazeCheck(STGControler.Player))
 			{
 				if (ThisTime % 2 == 0)
 				{
@@ -150,8 +150,8 @@ namespace NagaisoraFramework.STGSystem
 			float fx = DetermineRadius * Scale.x;
 			float fy = DetermineRadius * Scale.y;
 
-			float px = fx + STGManager.DetermineVector;
-			float py = fy + STGManager.DetermineVector;
+			float px = fx + STGControler.DetermineVector;
+			float py = fy + STGControler.DetermineVector;
 
 			for (int i = 0; i < LaserLength; i++)
 			{
@@ -200,7 +200,7 @@ namespace NagaisoraFramework.STGSystem
 
 			Vector2 position = KeyPoints.Last();
 
-			if (position.x > STGManager.MaxPosition.x || position.x < -STGManager.MaxPosition.x || position.y > STGManager.MaxPosition.y || position.y < -STGManager.MaxPosition.y)
+			if (position.x > STGControler.MaxPosition.x || position.x < -STGControler.MaxPosition.x || position.y > STGControler.MaxPosition.y || position.y < -STGControler.MaxPosition.y)
 			{
 				return true;
 			}
@@ -210,7 +210,7 @@ namespace NagaisoraFramework.STGSystem
 
 		public virtual bool GrazeCheck(STGComponment Target)
 		{
-			return HitCheck(STGManager.Player, DetermineRadius + 4f);
+			return HitCheck(STGControler.Player, DetermineRadius + 4f);
 		}
 
 		public void SetBendLaserMesh()
@@ -220,7 +220,7 @@ namespace NagaisoraFramework.STGSystem
 				return;
 			}
 
-			BendLaserMesh.material = STGManager.BlendManager.LaserBlends[BlendMode];
+			BendLaserMesh.material = STGControler.BlendManager.LaserBlends[BlendMode];
 			
 			if (KeyPoints != null)
 			{
@@ -245,10 +245,10 @@ namespace NagaisoraFramework.STGSystem
 
 			if (Delete_Effect)
 			{
-				STGManager.NewEffect<EffectControl>(Color, Order - 21, TransformPosition);
+				STGControler.NewEnemyShootEffect<EnemyShootEffectControl>(Color, Order - 21, TransformPosition);
 			}
 
-			STGManager.EnemyBullets.Remove(this);
+			STGControler.EnemyBullets.Remove(this);
 
 			base.BaseDelete();
 		}

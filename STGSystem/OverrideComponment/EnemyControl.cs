@@ -14,11 +14,18 @@ namespace NagaisoraFramework.STGSystem
 
 		public Animator Animator;
 
+		[ContextMenu("销毁机体 (仅限编辑器测试)", false)]
+		public void InstDelete()
+		{
+			BaseDelete();
+		}
+
+
 		public override void Init()
 		{
 			base.Init();
 			
-			STGManager.Enemys.Add(this);
+			STGControler.Enemys.Add(this);
 
 			InitSpriteRender();
 
@@ -27,7 +34,7 @@ namespace NagaisoraFramework.STGSystem
 				Animator = gameObject.AddComponent<Animator>();
 			}
 
-			EnemyInfo = STGManager.STGSystemData.Enemy[Type];
+			EnemyInfo = STGControler.STGSystemData.Enemy[Type];
 
 			DetermineOffset = EnemyInfo.DetermineOffset;
 			DetermineRadius = EnemyInfo.DetermineRadius;
@@ -35,7 +42,7 @@ namespace NagaisoraFramework.STGSystem
 			SpriteRender.drawMode = SpriteDrawMode.Sliced;
 			SpriteRender.sortingLayerName = "StageMain";
 			SpriteRender.sortingOrder = Order;
-			SpriteRender.material = STGManager.BlendManager.Blends[BlendMode];       //设定SpriteRender材质
+			SpriteRender.material = STGControler.BlendManager.Blends[BlendMode];       //设定SpriteRender材质
 
 			EnemyObject enemyObject = EnemyInfo.Info[Color];
 
@@ -47,7 +54,7 @@ namespace NagaisoraFramework.STGSystem
 		public override void OnUpdate()
 		{
 			base.OnUpdate();
-			Check(STGManager.Player);
+			Check(STGControler.Player);
 		}
 
 		public virtual void Check(STGComponment Target)
@@ -64,7 +71,7 @@ namespace NagaisoraFramework.STGSystem
 
 			if (HitCheck(Target))
 			{
-				STGManager.LifeSub();
+				STGControler.LifeSub();
 				BaseDelete();
 				return;
 			}
@@ -104,12 +111,12 @@ namespace NagaisoraFramework.STGSystem
 		{
 			if (Delete_Effect)
 			{
-				STGManager.NewEffect<EffectControl>(Color, Order - 21, TransformPosition);
+				STGControler.NewEnemyEndEffect(Order - 21, TransformPosition);
 			}
 
 			base.BaseDelete();
 
-			STGManager.Enemys.Remove(this);
+			STGControler.Enemys.Remove(this);
 		}
 	}
 }

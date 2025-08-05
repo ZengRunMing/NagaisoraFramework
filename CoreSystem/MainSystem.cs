@@ -18,7 +18,7 @@ namespace NagaisoraFramework
 
 		public static string DataPath = GetDataPath();
 
-		public static STGManager GolbalSTGManager;
+		public static STGControler GolbalSTGControler;
 
 		public static PoolManager GolbalPoolManager;
 

@@ -18,8 +18,6 @@ F:\Visual Studio Project\source\Nagaisora FrameWork Editor\NagaisoraFramework\bi
 F:\Visual Studio Project\source\Nagaisora FrameWork Editor\NagaisoraFramework\bin\Debug\Melanchall_DryWetMidi_Native64.dll
 F:\Visual Studio Project\source\Nagaisora FrameWork Editor\NagaisoraFramework\bin\Debug\netstandard.dll
 F:\Visual Studio Project\source\Nagaisora FrameWork Editor\NagaisoraFramework\bin\Debug\Melanchall_DryWetMidi_Native64.dylib
-F:\Visual Studio Project\source\Nagaisora FrameWork Editor\NagaisoraFramework\bin\Debug\NagaisoraFamework.dll.config
-F:\Visual Studio Project\source\Nagaisora FrameWork Editor\NagaisoraFramework\bin\Debug\NagaisoraFamework.dll
 F:\Visual Studio Project\source\Nagaisora FrameWork Editor\NagaisoraFramework\bin\Debug\Melanchall.DryWetMidi.dll
 F:\Visual Studio Project\source\Nagaisora FrameWork Editor\NagaisoraFramework\bin\Debug\System.Data.SQLite.dll
 F:\Visual Studio Project\source\Nagaisora FrameWork Editor\NagaisoraFramework\bin\Debug\System.Data.SQLite.EF6.dll
@@ -29,4 +27,6 @@ F:\Visual Studio Project\source\Nagaisora FrameWork Editor\NagaisoraFramework\bi
 F:\Visual Studio Project\source\Nagaisora FrameWork Editor\NagaisoraFramework\obj\Debug\NagaisoraFramework.csproj.AssemblyReference.cache
 F:\Visual Studio Project\source\Nagaisora FrameWork Editor\NagaisoraFramework\obj\Debug\NagaisoraFramework.csproj.CoreCompileInputs.cache
 F:\Visual Studio Project\source\Nagaisora FrameWork Editor\NagaisoraFramework\obj\Debug\Nagaisor.D32D1065.Up2Date
-F:\Visual Studio Project\source\Nagaisora FrameWork Editor\NagaisoraFramework\obj\Debug\NagaisoraFamework.dll
+F:\Visual Studio Project\source\Nagaisora FrameWork Editor\NagaisoraFramework\bin\Debug\NagaisoraFramework.dll.config
+F:\Visual Studio Project\source\Nagaisora FrameWork Editor\NagaisoraFramework\bin\Debug\NagaisoraFramework.dll
+F:\Visual Studio Project\source\Nagaisora FrameWork Editor\NagaisoraFramework\obj\Debug\NagaisoraFramework.dll

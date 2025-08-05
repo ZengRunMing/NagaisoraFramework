@@ -20,41 +20,46 @@ namespace NagaisoraFramework.Miedia
 
 		public IDictionary<int, List<Note>> Notekeys;
 
-		public void Init()
+		public void Start()
 		{
 			Notekeys = new Dictionary<int, List<Note>>();
+		}
+
+		public void FixedUpdate()
+		{
+			Notekeys.Clear();
 
 			foreach (var form in MidiPianoForms)
 			{
-				Notekeys.Add(form.ID, new List<Note>());
-
-				form.notes = null;
+				if (!Notekeys.ContainsKey(form.ID))
+				{
+					Notekeys.Add(form.ID, new List<Note>());
+				}
 			}
 
-			if (MidiControl.Playback != null)
+			if (MidiControl is null || MidiControl.MidiNotes is null || MidiControl.Playback is null)
 			{
-				MidiControl.Playback.NotesPlaybackStarted += KeyDownEvent;
-				MidiControl.Playback.NotesPlaybackFinished += KeyUpEnevt;
+				goto keyupdate;
 			}
-		}
 
-		public void KeyDownEvent(object sender, NotesEventArgs e)
-		{
-			foreach(var note in e.Notes)
+			notes = MidiControl.MidiNotes.AtTime((MetricTimeSpan)MidiControl.CurrentTime(TimeSpanType.Metric), MidiControl.Playback.TempoMap, LengthedObjectPart.Entire);
+
+			if (notes == null || notes.Count() == 0)
 			{
+				goto keyupdate;
+			}
+
+			foreach (var note in notes)
+			{
+				if (!Notekeys.ContainsKey(note.Channel))
+				{
+					Notekeys.Add(note.Channel, new List<Note>());
+				}
+
 				Notekeys[note.Channel].Add(note);
 			}
 
-			KeyUpdate();
-		}
-
-		public void KeyUpEnevt(object sender, NotesEventArgs e)
-		{
-			foreach (var note in e.Notes)
-			{
-				Notekeys[note.Channel].Remove(note);
-			}
-
+			keyupdate:
 			KeyUpdate();
 		}
 
