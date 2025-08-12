@@ -113,10 +113,9 @@ namespace NagaisoraFramework.STGSystem
 			{
 				STGControler.NewEnemyEndEffect(Order - 21, TransformPosition);
 			}
+			STGControler.Enemys.Remove(this);
 
 			base.BaseDelete();
-
-			STGControler.Enemys.Remove(this);
 		}
 	}
 }

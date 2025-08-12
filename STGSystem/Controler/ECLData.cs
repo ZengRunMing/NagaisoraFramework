@@ -16,17 +16,14 @@ namespace NagaisoraFramework.STGSystem
 		public uint FileVersion;
 		public string Author;
 
-		public List<VariableData> Variables;
-
-		public List<IBlock> Blocks;
+		public List<IECLItem> ECLItems;
 
 		public ECLData()
 		{
 			SystemVersion = BitConverter.ToUInt32(new byte[] { 1, 0, 0, 0 }, 0);
 			FileVersion = BitConverter.ToUInt32(new byte[] { 1, 0, 0, 0 }, 0);
 			Author = "Unknown";
-			Variables = new List<VariableData>();
-			Blocks = new List<IBlock>();
+			ECLItems = new List<IECLItem>();
 		}
 
 		public static ECLData Create(string name = "Default", string description = "DefaultECL", string author = "Unknown")
@@ -36,20 +33,17 @@ namespace NagaisoraFramework.STGSystem
 				Name = name,
 				Description = description,
 				Author = author,
+				ECLItems = new List<IECLItem>(),
 			};
 
-			// 默认添加一个启动组织块和一个循环组织块
-			StartUpOrganizationBlock startUpOrganizationBlock = new StartUpOrganizationBlock { Name = "Start Up", Description = "程序启动时执行的块" };
-			CycleOrganizationBlock cycleOrganizationBlock = new CycleOrganizationBlock { Name = "Main Cycle", Description = "程序主循环执行的块" };
+			IECLItem item = new ECLMain
+			{
+				Name = "Main",
+				Description = "ECL的程序入口",
+			};
+			item.Init();
 
-			startUpOrganizationBlock.Default();
-			cycleOrganizationBlock.Default();
-
-			startUpOrganizationBlock.Init();
-			cycleOrganizationBlock.Init();
-
-			data.Blocks.Add(startUpOrganizationBlock);
-			data.Blocks.Add(cycleOrganizationBlock);
+			data.ECLItems.Add(item);
 
 			return data;
 		}
@@ -67,81 +61,30 @@ namespace NagaisoraFramework.STGSystem
 			binaryWriter.Write(FileVersion);					// 文件版本
 			binaryWriter.Write(Author ?? string.Empty);			// 作者署名
 
-			binaryWriter.Write(Variables?.Count ?? 0);          // 变量数量
+			binaryWriter.Write(ECLItems.Count); // 写入 ECLItems 的数量
 
-			// 遍历所有变量并将它们的二进制数据写入文件流
-			foreach (var variable in Variables)                 
+			foreach (var item in ECLItems)
 			{
-				byte[] binary = variable.ToBinary();
-
-				binaryWriter.Write(binary.Length);
-				binaryWriter.Write(binary);
-			}
-
-			binaryWriter.Write(Blocks?.Count ?? 0);				// 写入块的数量
-
-			foreach (IBlock block in Blocks)                    // 遍历所有块并将它们的二进制数据写入文件流
-			{
-				if (block is OrganizationBlock organizationBlock)
+				if (item is ECLMain)
 				{
-					binaryWriter.Write((byte)0x00); // 组织块类型标识
-
-					byte[] blockBinary;
-
-					// 根据组织块的具体类型进行处理
-					if (organizationBlock is StartUpOrganizationBlock startUpOrganizationBlock)
-					{
-						binaryWriter.Write((byte)0x00); // 启动组织块类型标识
-						blockBinary = startUpOrganizationBlock.ToBinary(); // 获取启动块的二进制数据
-					}
-					else if (organizationBlock is CycleOrganizationBlock cycleOrganizationBlock)
-					{
-						binaryWriter.Write((byte)0x01); // 循环组织块类型标识
-						blockBinary = cycleOrganizationBlock.ToBinary(); // 获取块的二进制数据
-					}
-					else if (organizationBlock is InterruptOrganizationBlock interruptOrganizationBlock)
-					{
-						binaryWriter.Write((byte)0x02); // 中断组织块类型标识
-						blockBinary = interruptOrganizationBlock.ToBinary(); // 获取块的二进制数据
-					}
-					else if (organizationBlock is CyclicInterruptOrganizationBlock cyclicInterruptOrganizationBlock)
-					{
-						binaryWriter.Write((byte)0x03); // 周期中断组织块类型标识
-						blockBinary = cyclicInterruptOrganizationBlock.ToBinary(); // 获取块的二进制数据
-					}
-					else
-					{
-						throw new InvalidDataException($"Unknown organization block type: {block.GetType()}");
-					}
-
-					binaryWriter.Write(blockBinary.Length); // 写入块二进制长度
-					binaryWriter.Write(blockBinary); // 写入块二进制数据
+					binaryWriter.Write((byte)0); // 写入 ECLMain 类型标识
 				}
-				else if (block is FunctionBlock functionBlock)
+				else if (item is ECLFunction)
 				{
-					binaryWriter.Write((byte)0x01); // 函数块类型标识
-					byte[] blockBinary = functionBlock.ToBinary(); // 获取块的二进制数据
-					binaryWriter.Write(blockBinary.Length); // 写入块二进制长度
-					binaryWriter.Write(blockBinary); // 写入块二进制数据
+					binaryWriter.Write((byte)1); // 写入 ECLMain 类型标识
 				}
-				else if (block is Function function)
+				else if (item is ECLInterrupt)
 				{
-					binaryWriter.Write((byte)0x02); // 函数类型标识
-					byte[] blockBinary = function.ToBinary(); // 获取块的二进制数据
-					binaryWriter.Write(blockBinary.Length); // 写入块二进制长度
-					binaryWriter.Write(blockBinary); // 写入块二进制数据
-				}
-				else if (block is DataBlock dataBlock)
-				{
-					binaryWriter.Write((byte)0x03); // 数据块类型标识
-					byte[] blockBinary = dataBlock.ToBinary(); // 获取块的二进制数据
-					binaryWriter.Write(blockBinary.Length); // 写入块二进制长度
-					binaryWriter.Write(blockBinary); // 写入块二进制数据
+					binaryWriter.Write((byte)2); // 写入 ECLMain 类型标识
 				}
 				else
 				{
-					throw new InvalidDataException($"Unknown block type: {block.GetType()}");
+					throw new InvalidDataException($"Unknown ECLItem type: {item.GetType().Name}");
 				}
+
+				binaryWriter.Write(item.Name ?? string.Empty); // 写入每个 ECLItem 的名称
+				binaryWriter.Write(item.Description ?? string.Empty); // 写入每个 ECLItem 的描述
+				binaryWriter.Write(item.ExecuteCode ?? string.Empty); // 写入每个 ECLItem 的执行代码
 			}
 
 			binaryWriter.Close(); // 关闭二进制写入器
@@ -172,75 +115,50 @@ namespace NagaisoraFramework.STGSystem
 				Author = binaryReader.ReadString(), // 读取作者署名
 			};
 
-			int variableCount = binaryReader.ReadInt32(); // 读取变量数量
+			int itemCount = binaryReader.ReadInt32(); // 读取 ECLItems 的数量
 
-			for (int i = 0; i < variableCount; i++)
+			data.ECLItems = new List<IECLItem>(itemCount); // 初始化 ECLItems 列表
+
+			for (int i = 0; i < itemCount; i++)
 			{
-				int length = binaryReader.ReadInt32(); // 读取变量二进制长度
-				byte[] variableBinary = binaryReader.ReadBytes(length); // 读取变量二进制数据
-				VariableData variableData = new VariableData().FromBinary(variableBinary); // 从二进制数据创建变量数据
-				data.Variables.Add(variableData); // 将变量数据添加到列表中
-			}
+				byte itemType = binaryReader.ReadByte(); // 读取每个 ECLItem 的类型标识
 
-			int blockCount = binaryReader.ReadInt32(); // 读取块的数量
-			
-			for(int i = 0; i < blockCount; i++)
-			{
-				IBlock block;
+				string itemName = binaryReader.ReadString(); // 读取每个 ECLItem 的名称
+				string itemDescription = binaryReader.ReadString(); // 读取每个 ECLItem 的描述
+				string itemExecuteCode = binaryReader.ReadString(); // 读取每个 ECLItem 的执行代码
+				IECLItem item;
 
-				byte blockType = binaryReader.ReadByte(); // 读取块类型
-				
-				int Length;
-
-				switch (blockType)
+				switch (itemType)
 				{
-					case 0x00: // OrganizationBlock
-						byte OrganizationBlockblockType = binaryReader.ReadByte(); // 读取组织块类型
-						
-						Length = binaryReader.ReadInt32(); // 读取块二进制长度
-						byte[] OrganizationBlockBinary = binaryReader.ReadBytes(Length); // 读取组织块二进制数据
-
-						switch (OrganizationBlockblockType)
+					case 0: // ECLMain
+						item = new ECLMain
 						{
-							case 0x00: // StartUpOrganizationBlock
-								block = StartUpOrganizationBlock.FromBinary(OrganizationBlockBinary); // 从二进制数据创建启动组织块
-								break;
-							case 0x01: // CycleOrganizationBlock
-								block = CycleOrganizationBlock.FromBinary(OrganizationBlockBinary); // 从二进制数据创建循环组织块
-								break;
-							case 0x02: // InterruptOrganizationBlock
-								block = InterruptOrganizationBlock.FromBinary(OrganizationBlockBinary); // 从二进制数据创建中断组织块
-								break;
-							case 0x03: // CyclicInterruptOrganizationBlock
-								block = CyclicInterruptOrganizationBlock.FromBinary(OrganizationBlockBinary); // 从二进制数据创建周期中断组织块
-								break;
-							default:
-								throw new InvalidDataException($"Unknown organization block type: 0x{OrganizationBlockblockType:X2}");
-						}
+							Name = itemName,
+							Description = itemDescription,
+							ExecuteCode = itemExecuteCode
+						};
 						break;
-					case 0x01: // FunctionBlock
-						Length = binaryReader.ReadInt32(); // 读取块二进制长度
-						byte[] FunctionBlockBinary = binaryReader.ReadBytes(Length); // 读取函数块二进制数据
-
-						block = FunctionBlock.FromBinary(FunctionBlockBinary); // 从二进制数据创建函数块
+					case 1: // ECLFunction
+						item = new ECLFunction
+						{
+							Name = itemName,
+							Description = itemDescription,
+							ExecuteCode = itemExecuteCode
+						};
 						break;
-					case 0x02: // Function
-						Length = binaryReader.ReadInt32(); // 读取块二进制长度
-						byte[] FunctionBinary = binaryReader.ReadBytes(Length); // 读取函数二进制数据
-
-						block = Function.FromBinary(FunctionBinary); // 从二进制数据创建函数
-						break;
-					case 0x03: // DataBlock
-						Length = binaryReader.ReadInt32(); // 读取块二进制长度
-						byte[] DataBlockBinary = binaryReader.ReadBytes(Length); // 读取数据块二进制数据
-
-						block = DataBlock.FromBinary(DataBlockBinary); // 从二进制数据创建数据块
+					case 2: // ECLInterrupt
+						item = new ECLInterrupt
+						{
+							Name = itemName,
+							Description = itemDescription,
+							ExecuteCode = itemExecuteCode
+						};
 						break;
 					default:
-						throw new InvalidDataException($"Unknown block type: 0x{blockType:X2}");
+						throw new InvalidDataException($"Unknown ECLItem type: {itemType}");
 				}
 
-				data.Blocks.Add(block); // 将块添加到数据块列表中
+				data.ECLItems.Add(item); // 添加到 ECLItems 列表中
 			}
 
 			binaryReader.Close();
@@ -248,52 +166,5 @@ namespace NagaisoraFramework.STGSystem
 
 			return data;
 		}
-	}
-
-	public class VariableData
-	{
-		public string Name;
-		public string Type;
-		public object Value;
-		public string DefaultValue;
-		public Accessibility Accessibility;
-
-		public byte[] ToBinary()
-		{
-			MemoryStream memoryStream = new MemoryStream();
-			BinaryWriter binaryWriter = new BinaryWriter(memoryStream, Encoding.UTF8, true);
-			binaryWriter.Write(Name ?? string.Empty);
-			binaryWriter.Write(Type ?? string.Empty);
-			binaryWriter.Write(DefaultValue ?? string.Empty);
-			binaryWriter.Write((byte)Accessibility); // 将Accessibility枚举转换为字节
-			binaryWriter.Close();
-			return memoryStream.ToArray();
-		}
-
-		public VariableData FromBinary(byte[] binary)
-		{
-			MemoryStream memoryStream = new MemoryStream(binary);
-			BinaryReader binaryReader = new BinaryReader(memoryStream, Encoding.UTF8, true);
-			VariableData variableData = new VariableData
-			{
-				Name = binaryReader.ReadString(),
-				Type = binaryReader.ReadString(),
-				DefaultValue = binaryReader.ReadString(),
-				Accessibility = (Accessibility)binaryReader.ReadByte() // 将字节转换回Accessibility枚举
-			};
-			binaryReader.Close();
-			memoryStream.Close();
-			return variableData;
-		}
-	}
-
-	public enum Accessibility
-	{
-		Public,
-		Private,
-		Protected,
-		Internal,
-		ProtectedInternal,
-		PrivateProtected
 	}
 }

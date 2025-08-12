@@ -11,6 +11,8 @@ namespace NagaisoraFramework.STGSystem
 	[Serializable]
 	public class STGComponment : CommMonoScriptObject
 	{
+		public ECLControler ECLControler;
+
 		[Header("系统引用 (必须)")]
 		public STGControler STGControler;
 
@@ -396,11 +398,6 @@ namespace NagaisoraFramework.STGSystem
 		public Vector2[] LastPositions;
 		public readonly float MaxTransparent = 255f;
 
-		public Dictionary<string, ISTGComponmentFlag> ConditionFlags;
-		public List<ISTGComponmentFlag> RemovedConditionFlags;
-		public Dictionary<string, ISTGComponmentFlag> RunningFlags;
-		public List<ISTGComponmentFlag> RemovedRunningFlags;
-
 		public Vector2 VelocityVector => DirectionVector * Velocity;
 		public Vector2 DirectionVector => new Vector2(Sin(ADSDitection), Cos(ADSDitection));
 		public float ADSDitection => EulerAngles_ADS(Direction);
@@ -412,30 +409,6 @@ namespace NagaisoraFramework.STGSystem
 			get
 			{
 				return STGControler.GameTime;
-			}
-		}
-
-		public List<STGComponment> EnemyBullets
-		{
-			get
-			{
-				return STGControler.EnemyBullets;
-			}
-		}
-
-		public List<PlayerBulletControl> PlayerBullets
-		{
-			get
-			{
-				return STGControler.PlayerBullets;
-			}
-		}
-
-		public List<EnemyControl> Enemys
-		{
-			get
-			{
-				return STGControler.Enemys;
 			}
 		}
 
@@ -458,11 +431,6 @@ namespace NagaisoraFramework.STGSystem
 		{
 			StartPosition = TransformPosition;
 
-			ConditionFlags = new Dictionary<string, ISTGComponmentFlag>();
-			RemovedConditionFlags = new List<ISTGComponmentFlag>();
-			RunningFlags = new Dictionary<string, ISTGComponmentFlag>();
-			RemovedRunningFlags = new List<ISTGComponmentFlag>();
-
 			ThisTime = 0;
 
 			if (Transparent == 0)
@@ -471,8 +439,13 @@ namespace NagaisoraFramework.STGSystem
 			}
 
 			Disposed = false;
+		}
 
-			BindUpdateEvent();
+		public virtual void Init(ECLData ECLData)
+		{
+			ECLControler.Init(ECLData);
+
+			Init();
 		}
 
 		public virtual void InitSpriteRender()
@@ -544,8 +517,6 @@ namespace NagaisoraFramework.STGSystem
 			Move();
 			Velocity += Accelerate;
 
-			FlagCheck();
-
 			if (ThisTime < 5)
 			{
 				goto Skip;
@@ -563,6 +534,18 @@ namespace NagaisoraFramework.STGSystem
 			ThisTime++;
 		}
 
+		public virtual void OnSubThreadUpdate()
+		{
+			if (Disposed)
+			{
+				return;
+			}
+
+			// 子线程更新内容
+			// 在此处的执行不涉及Unity API的计算
+
+		}
+
 		public virtual void ClearUnityPropertyUpdateFlags()
 		{
 			m_RotationChanged = false;
@@ -577,51 +560,6 @@ namespace NagaisoraFramework.STGSystem
 		public virtual void KeyDown(bool[] keys)
 		{
 
-		}
-
-		public virtual void FlagCheck()
-		{
-			if ((ConditionFlags == null || ConditionFlags.Count == 0) && (RunningFlags == null || RunningFlags.Count == 0))
-			{
-				return;
-			}
-
-			ISTGComponmentFlag[] ConditionFlagsArray = ConditionFlags.Values.ToArray();
-			RemovedConditionFlags.Clear();
-			foreach (var flag in ConditionFlagsArray)
-			{
-				if (!flag.Condition())
-				{
-					continue;
-				}
-
-				AddRunningFlags(flag);
-				RemovedConditionFlags.Add(flag);
-			}
-
-			ISTGComponmentFlag[] RemovedConditionFlagsArray = RemovedConditionFlags.ToArray();
-			foreach (var flag in RemovedConditionFlagsArray)
-			{
-				RemoveFlags(flag);
-			}
-
-			ISTGComponmentFlag[] RunningFlagsArray = RunningFlags.Values.ToArray();
-			RemovedRunningFlags.Clear();
-			foreach (var flag in RunningFlagsArray)
-			{
-				flag.Action();
-
-				if (!flag.MultipleExecutions)
-				{
-					RemovedRunningFlags.Add(flag);
-				}
-			}
-
-			ISTGComponmentFlag[] RemovedRunningFlagsArray = RemovedRunningFlags.ToArray();
-			foreach (var flag in RemovedRunningFlagsArray)
-			{
-				RemoveRunningFlags(flag);
-			}
 		}
 
 		public virtual void Move()
@@ -773,16 +711,6 @@ namespace NagaisoraFramework.STGSystem
 			return (TargetGamePosition - TransformPosition).magnitude;
 		}
 
-		public void BindUpdateEvent()
-		{
-			STGControler.OnUpdate += OnUpdate;
-		}
-
-		public void UnBindUpdateEvent()
-		{
-			STGControler.OnUpdate -= OnUpdate;
-		}
-
 		public void BindKeyEvent()
 		{
 			STGControler.KeyDown += KeyDown;
@@ -793,52 +721,8 @@ namespace NagaisoraFramework.STGSystem
 			STGControler.KeyDown -= KeyDown;
 		}
 
-		public virtual void AddFlags(params ISTGComponmentFlag[] flags)
-		{
-			foreach(var flag in flags)
-			{
-				if (ConditionFlags.ContainsKey(flag.FlagName))
-				{
-					throw new Exception($"ConditionFlag {flag.FlagName} already exists in {name}.");
-				}
-				flag.Componment = this;
-				ConditionFlags.Add(flag.FlagName, flag);
-			}
-		}
-
-		public virtual void RemoveFlags(params ISTGComponmentFlag[] flags)
-		{
-			foreach (var flag in flags)
-			{
-				ConditionFlags.Remove(flag.FlagName);
-			}
-		}
-
-		public virtual void AddRunningFlags(params ISTGComponmentFlag[] flags)
-		{
-			foreach (var flag in flags)
-			{
-				if (RunningFlags.ContainsKey(flag.FlagName))
-				{
-					throw new Exception($"RunningFlag {flag.FlagName} already exists in {name}.");
-				}
-				flag.Componment = this;
-				RunningFlags.Add(flag.FlagName, flag);
-			}
-		}
-
-		public virtual void RemoveRunningFlags(params ISTGComponmentFlag[] flags)
-		{
-			foreach (var flag in flags)
-			{
-				RunningFlags.Remove(flag.FlagName);
-			}
-		}
-
 		public virtual void BaseDelete()
 		{
-			UnBindUpdateEvent();
-
 			TransformPosition = STGControler.DisablePosition;
 
 			UpdateUnityProperty();

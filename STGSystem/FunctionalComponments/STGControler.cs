@@ -4,16 +4,18 @@ using System.Collections.Generic;
 using Diagnostics = System.Diagnostics;
 
 using UnityEngine;
-using System.Linq;
 using UnityEngine.UI;
+using System.Threading;
 
 namespace NagaisoraFramework.STGSystem
 {
 	using static MainSystem;
 
-	public class STGControler : CommMonoScriptObject
+	public class STGControler : CommMonoScriptObject, IDisposable
 	{
 		public PoolManager PoolManager;
+
+		public ECLControler ECLControler;
 
 		[Header("系统引用 (必须)")]
 		public CoroutineManager CoroutineManager;
@@ -22,8 +24,6 @@ namespace NagaisoraFramework.STGSystem
 		public BlendManager BlendManager;
 
 		public PlayerControl Player;
-
-		public ECLControler ECLControler;
 
 		public RawImage BackgroundImage;
 
@@ -373,35 +373,25 @@ namespace NagaisoraFramework.STGSystem
 		[SerializeField]
 		private bool m_TestStatus = false;
 
-		public List<STGComponment> EnemyBullets;
 		public List<EnemyControl> Enemys;
+		public List<EnemyBulletControl> EnemyBullets;
+		public List<LaserControl> EnemyLasers;
 		public List<PlayerBulletControl> PlayerBullets;
+		public List<EffectControl> Effects;
 
-		//Flags
-		public Dictionary<string, ISTGControlerFlag> ConditionFlags;
-		public List<ISTGControlerFlag> RemovedConditionFlags;
-		public Dictionary<string, ISTGControlerFlag> RunningFlags;
-		public List<ISTGControlerFlag> RemovedRunningFlags;
-
-		//Events
-		public delegate void ComponentUpdate();
-		public event ComponentUpdate OnUpdate;
+		public EnemyControl[] EnemysArray;
+		public EnemyBulletControl[] EnemyBulletsArray;
+		public LaserControl[] EnemyLasersArray;
+		public PlayerBulletControl[] PlayerBulletsArray;
+		public EffectControl[] EffectsArray;
 
 		public delegate void KeyDownEvent(bool[] bools);
 		public event KeyDownEvent KeyDown;
 
+		public Thread SubUpdateThread;
+
 		public void Awake()
 		{
-			ECLControler = new ECLControler()
-			{
-				STGControler = this
-			};
-
-			ConditionFlags = new Dictionary<string, ISTGControlerFlag>();
-			RemovedConditionFlags = new List<ISTGControlerFlag>();
-			RunningFlags = new Dictionary<string, ISTGControlerFlag>();
-			RemovedRunningFlags = new List<ISTGControlerFlag>();
-
 			if (ClockSystem != null)
 			{
 				ClockSystem.ClockEvent += TimeClockEvent;
@@ -430,14 +420,6 @@ namespace NagaisoraFramework.STGSystem
 			PlayerReset();
 		}
 
-		public void FlagReset()
-		{
-			ConditionFlags.Clear();
-			RemovedConditionFlags.Clear();
-			RunningFlags.Clear();
-			RemovedRunningFlags.Clear();
-		}
-
 		public void Start()
 		{
 			if (IsGolbal)
@@ -457,13 +439,15 @@ namespace NagaisoraFramework.STGSystem
 			}
 
 			KeyDown += ReplaySystem.KeyDown;
-			OnUpdate += ReplaySystem.OnUpdate;
+
+			CreateUpdateThread();
 		}
 
 		public void OnDisable()
 		{
+			Dispose();
+
 			KeyDown -= ReplaySystem.KeyDown;
-			OnUpdate -= ReplaySystem.OnUpdate;
 		}
 
 		public void Update()
@@ -502,13 +486,9 @@ namespace NagaisoraFramework.STGSystem
 				ReplaySystem.GameTime = GameTime;
 			}
 
-			FlagCheck();
-
 			CallKeyDown(DownKey);
 
-			ECLControler?.OnUpdate();
-
-			OnUpdate?.Invoke();
+			AllUpdate();
 
 			if (IsMaster)
 			{
@@ -520,48 +500,100 @@ namespace NagaisoraFramework.STGSystem
 			}
 		}
 
-		public virtual void FlagCheck()
+		public virtual void AllUpdate()
 		{
-			if ((ConditionFlags == null || ConditionFlags.Count == 0) && (RunningFlags == null || RunningFlags.Count == 0))
+			ReplaySystem?.OnUpdate();
+
+			ECLControler?.OnUpdate();
+
+			EnemysArray = Enemys.ToArray();
+			EnemyBulletsArray = EnemyBullets.ToArray();
+			EnemyLasersArray = EnemyLasers.ToArray();
+			PlayerBulletsArray = PlayerBullets.ToArray();
+			EffectsArray = Effects.ToArray();
+
+			Player?.OnUpdate();
+
+			foreach (var enemy in EnemysArray)
+			{
+				enemy?.OnUpdate();
+			}
+
+			foreach (var enemyBullet in EnemyBulletsArray)
+			{
+				enemyBullet?.OnUpdate();
+			}
+
+			foreach (var enemyLaser in EnemyLasersArray)
+			{
+				enemyLaser?.OnUpdate();
+			}
+
+			foreach (var playerBullet in PlayerBulletsArray)
+			{
+				playerBullet?.OnUpdate();
+			}
+
+			foreach (var effect in EffectsArray)
+			{
+				effect?.OnUpdate();
+			}
+		}
+
+		public virtual void CreateUpdateThread()
+		{
+			if (!(SubUpdateThread is null))
 			{
 				return;
 			}
 
-			ISTGControlerFlag[] ConditionFlagsArray = ConditionFlags.Values.ToArray();
-			RemovedConditionFlags.Clear();
-			foreach (var flag in ConditionFlagsArray)
+			SubUpdateThread = new Thread(new ThreadStart(() =>
 			{
-				if (!flag.Condition())
+				while (true)
 				{
-					continue;
+					SubThreadUpdate();
 				}
+			}));
+			SubUpdateThread.Start();
+		}
 
-				AddRunningFlags(flag);
-				RemovedConditionFlags.Add(flag);
+		public virtual void Dispose()
+		{
+			SubUpdateThread?.Abort();
+		}
+
+		public virtual void SubThreadUpdate()
+		{
+			if (!IsRunning)
+			{
+				return;
 			}
 
-			ISTGControlerFlag[] RemovedConditionFlagsArray = RemovedConditionFlags.ToArray();
-			foreach (var flag in RemovedConditionFlagsArray)
+			Player?.OnSubThreadUpdate();
+
+			foreach (var enemy in EnemysArray)
 			{
-				RemoveFlags(flag);
+				enemy?.OnSubThreadUpdate();
 			}
 
-			ISTGControlerFlag[] RunningFlagsArray = RunningFlags.Values.ToArray();
-			RemovedRunningFlags.Clear();
-			foreach (var flag in RunningFlagsArray)
+			foreach (var enemyBullet in EnemyBulletsArray)
 			{
-				flag.Action();
-
-				if (!flag.MultipleExecutions)
-				{
-					RemovedRunningFlags.Add(flag);
-				}
+				enemyBullet?.OnSubThreadUpdate();
 			}
 
-			ISTGControlerFlag[] RemovedRunningFlagsArray = RemovedRunningFlags.ToArray();
-			foreach (var flag in RemovedRunningFlagsArray)
+			foreach (var enemyLaser in EnemyLasersArray)
 			{
-				RemoveRunningFlags(flag);
+				enemyLaser?.OnSubThreadUpdate();
+			}
+
+			foreach (var playerBullet in PlayerBulletsArray)
+			{
+				playerBullet?.OnSubThreadUpdate();
+			}
+
+			foreach (var effect in EffectsArray)
+			{
+				effect?.OnSubThreadUpdate();
 			}
 		}
 
@@ -676,48 +708,6 @@ namespace NagaisoraFramework.STGSystem
 			ECLControler.Stop();
 		}
 
-		public virtual void AddFlags(params ISTGControlerFlag[] flags)
-		{
-			foreach (var flag in flags)
-			{
-				if (ConditionFlags.ContainsKey(flag.FlagName))
-				{
-					throw new Exception($"ConditionFlag {flag.FlagName} already exists in {name}.");
-				}
-				flag.STGControler = this;
-				ConditionFlags.Add(flag.FlagName, flag);
-			}
-		}
-
-		public virtual void RemoveFlags(params ISTGControlerFlag[] flags)
-		{
-			foreach (var flag in flags)
-			{
-				ConditionFlags.Remove(flag.FlagName);
-			}
-		}
-
-		public virtual void AddRunningFlags(params ISTGControlerFlag[] flags)
-		{
-			foreach (var flag in flags)
-			{
-				if (RunningFlags.ContainsKey(flag.FlagName))
-				{
-					throw new Exception($"RunningFlag {flag.FlagName} already exists in {name}.");
-				}
-				flag.STGControler = this;
-				RunningFlags.Add(flag.FlagName, flag);
-			}
-		}
-
-		public virtual void RemoveRunningFlags(params ISTGControlerFlag[] flags)
-		{
-			foreach (var flag in flags)
-			{
-				RunningFlags.Remove(flag.FlagName);
-			}
-		}
-
 		public GameObject NewObject(Type type, string name, GameObject parent)
 		{
 			GameObject Object = PoolManager.NewObject(type);
@@ -770,6 +760,8 @@ namespace NagaisoraFramework.STGSystem
 			component.DetermineRadius = EnemyInfo.DetermineRadius;
 			component.Order = 21 + order;
 
+			Enemys.Add(component);
+
 			if (init)
 			{
 				component.Init();
@@ -801,6 +793,8 @@ namespace NagaisoraFramework.STGSystem
 			component.Order = 21 + order;
 			component.Direction = angle;
 
+			EnemyBullets.Add(component);
+
 			if (init)
 			{
 				component.Init();
@@ -811,7 +805,7 @@ namespace NagaisoraFramework.STGSystem
 
 		public (GameObject, T) NewEnemyLaser<T>(LaserType type, int color, int length, string name, int order, Vector2 position, float angle, bool init = true, BlendMode blendMode = BlendMode.AlphaBlend) where T : LaserControl
 		{
-			if (EnemyBullets.Count >= MaxEnemyBulletCount)
+			if (EnemyLasers.Count >= MaxEnemyBulletCount)
 			{
 				Debug.Log("BulletNumberOutMaxCount");
 				return (null, null);
@@ -833,6 +827,8 @@ namespace NagaisoraFramework.STGSystem
 			component.LaserLength = length;
 			component.Order = 21 + order;
 			component.Direction = angle;
+
+			EnemyLasers.Add(component);
 
 			if (init)
 			{
@@ -858,6 +854,8 @@ namespace NagaisoraFramework.STGSystem
 			component.Order = 21 + order;
 			component.Direction = angle;
 
+			PlayerBullets.Add(component);
+
 			if (init)
 			{
 				component.Init();
@@ -881,7 +879,7 @@ namespace NagaisoraFramework.STGSystem
 			component.Color = color;
 			component.Order = 21 + order;
 
-			BulletEffectCount++;
+			Effects.Add(component);
 
 			if (init)
 			{
@@ -908,7 +906,7 @@ namespace NagaisoraFramework.STGSystem
 			component.TransformPosition = position;
 			component.Order = 21 + order;
 
-			BulletEffectCount++;
+			Effects.Add(component);
 
 			if (init)
 			{

@@ -33,8 +33,6 @@ namespace NagaisoraFramework.STGSystem
 		{
 			base.Init();
 
-			STGControler.EnemyBullets.Add(this);
-
 			DetermineRadius = STGControler.STGSystemData.EnemyLongLaser.DetermineRadius;
 
 			if (Type == LaserType.Long)
@@ -248,7 +246,7 @@ namespace NagaisoraFramework.STGSystem
 				STGControler.NewEnemyShootEffect<EnemyShootEffectControl>(Color, Order - 21, TransformPosition);
 			}
 
-			STGControler.EnemyBullets.Remove(this);
+			STGControler.EnemyLasers.Remove(this);
 
 			base.BaseDelete();
 		}

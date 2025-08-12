@@ -18,8 +18,6 @@ namespace NagaisoraFramework.STGSystem
 			{
 				ECLcontroler.STGControler = STGControler;
 			}
-
-			STGControler.OnUpdate += OnUpdate;
 		}
 
 		public void OnUpdate()

@@ -14,5 +14,12 @@ namespace NagaisoraFramework.STGSystem
 		{
 			base.OnUpdate();
 		}
+
+		public override void BaseDelete()
+		{
+			STGControler.Effects.Remove(this);
+
+			base.BaseDelete();
+		}
 	}
 }

@@ -397,15 +397,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="STGSystem\Controler\Block\ExecutableBlock.cs" />
-    <Compile Include="STGSystem\Controler\Block\BlockComColumn.cs" />
-    <Compile Include="STGSystem\Controler\Block\BlockInterfereItem.cs" />
-    <Compile Include="STGSystem\Controler\Block\DataBlock.cs" />
-    <Compile Include="STGSystem\Controler\Block\Function.cs" />
-    <Compile Include="STGSystem\Controler\Block\FunctionBlock.cs" />
-    <Compile Include="STGSystem\Controler\Block\OrganizationBlock.cs" />
-    <Compile Include="STGSystem\Controler\BlockControler.cs" />
     <Compile Include="STGSystem\Controler\ECLData.cs" />
+    <Compile Include="STGSystem\Controler\Items\ECLInterrupt.cs" />
+    <Compile Include="STGSystem\Controler\Items\ECLFunction.cs" />
+    <Compile Include="STGSystem\Controler\Items\ECLMain.cs" />
+    <Compile Include="STGSystem\Controler\Items\IECLItem.cs" />
     <Compile Include="STGSystem\Controler\SFC\ISFComponment.cs" />
     <Compile Include="STGSystem\Controler\SFC\SFCStep.cs" />
     <Compile Include="STGSystem\Controler\SFC\SFCTran.cs" />
@@ -420,7 +416,6 @@
     <Compile Include="CoreSystem\Componment\SystemControler.cs" />
     <Compile Include="CoreSystem\Componment\SystemStart.cs" />
     <Compile Include="CoreSystem\DataPathDefine.cs" />
-    <Compile Include="STGSystem\Controler\Block\IBlock.cs" />
     <Compile Include="CoreSystem\RenderTextureHelper.cs" />
     <Compile Include="STGSystem\Controler\SFC\SFControler.cs" />
     <Compile Include="GenericComponment\TimeLineControler.cs" />
