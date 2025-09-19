@@ -96,8 +96,9 @@ namespace NagaisoraFramework
 		public new event Messsage Accept;
 		public new event Messsage Receive;
 
-		public Thread[] MessagingThreads;
-		public Timer Timer1S;
+		public Thread MessagingThread;
+
+		public System.Threading.Timer Timer1S;
 		public N45Server() : this(4096)
 		{
 
@@ -108,15 +109,15 @@ namespace NagaisoraFramework
 			KeyLength = keylength;
 			N45Clients = new Dictionary<Socket, N45ClientInfo>();
 
-			Timer1S = new Timer(Timer1SMethod, null, 0, 1000);
+			Timer1S = new System.Threading.Timer(Timer1SMethod, null, 0, 1000);
 
-			MessagingThreads = new Thread[5];
+			//MessagingThreads = new Thread[5];
 
-			for (int i = 0; i < MessagingThreads.Length; i++)
-			{
-				MessagingThreads[i] = new Thread(MessagingThreadMethod);
-				MessagingThreads[i].Start();
-			}
+			//for (int i = 0; i < MessagingThreads.Length; i++)
+			//{
+				MessagingThread = new Thread(MessagingThreadMethod);
+				MessagingThread.Start();
+			//}
 		}
 
 		public void Timer1SMethod(object state)
@@ -148,13 +149,18 @@ namespace NagaisoraFramework
 						continue;
 					}
 
-					foreach (var info in N45Clients)
+					Parallel.ForEach(N45Clients.ToArray(), (info) =>
 					{
-						info.Value.MessagingThreadMethod();
-					}
+						lock (N45Clients)
+						{
+							info.Value.MessagingThreadMethod();
+						}
+					});
 				}
-				catch
-				{ }
+				catch (Exception ex)
+				{
+					throw ex;
+				}
 			}
 		}
 
@@ -179,15 +185,15 @@ namespace NagaisoraFramework
 				return;
 			}
 
-			foreach (var info in N45Clients)
+			foreach (var info in N45Clients.ToArray())
 			{
 				info.Value.Dispose();
 			}
 
-			foreach (Thread thread in MessagingThreads)
-			{
-				thread.Abort();
-			}
+			//foreach (Thread thread in MessagingThreads)
+			//{
+				MessagingThread.Abort();
+			//}
 		}
 
 		public override void AcceptCallBack(IAsyncResult result)
@@ -531,7 +537,7 @@ namespace NagaisoraFramework
 		public string RSAKey;
 		public string OldLocalKey;
 
-		public Timer KeyUpdateTimer;
+		public System.Threading.Timer KeyUpdateTimer;
 		public Random KeyUpdateTimeRandom;
 		public long NowTime = 0;
 
@@ -557,7 +563,7 @@ namespace NagaisoraFramework
 			ReceiveMessagingQueue = new Queue<byte[]>();
 			SendMessagingQueue = new Queue<N45Object>();
 
-			KeyUpdateTimer = new Timer(UpdateKeyClick, null, 0, 1000);
+			KeyUpdateTimer = new System.Threading.Timer(UpdateKeyClick, null, 0, 1000);
 
 			KeyUpdateTimeRandom = new Random();
 			NowTime = KeyUpdateTimeRandom.Next(10, 30);
@@ -582,6 +588,8 @@ namespace NagaisoraFramework
 				};
 
 				SendMessagingQueue.Enqueue(keyobj);
+
+				Console.WriteLine($"{EndPoint}¸üÐÂÃÜÔ¿");
 			}
 		}
 

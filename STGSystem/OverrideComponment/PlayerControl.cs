@@ -4,11 +4,6 @@ namespace NagaisoraFramework.STGSystem
 {
 	public class PlayerControl : STGComponment
 	{
-		[Header("系统引用 (PlayerControl)")]
-		public GameObject Effect;
-		public GameObject SlowEffectL;
-		public GameObject SlowEffectR;
-
 		[Header("系统参数 (PlayerControl)")]
 		public Animator Animator;
 		public float HighSpeed;
@@ -32,32 +27,12 @@ namespace NagaisoraFramework.STGSystem
 				Animator = gameObject.AddComponent<Animator>();
 			}
 
-			if (!STGControler.IsReplaying)
-			{
-				BindKeyEvent();
-			}
-
 			base.Init();
-		}
-
-		public void Update()
-		{
-			if (IsSolt)
-			{
-				Effect.SetActive(true);
-			}
-			else
-			{
-				Effect.SetActive(false);
-			}
 		}
 
 		public override void OnUpdate()
 		{
 			base.OnUpdate();
-
-			SlowEffectL.transform.Rotate(new Vector3(0, 0, RD), Space.Self);
-			SlowEffectR.transform.Rotate(new Vector3(0, 0, -RD), Space.Self);
 
 			Velocity = HighSpeed;
 
@@ -78,7 +53,7 @@ namespace NagaisoraFramework.STGSystem
 		{
 			base.Move();
 
-			Vector2 position = Transform.localPosition;
+			Vector2 position = TransformPosition;
 
 			if (position.y >= STGControler.PlayerMaxPosition.y)
 			{
@@ -98,7 +73,7 @@ namespace NagaisoraFramework.STGSystem
 				position.x = -STGControler.PlayerMaxPosition.x;
 			}
 
-			Transform.localPosition = position;
+			TransformPosition = position;
 		}
 
 		public override void KeyDown(bool[] keys)

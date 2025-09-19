@@ -20,7 +20,6 @@ namespace NagaisoraFramework.STGSystem
 			BaseDelete();
 		}
 
-
 		public override void Init()
 		{
 			base.Init();
@@ -42,7 +41,6 @@ namespace NagaisoraFramework.STGSystem
 			SpriteRender.drawMode = SpriteDrawMode.Sliced;
 			SpriteRender.sortingLayerName = "StageMain";
 			SpriteRender.sortingOrder = Order;
-			SpriteRender.material = STGControler.BlendManager.Blends[BlendMode];       //设定SpriteRender材质
 
 			EnemyObject enemyObject = EnemyInfo.Info[Color];
 
@@ -60,6 +58,11 @@ namespace NagaisoraFramework.STGSystem
 		public virtual void Check(STGComponment Target)
 		{
 			if (Target == null || Target.Disposed)
+			{
+				return;
+			}
+
+			if (STGControler.TestStatus)
 			{
 				return;
 			}

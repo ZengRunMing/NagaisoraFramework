@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using Diagnostics = System.Diagnostics;
-
+using System.Threading;
 using UnityEngine;
 using UnityEngine.UI;
-using System.Threading;
+using Diagnostics = System.Diagnostics;
 
 namespace NagaisoraFramework.STGSystem
 {
@@ -275,15 +274,15 @@ namespace NagaisoraFramework.STGSystem
 				m_EnemyBulletCount = value;
 			}
 		}
-		public bool StatusLock
+		public bool PlayerInvincible
 		{
 			get
 			{
-				return m_StatusLock;
+				return m_PlayerInvincible;
 			}
 			set
 			{
-				m_StatusLock = value;
+				m_PlayerInvincible = value;
 			}
 		}
 		public bool IsRunning
@@ -351,10 +350,6 @@ namespace NagaisoraFramework.STGSystem
 		[SerializeField]
 		private Vector2 m_AxisVector;
 		[SerializeField]
-		private int m_Life;
-		[SerializeField]
-		private int m_Bomb;
-		[SerializeField]
 		private ushort m_DownKey;
 		[SerializeField]
 		private float m_BackgroundTransparent;
@@ -365,14 +360,21 @@ namespace NagaisoraFramework.STGSystem
 		[SerializeField]
 		private uint m_GameTime = 0;
 		[SerializeField]
-		private bool m_StatusLock;
-		[SerializeField]
 		public bool m_IsRunning;
 		[SerializeField]
 		public bool m_IsReplaying;
 		[SerializeField]
 		private bool m_TestStatus = false;
 
+		[Header("玩家状态")]
+		[SerializeField]
+		private int m_Life;
+		[SerializeField]
+		private int m_Bomb;
+		[SerializeField]
+		private bool m_PlayerInvincible;
+
+		[Header("系统数组")]
 		public List<EnemyControl> Enemys;
 		public List<EnemyBulletControl> EnemyBullets;
 		public List<LaserControl> EnemyLasers;
@@ -390,6 +392,8 @@ namespace NagaisoraFramework.STGSystem
 
 		public Thread SubUpdateThread;
 
+		public static List<Timer> Timers;
+
 		public void Awake()
 		{
 			if (ClockSystem != null)
@@ -398,6 +402,8 @@ namespace NagaisoraFramework.STGSystem
 			}
 
 			PoolManager = new PoolManager();
+
+			Timers = new List<Timer>();
 
 			if (!gameObject.TryGetComponent(out CoroutineManager))
 			{
@@ -503,6 +509,11 @@ namespace NagaisoraFramework.STGSystem
 		public virtual void AllUpdate()
 		{
 			ReplaySystem?.OnUpdate();
+
+			foreach (Timer timer in Timers.ToArray())
+			{
+				timer.OnUpdate();
+			}
 
 			ECLControler?.OnUpdate();
 
@@ -677,10 +688,10 @@ namespace NagaisoraFramework.STGSystem
 
 		public void LifeSub()
 		{
-			if (!StatusLock)
+			if (!PlayerInvincible)
 			{
 				Life--;
-				StatusLock = true;
+				PlayerInvincible = true;
 			}
 		}
 
@@ -690,6 +701,17 @@ namespace NagaisoraFramework.STGSystem
 			{
 				return;
 			}
+
+			if (TestStatus)
+			{
+				Player.gameObject.SetActive(false);
+			}
+			else
+			{
+				Player.gameObject.SetActive(true);
+			}
+
+			Player.Init();
 
 			IsRunning = true;
 
@@ -706,6 +728,16 @@ namespace NagaisoraFramework.STGSystem
 			IsRunning = false;
 
 			ECLControler.Stop();
+		}
+
+		public void RegisterTimer(Timer timer)
+		{
+			Timers.Add(timer);
+		}
+
+		public void UnRegisterTimer(Timer timer)
+		{
+			Timers.Remove(timer);
 		}
 
 		public GameObject NewObject(Type type, string name, GameObject parent)
@@ -753,14 +785,11 @@ namespace NagaisoraFramework.STGSystem
 			}
 
 			component.TransformPosition = position;
-			component.BlendMode = blendMode;
 			component.Type = type;
 			component.Color = color;
 			component.DetermineOffset = EnemyInfo.DetermineOffset;
 			component.DetermineRadius = EnemyInfo.DetermineRadius;
 			component.Order = 21 + order;
-
-			Enemys.Add(component);
 
 			if (init)
 			{
@@ -787,13 +816,11 @@ namespace NagaisoraFramework.STGSystem
 			}
 
 			component.TransformPosition = position;
-			component.BlendMode = blendMode;
 			component.BulletData = STGSystemData.EnemyBullet[type];
 			component.Color = color;
 			component.Order = 21 + order;
 			component.Direction = angle;
 
-			EnemyBullets.Add(component);
 
 			if (init)
 			{
@@ -820,15 +847,12 @@ namespace NagaisoraFramework.STGSystem
 			}
 
 			component.TransformPosition = Vector2.zero;
-			component.BlendMode = blendMode;
 			component.HeadPosition = position;
 			component.Type = type;
 			component.Color = color;
 			component.LaserLength = length;
 			component.Order = 21 + order;
 			component.Direction = angle;
-
-			EnemyLasers.Add(component);
 
 			if (init)
 			{
@@ -849,12 +873,9 @@ namespace NagaisoraFramework.STGSystem
 			}
 
 			component.TransformPosition = position;
-			component.BlendMode = blendMode;
 			component.BulletData = STGSystemData.PlayerBullet[type];
 			component.Order = 21 + order;
 			component.Direction = angle;
-
-			PlayerBullets.Add(component);
 
 			if (init)
 			{
@@ -875,11 +896,8 @@ namespace NagaisoraFramework.STGSystem
 			}
 
 			component.TransformPosition = position;
-			component.BlendMode = blendMode;
 			component.Color = color;
 			component.Order = 21 + order;
-
-			Effects.Add(component);
 
 			if (init)
 			{
@@ -889,13 +907,13 @@ namespace NagaisoraFramework.STGSystem
 			return (Object, component);
 		}
 
-		public (GameObject, EnemyEndEffectControl) NewEnemyEndEffect(int order, Vector3 position, bool init = true)
+		public (GameObject, ParticleSystemEffectControl) NewEnemyEndEffect(int order, Vector3 position, bool init = true)
 		{
-			GameObject Object = NewObjectOfPrefab(typeof(EnemyEndEffectControl), "EnemyEndEffect", Parent, EnemyEndPrefab);
+			GameObject Object = NewObjectOfPrefab(typeof(ParticleSystemEffectControl), "EnemyEndEffect", Parent, EnemyEndPrefab);
 
-			if (!Object.TryGetComponent(out EnemyEndEffectControl component))
+			if (!Object.TryGetComponent(out ParticleSystemEffectControl component))
 			{
-				component = Object.AddComponent<EnemyEndEffectControl>();
+				component = Object.AddComponent<ParticleSystemEffectControl>();
 			}
 
 			if (component.STGControler is null || component.STGControler != this)
@@ -905,8 +923,6 @@ namespace NagaisoraFramework.STGSystem
 
 			component.TransformPosition = position;
 			component.Order = 21 + order;
-
-			Effects.Add(component);
 
 			if (init)
 			{

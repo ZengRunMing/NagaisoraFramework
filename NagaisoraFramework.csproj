@@ -61,12 +61,21 @@
       <HintPath>..\packages\Melanchall.DryWetMidi.8.0.1\lib\net45\Melanchall.DryWetMidi.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Microsoft.Win32.Registry, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Win32.Registry.5.0.0\lib\net461\Microsoft.Win32.Registry.dll</HintPath>
+    </Reference>
     <Reference Include="Mono.Data.Sqlite">
       <HintPath>E:\UnityEidor\2022.3.37f1c1\Editor\Data\MonoBleedingEdge\lib\mono\unityjit-win32\Mono.Data.Sqlite.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="System">
       <Private>False</Private>
+    </Reference>
+    <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ComponentModel.Annotations, Version=4.2.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ComponentModel.Annotations.5.0.0\lib\net461\System.ComponentModel.Annotations.dll</HintPath>
     </Reference>
     <Reference Include="System.ComponentModel.DataAnnotations">
       <Private>False</Private>
@@ -88,6 +97,22 @@
     </Reference>
     <Reference Include="System.Drawing">
       <Private>False</Private>
+    </Reference>
+    <Reference Include="System.Memory, Version=4.0.1.2, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Memory.4.5.5\lib\net461\System.Memory.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Numerics.Vectors, Version=4.1.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Numerics.Vectors.4.5.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.4.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.5.3\lib\net461\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Security.AccessControl, Version=6.0.0.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Security.AccessControl.6.0.1\lib\net461\System.Security.AccessControl.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Security.Principal.Windows, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Security.Principal.Windows.5.0.0\lib\net461\System.Security.Principal.Windows.dll</HintPath>
     </Reference>
     <Reference Include="System.Xml.Linq">
       <Private>False</Private>
@@ -397,47 +422,55 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CoreSystem\Enums.cs" />
+    <Compile Include="CoreSystem\FrameworkMath.cs" />
+    <Compile Include="GenericFunctions\AssetBundleHelper.cs" />
+    <Compile Include="GenericFunctions\CommonFunctions.cs" />
     <Compile Include="STGSystem\Controler\ECLData.cs" />
+    <Compile Include="STGSystem\Controler\Items\ECLInterface.cs" />
+    <Compile Include="STGSystem\Controler\Items\ECLCondition.cs" />
     <Compile Include="STGSystem\Controler\Items\ECLInterrupt.cs" />
-    <Compile Include="STGSystem\Controler\Items\ECLFunction.cs" />
+    <Compile Include="STGSystem\Controler\Items\ECLClass.cs" />
     <Compile Include="STGSystem\Controler\Items\ECLMain.cs" />
+    <Compile Include="STGSystem\Controler\Items\IECLCondition.cs" />
+    <Compile Include="STGSystem\Controler\Items\IECLInterrupt.cs" />
     <Compile Include="STGSystem\Controler\Items\IECLItem.cs" />
     <Compile Include="STGSystem\Controler\SFC\ISFComponment.cs" />
     <Compile Include="STGSystem\Controler\SFC\SFCStep.cs" />
     <Compile Include="STGSystem\Controler\SFC\SFCTran.cs" />
-    <Compile Include="CoreSystem\AssemblySystem.cs" />
-    <Compile Include="CoreSystem\BGMPackData.cs" />
-    <Compile Include="CoreSystem\BitArrayBool.cs" />
-    <Compile Include="CoreSystem\BlendManager.cs" />
-    <Compile Include="CoreSystem\Componment\ClockSystem.cs" />
-    <Compile Include="CoreSystem\Componment\CoroutineManager.cs" />
-    <Compile Include="CoreSystem\Componment\EventTriggerListener.cs" />
-    <Compile Include="CoreSystem\Componment\InputModule.cs" />
-    <Compile Include="CoreSystem\Componment\SystemControler.cs" />
-    <Compile Include="CoreSystem\Componment\SystemStart.cs" />
-    <Compile Include="CoreSystem\DataPathDefine.cs" />
-    <Compile Include="CoreSystem\RenderTextureHelper.cs" />
+    <Compile Include="GenericFunctions\AssemblySystem.cs" />
+    <Compile Include="DataSystem\BGMPackData.cs" />
+    <Compile Include="GenericFunctions\BitArrayBool.cs" />
+    <Compile Include="GenericComponment\BlendManager.cs" />
+    <Compile Include="GenericComponment\ClockSystem.cs" />
+    <Compile Include="GenericComponment\CoroutineManager.cs" />
+    <Compile Include="GenericComponment\EventTriggerListener.cs" />
+    <Compile Include="GenericComponment\InputModule.cs" />
+    <Compile Include="GenericComponment\SystemControler.cs" />
+    <Compile Include="GenericComponment\SystemStart.cs" />
+    <Compile Include="DataSystem\DataPathDefine.cs" />
+    <Compile Include="GenericFunctions\RenderTextureHelper.cs" />
     <Compile Include="STGSystem\Controler\SFC\SFControler.cs" />
     <Compile Include="GenericComponment\TimeLineControler.cs" />
-    <Compile Include="CoreSystem\SerializationDictionary.cs" />
-    <Compile Include="CoreSystem\TimeControler.cs" />
-    <Compile Include="CoreSystem\TimeLineSystem.cs" />
-    <Compile Include="CoreSystem\ConfigData.cs" />
-    <Compile Include="CoreSystem\Famework Common.cs" />
-    <Compile Include="CoreSystem\FlagSystem.cs" />
-    <Compile Include="CoreSystem\KeyConfig.cs" />
+    <Compile Include="GenericFunctions\SerializationDictionary.cs" />
+    <Compile Include="GenericFunctions\TimeControler.cs" />
+    <Compile Include="GenericFunctions\TimeLineSystem.cs" />
+    <Compile Include="DataSystem\ConfigData.cs" />
+    <Compile Include="CoreSystem\Framework Common.cs" />
+    <Compile Include="GenericFunctions\FlagSystem.cs" />
+    <Compile Include="DataSystem\KeyConfig.cs" />
     <Compile Include="CoreSystem\MainSystem.cs" />
-    <Compile Include="CoreSystem\ManagementObject.cs" />
-    <Compile Include="CoreSystem\MemoryMappedViewAccessorStream.cs" />
-    <Compile Include="CoreSystem\PlayerData.cs" />
-    <Compile Include="CoreSystem\ProgramSystem.cs" />
-    <Compile Include="CoreSystem\ReplayData.cs" />
-    <Compile Include="CoreSystem\ScoreData.cs" />
-    <Compile Include="CoreSystem\SerializeSystem.cs" />
-    <Compile Include="CoreSystem\SQLite.cs" />
-    <Compile Include="CoreSystem\ThreadManager.cs" />
-    <Compile Include="CoreSystem\Timer.cs" />
-    <Compile Include="CoreSystem\WindowsAPI.cs" />
+    <Compile Include="GenericFunctions\ManagementObject.cs" />
+    <Compile Include="GenericFunctions\MemoryMappedViewAccessorStream.cs" />
+    <Compile Include="DataSystem\PlayerData.cs" />
+    <Compile Include="GenericFunctions\ProgramSystem.cs" />
+    <Compile Include="DataSystem\ReplayData.cs" />
+    <Compile Include="DataSystem\ScoreData.cs" />
+    <Compile Include="GenericFunctions\SerializeSystem.cs" />
+    <Compile Include="GenericFunctions\SQLite.cs" />
+    <Compile Include="GenericFunctions\ThreadManager.cs" />
+    <Compile Include="GenericFunctions\Timer.cs" />
+    <Compile Include="GenericFunctions\WindowsAPI.cs" />
     <Compile Include="DataSystem\Animation\AnimationDataSystem.cs" />
     <Compile Include="DataSystem\ConfigFileSystem.cs" />
     <Compile Include="DataSystem\Meida\BGMPackDataCollection.cs" />
@@ -500,15 +533,16 @@
     <Compile Include="STGSystem\Controler\STGControlerTimeLineControler.cs" />
     <Compile Include="STGSystem\OverrideComponment\BossControl.cs" />
     <Compile Include="STGSystem\OverrideComponment\BulletControl.cs" />
-    <Compile Include="STGSystem\OverrideComponment\BulletMontage.cs" />
+    <Compile Include="STGSystem\OverrideComponment\EnemyBulletMontageControl.cs" />
     <Compile Include="STGSystem\OverrideComponment\EffectControl.cs" />
     <Compile Include="STGSystem\OverrideComponment\EnemyBulletControl.cs" />
     <Compile Include="STGSystem\OverrideComponment\EnemyControl.cs" />
-    <Compile Include="STGSystem\OverrideComponment\EnemyEndEffectControl.cs" />
+    <Compile Include="STGSystem\OverrideComponment\ParticleSystemEffectControl.cs" />
     <Compile Include="STGSystem\OverrideComponment\LaserControl.cs" />
     <Compile Include="STGSystem\OverrideComponment\PlayerBulletControl.cs" />
     <Compile Include="STGSystem\OverrideComponment\PlayerControl.cs" />
-    <Compile Include="STGSystem\OverrideComponment\ShootEffectControl.cs" />
+    <Compile Include="STGSystem\OverrideComponment\EnemyShootEffectControl.cs" />
+    <Compile Include="STGSystem\OverrideComponment\SpriteRenderEffectControl.cs" />
     <Compile Include="STGSystem\SpecialComponents\SpellCardTitle.cs" />
     <Compile Include="StorySytem\StoryBalloon.cs" />
     <Compile Include="StorySytem\StoryControl.cs" />
@@ -545,7 +579,12 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\LogSystem\LogSystem.csproj">
+      <Project>{97f91d66-f97f-4f93-9527-8abbec9ee32d}</Project>
+      <Name>LogSystem</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
@@ -555,8 +594,10 @@
     <Error Condition="!Exists('..\packages\EntityFramework.6.5.1\build\EntityFramework.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.5.1\build\EntityFramework.props'))" />
     <Error Condition="!Exists('..\packages\EntityFramework.6.5.1\build\EntityFramework.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.5.1\build\EntityFramework.targets'))" />
     <Error Condition="!Exists('..\packages\Melanchall.DryWetMidi.8.0.1\build\Melanchall.DryWetMidi.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Melanchall.DryWetMidi.8.0.1\build\Melanchall.DryWetMidi.targets'))" />
+    <Error Condition="!Exists('..\packages\System.ValueTuple.4.6.1\build\net471\System.ValueTuple.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\System.ValueTuple.4.6.1\build\net471\System.ValueTuple.targets'))" />
   </Target>
   <Import Project="..\packages\Stub.System.Data.SQLite.Core.NetFramework.1.0.119.0\build\net46\Stub.System.Data.SQLite.Core.NetFramework.targets" Condition="Exists('..\packages\Stub.System.Data.SQLite.Core.NetFramework.1.0.119.0\build\net46\Stub.System.Data.SQLite.Core.NetFramework.targets')" />
   <Import Project="..\packages\EntityFramework.6.5.1\build\EntityFramework.targets" Condition="Exists('..\packages\EntityFramework.6.5.1\build\EntityFramework.targets')" />
   <Import Project="..\packages\Melanchall.DryWetMidi.8.0.1\build\Melanchall.DryWetMidi.targets" Condition="Exists('..\packages\Melanchall.DryWetMidi.8.0.1\build\Melanchall.DryWetMidi.targets')" />
+  <Import Project="..\packages\System.ValueTuple.4.6.1\build\net471\System.ValueTuple.targets" Condition="Exists('..\packages\System.ValueTuple.4.6.1\build\net471\System.ValueTuple.targets')" />
 </Project>

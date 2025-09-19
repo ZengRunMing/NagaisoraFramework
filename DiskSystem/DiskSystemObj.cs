@@ -1,6 +1,6 @@
 ﻿namespace NagaisoraFramework
 {
-	public interface DiskSystemObj
+	public interface DiskSystemObject
 	{
 
 	}

@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 // 控制。更改这些特性值可修改
 // 与程序集关联的信息。
 [assembly: AssemblyTitle("NagaisoraFramework")]
-[assembly: AssemblyDescription("长空架构(UnityEngine Edition)")]
+[assembly: AssemblyDescription("长空架构 (UnityEngine Edition)")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Makira Automation E.E.T.")]
 [assembly: AssemblyProduct("NagaisoraFramework")]

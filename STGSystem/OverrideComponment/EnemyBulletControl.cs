@@ -7,6 +7,9 @@ namespace NagaisoraFramework.STGSystem
 	//敌机子弹控制系统
 	public class EnemyBulletControl : BulletControl
 	{
+		/// <summary>
+		/// 子弹的数据
+		/// </summary>
 		public EnemyBulletInfo BulletData                                   //子弹设定缓存
 		{
 			get
@@ -20,6 +23,9 @@ namespace NagaisoraFramework.STGSystem
 			}
 		}
 
+		/// <summary>
+		/// 指定的子弹颜色
+		/// </summary>
 		public int Color
 		{
 			get
@@ -41,6 +47,9 @@ namespace NagaisoraFramework.STGSystem
 		[SerializeField]
 		protected bool m_BulletDataChanged;
 
+		/// <summary>
+		/// 基于父类重写的初始化函数，在回调父类函数后添加了向STGControl注册自身的程序动作
+		/// </summary>
 		public override void Init()                                         //基于父类派生重写的初始化方法，此处编写初始化程序
 		{
 			base.Init();                                                    //调用父类的初始化方法
@@ -48,12 +57,18 @@ namespace NagaisoraFramework.STGSystem
 			STGControler.EnemyBullets.Add(this);
 		}
 
+		/// <summary>
+		/// 基于父类重写的主线程更新函数，回调父类外添加了全检查执行
+		/// </summary>
 		public override void OnUpdate()                                     //基于父类派生重写的逻辑更新方法
 		{
 			base.OnUpdate();                                                //调用父类的逻辑更新方法
 			Check(STGControler.Player);                                       //调用判定检查方法
 		}
 
+		/// <summary>
+		/// 基于父类重写的Unity对象更新函数
+		/// </summary>
 		public override void UpdateUnityProperty()
 		{
 			if (m_BulletDataChanged)
@@ -73,6 +88,9 @@ namespace NagaisoraFramework.STGSystem
 			}
 		}
 
+		/// <summary>
+		/// 基于父类重写的Unity对象更新标记清除函数
+		/// </summary>
 		public override void ClearUnityPropertyUpdateFlags()
 		{
 			base.ClearUnityPropertyUpdateFlags();
@@ -80,9 +98,18 @@ namespace NagaisoraFramework.STGSystem
 			m_BulletDataChanged = false;
 		}
 
+		/// <summary>
+		/// 敌机子弹的全判定函数，可以被重写
+		/// </summary>
+		/// <param name="Target">自机的STGComponment</param>
 		public override void Check(STGComponment Target)                      //基于父类派生重写的判定检查方法
 		{
 			if (Target == null || Target.Disposed)
+			{
+				return;
+			}
+
+			if (STGControler.TestStatus)                                //如果是测试模式则不进行下一步动作
 			{
 				return;
 			}
@@ -101,14 +128,19 @@ namespace NagaisoraFramework.STGSystem
 			}
 
 			if (HitCheck(Target))											//判断指定对象(玩家)是否在判定范围内
-			{																
-				STGControler.LifeSub();                                       //调用STG管理器玩家残机减一函数
+			{
+				STGControler.LifeSub();                                     //调用STG管理器玩家残机减一函数
 				BaseDelete();												//销毁自身 (入列对象池)
 				return;														//执行无条件返回
 			}
 		}
 
-		public virtual bool GrazeCheck(STGComponment Target)                 //基于父类派生重写的Graze判定方法，原理与标准判定类似
+		/// <summary>
+		/// Grage判定函数
+		/// </summary>
+		/// <param name="Target">自机的STGComponment</param>
+		/// <returns></returns>
+		public virtual bool GrazeCheck(STGComponment Target)                 //Graze判定方法，原理与标准判定类似
 		{
 			if (Target == null || Target.Disposed)
 			{
@@ -146,6 +178,7 @@ namespace NagaisoraFramework.STGSystem
 			{
 				STGControler.NewEnemyShootEffect<EnemyShootEffectControl>(Color, Order - 21, TransformPosition);
 			}
+
 			STGControler.EnemyBullets.Remove(this);
 
 			base.BaseDelete();

@@ -7,7 +7,7 @@ using UnityEngine;
 namespace NagaisoraFramework.STGSystem
 {
 	using static MainSystem;
-	using static UnityEngine.GraphicsBuffer;
+	using static FrameworkMath;
 
 	public class LaserControl : STGComponment
 	{
@@ -54,7 +54,6 @@ namespace NagaisoraFramework.STGSystem
 				SpriteRender.size = STGControler.STGSystemData.EnemyLongLaser.Normoal_Size;
 				SpriteRender.sortingLayerName = "StageMain";
 				SpriteRender.sortingOrder = Order;
-				SpriteRender.material = STGControler.BlendManager.Blends[BlendMode];
 
 				Transform.localPosition = HeadPosition;
 
@@ -217,8 +216,6 @@ namespace NagaisoraFramework.STGSystem
 			{
 				return;
 			}
-
-			BendLaserMesh.material = STGControler.BlendManager.LaserBlends[BlendMode];
 			
 			if (KeyPoints != null)
 			{

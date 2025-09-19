@@ -7,11 +7,11 @@ namespace NagaisoraFramework
 	{
 		public bool IsRunning;
 
-		public Timer<T> Timer;
+		public Timer Timer;
 
-		public void Init(T obj)
+		public void Init()
 		{
-			Timer = new Timer<T>(obj);
+			Timer = new Timer();
 		}
 
 		public void TimeLineStart()

@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace NagaisoraFramework
 {
-	using static MainSystem;
+	using static FrameworkMath;
 
 	public class RotatePoint : CommMonoScriptObject
 	{

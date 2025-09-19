@@ -132,6 +132,6 @@ namespace NagaisoraFramework
 		FAT16 = 3,
 		FAT32 = 4,
 		FAT64 = 5,
-		TRFS = 6,
+		NRFS = 6,
 	}
 }

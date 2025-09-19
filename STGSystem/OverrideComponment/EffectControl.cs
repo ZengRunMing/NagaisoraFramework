@@ -1,6 +1,4 @@
-﻿using UnityEngine;
-
-namespace NagaisoraFramework.STGSystem
+﻿namespace NagaisoraFramework.STGSystem
 {
 	// EffectControl类用于控制游戏中的特效，此类作为效果类的基类仅用于分类作用
 	public class EffectControl : STGComponment

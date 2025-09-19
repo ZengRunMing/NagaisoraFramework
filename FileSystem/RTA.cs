@@ -6,7 +6,7 @@ namespace NagaisoraFramework
 {
 	using Underlyingsystem;
 
-	public class RTA : IDiskInfo, DiskSystemObj
+	public class RTA : IDiskInfo, DiskSystemObject
 	{
 		public byte[] Version { get; }
 		public override ulong StartSector { get; }

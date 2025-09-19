@@ -1,10 +1,10 @@
-﻿using System.IO;
+﻿using LogSystem;
+using System.IO;
+
 using UnityEngine;
 
 namespace NagaisoraFramework.DataFileSystem
 {
-	using static MainSystem;
-
 	public static class ScoreDataSystem
 	{
 		/// <summary>
@@ -16,8 +16,12 @@ namespace NagaisoraFramework.DataFileSystem
 		{
 			if (!File.Exists(Path))
 			{
-				Debug.LogWarning(new FileNotFoundException($"ScoreDataLoad({Path}) => 所在路径不存在ScoreData文件，将创建初始化的数据写入文件并装载"));
+				Debug.Log($"[Framework Kernel] 不存在玩家数据文件，将创建初始化数据");
 				ScoreDataSave(ScoreData.Default(), Path);
+			}
+			else
+			{
+				Debug.Log($"[Framework Kernel] 装载玩家数据");
 			}
 
 			return ScoreData.FromBinary(File.ReadAllBytes(Path));

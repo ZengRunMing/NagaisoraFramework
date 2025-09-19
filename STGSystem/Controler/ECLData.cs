@@ -2,13 +2,14 @@
 using System.Text;
 using System.Collections.Generic;
 using System;
+using System.Reflection;
 
 namespace NagaisoraFramework.STGSystem
 {
 	public class ECLData
 	{
 		public static readonly string EditorHeader = "EDIECL";
-		public static readonly string ExecutableHander = "EXTECL";
+		public static readonly string ExecutableHeader = "EXTECL";
 
 		public uint SystemVersion;
 		public string Name;
@@ -17,6 +18,11 @@ namespace NagaisoraFramework.STGSystem
 		public string Author;
 
 		public List<IECLItem> ECLItems;
+
+		public Assembly ECLAssembly;
+
+		public bool IsRelease = false;
+		public bool IsExecutable = false;
 
 		public ECLData()
 		{
@@ -69,13 +75,21 @@ namespace NagaisoraFramework.STGSystem
 				{
 					binaryWriter.Write((byte)0); // 写入 ECLMain 类型标识
 				}
-				else if (item is ECLFunction)
+				else if (item is ECLClass)
 				{
-					binaryWriter.Write((byte)1); // 写入 ECLMain 类型标识
+					binaryWriter.Write((byte)1); // 写入 ECLClass 类型标识
 				}
 				else if (item is ECLInterrupt)
 				{
-					binaryWriter.Write((byte)2); // 写入 ECLMain 类型标识
+					binaryWriter.Write((byte)2); // 写入 ECLInterrupt 类型标识
+				}
+				else if (item is ECLCondition)
+				{
+					binaryWriter.Write((byte)3); // 写入 ECLCondition 类型标识
+				}
+				else if (item is ECLInterface)
+				{
+					binaryWriter.Write((byte)4); // 写入 ECLFunction 类型标识
 				}
 				else
 				{
@@ -101,9 +115,9 @@ namespace NagaisoraFramework.STGSystem
 
 			string headerString = new string(header);
 
-			if (headerString != EditorHeader)
+			if (headerString != EditorHeader && headerString != ExecutableHeader)
 			{
-				throw new InvalidDataException($"Invalid file header: {headerString}. Expected: {EditorHeader}"); // 检查文件头标识是否正确
+				throw new InvalidDataException($"Invalid file header: {headerString}. Expected: {EditorHeader} or {ExecutableHeader}"); // 检查文件头标识是否正确
 			}
 
 			ECLData data = new ECLData // 创建 ECLData 实例
@@ -115,52 +129,83 @@ namespace NagaisoraFramework.STGSystem
 				Author = binaryReader.ReadString(), // 读取作者署名
 			};
 
-			int itemCount = binaryReader.ReadInt32(); // 读取 ECLItems 的数量
-
-			data.ECLItems = new List<IECLItem>(itemCount); // 初始化 ECLItems 列表
-
-			for (int i = 0; i < itemCount; i++)
+			if (headerString == EditorHeader)
 			{
-				byte itemType = binaryReader.ReadByte(); // 读取每个 ECLItem 的类型标识
+				int itemCount = binaryReader.ReadInt32(); // 读取 ECLItems 的数量
 
-				string itemName = binaryReader.ReadString(); // 读取每个 ECLItem 的名称
-				string itemDescription = binaryReader.ReadString(); // 读取每个 ECLItem 的描述
-				string itemExecuteCode = binaryReader.ReadString(); // 读取每个 ECLItem 的执行代码
-				IECLItem item;
+				data.ECLItems = new List<IECLItem>(itemCount); // 初始化 ECLItems 列表
 
-				switch (itemType)
+				for (int i = 0; i < itemCount; i++)
 				{
-					case 0: // ECLMain
-						item = new ECLMain
-						{
-							Name = itemName,
-							Description = itemDescription,
-							ExecuteCode = itemExecuteCode
-						};
-						break;
-					case 1: // ECLFunction
-						item = new ECLFunction
-						{
-							Name = itemName,
-							Description = itemDescription,
-							ExecuteCode = itemExecuteCode
-						};
-						break;
-					case 2: // ECLInterrupt
-						item = new ECLInterrupt
-						{
-							Name = itemName,
-							Description = itemDescription,
-							ExecuteCode = itemExecuteCode
-						};
-						break;
-					default:
-						throw new InvalidDataException($"Unknown ECLItem type: {itemType}");
-				}
+					byte itemType = binaryReader.ReadByte(); // 读取每个 ECLItem 的类型标识
 
-				data.ECLItems.Add(item); // 添加到 ECLItems 列表中
+					string itemName = binaryReader.ReadString(); // 读取每个 ECLItem 的名称
+					string itemDescription = binaryReader.ReadString(); // 读取每个 ECLItem 的描述
+					string itemExecuteCode = binaryReader.ReadString(); // 读取每个 ECLItem 的执行代码
+					IECLItem item;
+
+					switch (itemType)
+					{
+						case 0: // ECLMain
+							item = new ECLMain
+							{
+								Name = itemName,
+								Description = itemDescription,
+								ExecuteCode = itemExecuteCode
+							};
+							break;
+						case 1: // ECLFunction
+							item = new ECLClass
+							{
+								Name = itemName,
+								Description = itemDescription,
+								ExecuteCode = itemExecuteCode
+							};
+							break;
+						case 2: // ECLInterrupt
+							item = new ECLInterrupt
+							{
+								Name = itemName,
+								Description = itemDescription,
+								ExecuteCode = itemExecuteCode
+							};
+							break;
+						case 3: // ECLCondition
+							item = new ECLCondition
+							{
+								Name = itemName,
+								Description = itemDescription,
+								ExecuteCode = itemExecuteCode
+							};
+							break;
+						case 4: // ECLInterface
+							item = new ECLInterface
+							{
+								Name = itemName,
+								Description = itemDescription,
+								ExecuteCode = itemExecuteCode
+							};
+							break;
+						default:
+							throw new InvalidDataException($"Unknown ECLItem type: {itemType}");
+					}
+
+					data.ECLItems.Add(item); // 添加到 ECLItems 列表中
+				}
+				goto close;
 			}
 
+			data.IsExecutable = true; // 设置为可执行文件
+
+			data.IsRelease = !binaryReader.ReadBoolean(); // 读取调试标志
+			int assemblyLength = binaryReader.ReadInt32(); // 读取程序集长度
+			int pdbLength = binaryReader.ReadInt32(); // 读取 PDB 长度
+			byte[] assemblyBinary = binaryReader.ReadBytes(assemblyLength); // 读取程序集二进制数据
+			byte[] pdbBinary = binaryReader.ReadBytes(pdbLength); // 读取 PDB 二进制数据
+
+			data.ECLAssembly = MainSystem.LoadAssembly(assemblyBinary); // 加载程序集
+
+			close:
 			binaryReader.Close();
 			memoryStream.Close();
 

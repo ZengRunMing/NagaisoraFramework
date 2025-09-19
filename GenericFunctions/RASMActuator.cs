@@ -12,6 +12,7 @@ namespace NagaisoraFramework
 	using VirtualMemorySystem;
 
 	using static MainSystem;
+	using static FrameworkMath;
 
 	[Serializable]
 	public class RASMActuator
@@ -63,7 +64,7 @@ namespace NagaisoraFramework
 			Tack.Add(BitConverter.ToString(new byte[4] { 47, 56, 15, 48 }), NEWFLOAT);
 			Tack.Add(BitConverter.ToString(new byte[4] { 47, 58, 152, 155 }), NEWFDOUBLE);
 			Tack.Add(BitConverter.ToString(new byte[4] { 47, 57, 52, 14 }), NEWBOOL);
-			Tack.Add(BitConverter.ToString(new byte[4] { 47, 65, 84, 25 }), NEWSTRING);
+			Tack.Add(BitConverter.ToString(new byte[4] { 47, 65, 84, 25 }), NEWSNRING);
 			Tack.Add(BitConverter.ToString(new byte[4] { 47, 57, 23, 15 }), NEWCHAR);
 			Tack.Add(BitConverter.ToString(new byte[4] { 47, 20, 21, 54 }), NEWTIME);
 			Tack.Add(BitConverter.ToString(new byte[4] { 47, 57, 15, 42 }), NEWVECTOR2);
@@ -333,7 +334,7 @@ namespace NagaisoraFramework
 
 			ShowLog(LSLogType.Info, executable, Lim, string.Format("BOOL类型变量 {0} 已创建, 地址 0x{1}", Name, Postion.ToString("X8")));
 		}
-		public void NEWSTRING()
+		public void NEWSNRING()
 		{
 			EBR.ReadByte();
 			string Name = EBR.ReadString();
@@ -342,7 +343,7 @@ namespace NagaisoraFramework
 			executable.token.Add(Name, new Token(MBR.WriteEnd, 5));
 			MBR.WriteString(MBR.WriteEnd, "");
 
-			ShowLog(LSLogType.Info, executable, Lim, string.Format("STRING类型变量 {0} 已创建, 地址 0x{1}", Name, Postion.ToString("X8")));
+			ShowLog(LSLogType.Info, executable, Lim, string.Format("SNRING类型变量 {0} 已创建, 地址 0x{1}", Name, Postion.ToString("X8")));
 		}
 		public void NEWCHAR()
 		{
@@ -1027,15 +1028,15 @@ namespace NagaisoraFramework
 			for (long i = 0; i < prtl; i++)
 			{
 				string TName = binary.ReadString();
-				long TPTR = binary.ReadInt64();
-				PrToken.Add(TName, TPTR);
+				long TPNR = binary.ReadInt64();
+				PrToken.Add(TName, TPNR);
 			}
 
 			for (long i = 0; i < cmtl; i++)
 			{
 				long Index = binary.ReadInt64();
-				long TPTR = binary.ReadInt64();
-				CmToken.Add(Index, TPTR);
+				long TPNR = binary.ReadInt64();
+				CmToken.Add(Index, TPNR);
 			}
 		}
 	}

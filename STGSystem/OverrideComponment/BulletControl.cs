@@ -20,9 +20,12 @@ namespace NagaisoraFramework.STGSystem
 			SpriteRender.drawMode = SpriteDrawMode.Sliced;
 			SpriteRender.sortingLayerName = "StageMain";
 			SpriteRender.sortingOrder = Order;
-			SpriteRender.material = STGControler.BlendManager.Blends[BlendMode];       //设定SpriteRender材质
 		}
 
+		/// <summary>
+		/// 子弹组件的全判定函数，可以通过重写添加需要执行的判定程序，不需要回调父类的函数
+		/// </summary>
+		/// <param name="Target">针对的STGComponment</param>
 		public virtual void Check(STGComponment Target)
 		{
 

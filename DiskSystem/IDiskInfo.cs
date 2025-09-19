@@ -27,9 +27,9 @@ namespace NagaisoraFramework
 
 			binaryReader.BaseStream.Position = 0;
 
-			if (new string(Hider.Take(4).ToArray()) == "TRFS")
+			if (new string(Hider.Take(4).ToArray()) == "NRFS")
 			{
-				return TRFSInfo.FormBinary(binaryReader.ReadBytes(512));
+				return NRFSInfo.FormBinary(binaryReader.ReadBytes(512));
 			}
 			else if (new string(Hider) == "RTA PART")
 			{
