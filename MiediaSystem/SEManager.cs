@@ -87,6 +87,8 @@ namespace NagaisoraFramework.Miedia
 				name = "SE-" + a.ToString("00")
 			};
 
+			DontDestroyOnLoad(obj);
+
 			AudioSource audio = obj.AddComponent<AudioSource>();
 
 			audio.outputAudioMixerGroup = Mixer;

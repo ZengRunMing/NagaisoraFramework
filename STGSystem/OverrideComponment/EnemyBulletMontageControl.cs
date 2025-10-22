@@ -35,7 +35,7 @@ namespace NagaisoraFramework.STGSystem
 		{
 			base.Move();
 
-			float ADSAngle = EulerAngles_ADS(Angle);
+			float ADSAngle = EulerAngles_ADS(ViewAngle);
 
 			Vector = new Vector2(Sin(ADSAngle), Cos(ADSAngle));
 

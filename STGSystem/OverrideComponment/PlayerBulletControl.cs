@@ -2,8 +2,6 @@
 
 namespace NagaisoraFramework.STGSystem
 {
-	using static MainSystem;
-
 	//玩家子弹控制系统
 	public class PlayerBulletControl : BulletControl
 	{
@@ -16,7 +14,31 @@ namespace NagaisoraFramework.STGSystem
 			set
 			{
 				m_BulletData = value;
-				m_BulletDataChanged = true;
+				BulletDataChanged = true;
+			}
+		}
+
+		public bool BulletDataChanged
+		{
+			get
+			{
+				return m_BulletDataChanged;
+			}
+			set
+			{
+				m_BulletDataChanged = value;
+			}
+		}
+
+		public float DamageValue
+		{
+			get
+			{
+				return m_DamageValue;
+			}
+			set
+			{
+				m_DamageValue = value;
 			}
 		}
 
@@ -24,11 +46,20 @@ namespace NagaisoraFramework.STGSystem
 		protected PlayerBulletInfo m_BulletData;
 
 		[SerializeField]
+		protected float m_DamageValue;
+
+		// Unity Property Changed Flag
+		[SerializeField]
 		protected bool m_BulletDataChanged;
 
 		public override void Init()
 		{
 			base.Init();
+
+			SpriteRender.drawMode = SpriteDrawMode.Sliced;
+			SpriteRender.sortingLayerName = "PlayerBullet";
+			SpriteRender.sortingOrder = Order;
+
 			STGControler.PlayerBullets.Add(this);
 		}
 
@@ -79,6 +110,7 @@ namespace NagaisoraFramework.STGSystem
 			if (HitCheck(Target))
 			{
 				BaseDelete();
+				Target.GetComponent<EnemyControl>().OnDamage(DamageValue);
 				return;
 			}
 		}

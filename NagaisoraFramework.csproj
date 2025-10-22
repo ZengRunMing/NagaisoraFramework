@@ -427,6 +427,7 @@
     <Compile Include="GenericFunctions\AssetBundleHelper.cs" />
     <Compile Include="GenericFunctions\CommonFunctions.cs" />
     <Compile Include="STGSystem\Controler\ECLData.cs" />
+    <Compile Include="STGSystem\Controler\GenericFunction.cs" />
     <Compile Include="STGSystem\Controler\Items\ECLInterface.cs" />
     <Compile Include="STGSystem\Controler\Items\ECLCondition.cs" />
     <Compile Include="STGSystem\Controler\Items\ECLInterrupt.cs" />
@@ -491,7 +492,6 @@
     <Compile Include="GenericComponment\DontDestory.cs" />
     <Compile Include="GenericComponment\LoadingEffect.cs" />
     <Compile Include="GenericComponment\ObjectRotate.cs" />
-    <Compile Include="GenericComponment\ObjectRotateFixed.cs" />
     <Compile Include="GenericComponment\PositionofSize.cs" />
     <Compile Include="GenericComponment\RawImageUV.cs" />
     <Compile Include="GenericComponment\RotatePoint.cs" />

@@ -12,7 +12,7 @@ namespace NagaisoraFramework.STGSystem
 			InitSpriteRender();
 
 			SpriteRender.drawMode = SpriteDrawMode.Sliced;
-			SpriteRender.sortingLayerName = "StageMain";
+			SpriteRender.sortingLayerName = RenderLayerName;
 			SpriteRender.sortingOrder = Order;
 
 			SpriteRender.color = Color.white;

@@ -12,14 +12,18 @@ public class RawImageUV : CommMonoScriptObject
 
     public RawImage RawImage;
 
-	private void Start()
+	public void Start()
 	{
-        RawImage = this.GetComponent<RawImage>();
+        if (RawImage == null)
+        {
+            RawImage = GetComponent<RawImage>();
+        }
+
         w = RawImage.uvRect.width;
         h = RawImage.uvRect.height;
 	}
 
-	private void FixedUpdate()
+	public void FixedUpdate()
     {
         RawImage.uvRect = new Rect(RawImage.uvRect.x + x, RawImage.uvRect.y + y, w, h);
     }

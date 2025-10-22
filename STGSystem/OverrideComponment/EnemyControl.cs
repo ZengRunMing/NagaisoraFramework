@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace NagaisoraFramework.STGSystem
 {
@@ -13,6 +14,21 @@ namespace NagaisoraFramework.STGSystem
 		public bool Delete_Effect = false;
 
 		public Animator Animator;
+
+		public float HealthValue
+		{
+			get
+			{
+				return m_HealthValue;
+			}
+			set
+			{
+				m_HealthValue = value;
+			}
+		}
+
+		[SerializeField]
+		protected float m_HealthValue = 1f;
 
 		[ContextMenu("销毁机体 (仅限编辑器测试)", false)]
 		public void InstDelete()
@@ -39,7 +55,7 @@ namespace NagaisoraFramework.STGSystem
 			DetermineRadius = EnemyInfo.DetermineRadius;
 
 			SpriteRender.drawMode = SpriteDrawMode.Sliced;
-			SpriteRender.sortingLayerName = "StageMain";
+			SpriteRender.sortingLayerName = "Enemy";
 			SpriteRender.sortingOrder = Order;
 
 			EnemyObject enemyObject = EnemyInfo.Info[Color];
@@ -52,6 +68,13 @@ namespace NagaisoraFramework.STGSystem
 		public override void OnUpdate()
 		{
 			base.OnUpdate();
+
+			if (HealthValue < 0f)
+			{
+				Delete_Effect = true;
+				BaseDelete();
+			}
+
 			Check(STGControler.Player);
 		}
 
@@ -78,6 +101,22 @@ namespace NagaisoraFramework.STGSystem
 				BaseDelete();
 				return;
 			}
+		}
+
+		public void OnDamage(float damageValue)
+		{
+			HealthValue -= damageValue;
+		}
+
+		public override void BaseDelete()
+		{
+			if (Delete_Effect)
+			{
+				STGControler.NewEnemyEndEffect(Order, TransformPosition);
+			}
+			STGControler.Enemys.Remove(this);
+
+			base.BaseDelete();
 		}
 
 		public virtual void SetAnimatorNormal()
@@ -108,17 +147,6 @@ namespace NagaisoraFramework.STGSystem
 			}
 			Animator.SetBool("MoveingL", false);
 			Animator.SetBool("MoveingR", true);
-		}
-
-		public override void BaseDelete()
-		{
-			if (Delete_Effect)
-			{
-				STGControler.NewEnemyEndEffect(Order - 21, TransformPosition);
-			}
-			STGControler.Enemys.Remove(this);
-
-			base.BaseDelete();
 		}
 	}
 }

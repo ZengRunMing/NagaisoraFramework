@@ -54,6 +54,10 @@ namespace NagaisoraFramework.STGSystem
 		{
 			base.Init();                                                    //调用父类的初始化方法
 
+			SpriteRender.drawMode = SpriteDrawMode.Sliced;
+			SpriteRender.sortingLayerName = "EnemyBullet";
+			SpriteRender.sortingOrder = Order;
+
 			STGControler.EnemyBullets.Add(this);
 		}
 

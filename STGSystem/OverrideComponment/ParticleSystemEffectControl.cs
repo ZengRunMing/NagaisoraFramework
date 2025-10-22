@@ -25,7 +25,7 @@ namespace NagaisoraFramework.STGSystem
 
 				ParticleSystemRenderer render = particleSystem.GetComponentInChildren<ParticleSystemRenderer>(); // 获取粒子系统渲染器组件
 
-				render.sortingLayerName = "StageMain";	// 设置粒子系统的渲染图层
+				render.sortingLayerName = RenderLayerName;	// 设置粒子系统的渲染图层
 				render.sortingOrder = Order;			// 设置粒子系统的渲染顺序
 			}
 

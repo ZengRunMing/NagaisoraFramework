@@ -13,7 +13,7 @@ namespace NagaisoraFramework
 	using DataFileSystem;
 	using LogSystem;
 	using Miedia;
-	using STGSystem;
+	using STGSystem; 
 
 	public static class MainSystem
 	{
@@ -105,13 +105,40 @@ namespace NagaisoraFramework
 		{
 			return InitRandom(UnityEngine.Random.Range(int.MinValue, int.MaxValue));
 		}
+
+		public static int InitRandom(int seed)
+		{
+			gameseed = seed;
+			UnityEngine.Random.InitState(gameseed);
+
+			return gameseed;
+		}
+
+		public static int RandomInt()
+		{
+			return RandomInt(int.MinValue, int.MaxValue);
+		}
+
+		public static int RandomInt(int min, int max)
+		{
+			return UnityEngine.Random.Range(min, max);
+		}
+
+		public static float RandomFloat()
+		{
+			return RandomFloat(float.MinValue, float.MaxValue);
+		}
+
+		public static float RandomFloat(float min, float max)
+		{
+			return UnityEngine.Random.Range(min, max);
+		}
 #else
 		public static int InitRandom()
 		{
 			System.Random random = new System.Random();
 			return InitRandom(random.Next(int.MinValue, int.MaxValue));
 		}
-#endif
 
 		public static int InitRandom(int seed)
 		{
@@ -120,34 +147,10 @@ namespace NagaisoraFramework
 
 			return gameseed;
 		}
-
-		public static float Seedrandom(float a, float b)
-		{
-			return (float)Random.NextDouble() * (b - a) + a;
-		}
-
-		public static float Seedrandom2(float a)
-		{
-			if (a == 0f)
-			{
-				return 0f;
-			}
-			return ((float)Random.NextDouble() * 2f - 1f) * a;
-		}
-
+		
 		public static int RandomInt()
 		{
-			return Random.Next();
-		}
-
-		public static float RandomFloat()
-		{
-			return (float)Random.NextDouble();
-		}
-
-		public static byte RandomByte()
-		{
-			return (byte)Random.Next(byte.MinValue, byte.MaxValue);
+			return RandomInt(int.MinValue, int.MaxValue);
 		}
 
 		public static int RandomInt(int min, int max)
@@ -155,13 +158,19 @@ namespace NagaisoraFramework
 			return Random.Next(min, max);
 		}
 
-		public static byte RandomByte(int min, int max)
+		public static float RandomFloat()
 		{
-			return (byte)Random.Next(min, max);
+			return RandomFloat(float.MinValue, float.MaxValue);
 		}
+
+		public static float RandomFloat(float min, float max)
+		{
+			return (float)FrameworkMath.Scale(Random.NextDouble(), 0, 1, min, max);
+		}
+#endif
 		#endregion
 
-		# region Event
+		#region Event
 		public static void CallKeyDown(ushort keys)
 		{
 			BitArray bitArray = new BitArray(BitConverter.GetBytes(keys));

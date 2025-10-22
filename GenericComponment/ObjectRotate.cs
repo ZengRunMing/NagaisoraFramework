@@ -8,9 +8,9 @@ namespace NagaisoraFramework
 
 		public Vector3 RotateR;
 
-		void Update()
+		public void FixedUpdate()
 		{
-			base.transform.localEulerAngles += Speed * Time.deltaTime * RotateR;
+			transform.localEulerAngles += Speed * RotateR;
 		}
 	}
 }

@@ -28,6 +28,8 @@ namespace NagaisoraFramework.STGSystem
 
 		public GameObject Parent;
 
+		public GameObject PlayerDeterminePoint;
+
 		[Header("系统引用 (选用)")]
 		public ClockSystem ClockSystem;
 		public STGControler Master;
@@ -446,7 +448,7 @@ namespace NagaisoraFramework.STGSystem
 
 			KeyDown += ReplaySystem.KeyDown;
 
-			CreateUpdateThread();
+			//CreateUpdateThread();
 		}
 
 		public void OnDisable()
@@ -462,6 +464,16 @@ namespace NagaisoraFramework.STGSystem
 
 			EnemyBulletCount = (uint)EnemyBullets.Count;
 			IsReplaying = ReplaySystem != null && ReplaySystem.IsReplaying;
+
+			if (Player.IsSolt)
+			{
+				PlayerDeterminePoint.transform.localPosition = Player.TransformPosition;
+				PlayerDeterminePoint.SetActive(true);
+			}
+			else if (PlayerDeterminePoint.activeSelf == true)
+			{
+				PlayerDeterminePoint.SetActive(false);
+			}
 		}
 
 		public void FixedUpdate()
@@ -704,18 +716,18 @@ namespace NagaisoraFramework.STGSystem
 
 			if (TestStatus)
 			{
-				Player.gameObject.SetActive(false);
+				Player?.gameObject.SetActive(false);
 			}
 			else
 			{
-				Player.gameObject.SetActive(true);
+				Player?.gameObject.SetActive(true);
 			}
 
-			Player.Init();
+			Player?.Init();
 
 			IsRunning = true;
 
-			ECLControler.Run();
+			ECLControler?.Run();
 		}
 
 		public virtual void Stop()
@@ -727,7 +739,7 @@ namespace NagaisoraFramework.STGSystem
 
 			IsRunning = false;
 
-			ECLControler.Stop();
+			ECLControler?.Stop();
 		}
 
 		public void RegisterTimer(Timer timer)
@@ -789,7 +801,7 @@ namespace NagaisoraFramework.STGSystem
 			component.Color = color;
 			component.DetermineOffset = EnemyInfo.DetermineOffset;
 			component.DetermineRadius = EnemyInfo.DetermineRadius;
-			component.Order = 21 + order;
+			component.Order = order;
 
 			if (init)
 			{
@@ -818,7 +830,7 @@ namespace NagaisoraFramework.STGSystem
 			component.TransformPosition = position;
 			component.BulletData = STGSystemData.EnemyBullet[type];
 			component.Color = color;
-			component.Order = 21 + order;
+			component.Order = order;
 			component.Direction = angle;
 
 
@@ -834,7 +846,7 @@ namespace NagaisoraFramework.STGSystem
 		{
 			if (EnemyLasers.Count >= MaxEnemyBulletCount)
 			{
-				Debug.Log("BulletNumberOutMaxCount");
+				Debug.Log("LaserNumberOutMaxCount");
 				return (null, null);
 			}
 
@@ -851,7 +863,7 @@ namespace NagaisoraFramework.STGSystem
 			component.Type = type;
 			component.Color = color;
 			component.LaserLength = length;
-			component.Order = 21 + order;
+			component.Order = order;
 			component.Direction = angle;
 
 			if (init)
@@ -874,7 +886,7 @@ namespace NagaisoraFramework.STGSystem
 
 			component.TransformPosition = position;
 			component.BulletData = STGSystemData.PlayerBullet[type];
-			component.Order = 21 + order;
+			component.Order = order;
 			component.Direction = angle;
 
 			if (init)
@@ -897,7 +909,7 @@ namespace NagaisoraFramework.STGSystem
 
 			component.TransformPosition = position;
 			component.Color = color;
-			component.Order = 21 + order;
+			component.Order = order;
 
 			if (init)
 			{
@@ -922,7 +934,7 @@ namespace NagaisoraFramework.STGSystem
 			}
 
 			component.TransformPosition = position;
-			component.Order = 21 + order;
+			component.Order = order;
 
 			if (init)
 			{

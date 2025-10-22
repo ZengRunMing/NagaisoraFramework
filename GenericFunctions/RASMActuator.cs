@@ -565,18 +565,11 @@ namespace NagaisoraFramework
 
 			if (c.Type == 0)
 			{
-				a.Value = RandomInt((int)a.Value, (int)b.Value);
+				c.Value = RandomInt((int)a.Value, (int)b.Value);
 			}
 			else if (a.Type == 2)
 			{
-				Reset:
-				float s = RandomFloat();
-				if (s < (float)a.Value || s > (float)b.Value)
-				{
-					goto Reset;
-				}
-
-				c.Value = s;
+				c.Value = RandomFloat((float)a.Value, (float)b.Value);
 			}
 
 			MBR.WriteObject(executable.token.Forward[a.Name].Position, a.Value, executable.token.Forward[a.Name].Type);
@@ -612,14 +605,7 @@ namespace NagaisoraFramework
 			}
 			else if (c.Type == 2)
 			{
-				Reset:
-				float s = RandomFloat();
-				if (s < (float)a.Value || s > (float)b.Value)
-				{
-					goto Reset;
-				}
-
-				c.Value = s;
+				c.Value = (int)c.Value + RandomFloat((float)a.Value, (float)b.Value);
 			}
 
 			MBR.WriteObject(executable.token.Forward[c.Name].Position, c.Value, executable.token.Forward[c.Name].Type);

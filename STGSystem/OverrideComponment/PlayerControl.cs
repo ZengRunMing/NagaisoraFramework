@@ -9,8 +9,6 @@ namespace NagaisoraFramework.STGSystem
 		public float HighSpeed;
 		public float SoltSpeed;
 		
-		public float RD = 10f;
-
 		[Header("系统状态 (PlayerControl)")]
 		public bool IsSolt = false;
 		public bool IsShoot;
@@ -28,6 +26,10 @@ namespace NagaisoraFramework.STGSystem
 			}
 
 			base.Init();
+
+			SpriteRender.drawMode = SpriteDrawMode.Sliced;
+			SpriteRender.sortingLayerName = "Player";
+			SpriteRender.sortingOrder = Order;
 		}
 
 		public override void OnUpdate()

@@ -3,11 +3,8 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Collections.Generic;
-using System.IO.MemoryMappedFiles;
 
 using NagaisoraFramework.Underlyingsystem;
-using System.Diagnostics;
-using System.Collections;
 
 namespace NagaisoraFramework
 {
@@ -149,20 +146,6 @@ namespace NagaisoraFramework
 
 		public void PushIdleSector(long sectorIndex, NRFStream stream)
 		{
-			// 如果当前没有空闲扇区信息, 则需要判断压入的扇区是否保存了下一组的空闲扇区信息
-			if (IdleSectorCount == 0)
-			{
-				stream.SetSector(sectorIndex);                      // 定位到该扇区
-				byte[] binary = stream.DataReader.ReadBytes(512);   // 读取该扇区的二进制数据
-				IdleSectorInfomation info = FromBinary(binary);     // 解析二进制数据为空闲扇区信息对象
-
-				// 如果存在下一组空闲扇区信息，则将其设置为主空闲扇区信息
-				if (!(info is null))
-				{
-					IsLast = false;
-				}
-			}
-
 			// 如果空闲扇区数量未达到上限，则将当前信息压入栈中
 			if (IdleSectorCount < 63)
 			{
@@ -174,8 +157,12 @@ namespace NagaisoraFramework
 			stream.SetSector(sectorIndex);          // 定位到该扇区
 			stream.DataWriter.Write(ToBinary());    // 将当前信息写入该扇区
 			stream.DataWriter.Flush();              // 刷新写入器
+			stream.Flush();                         // 刷新底层流
 
-			stream.RootIdleInfomation = new IdleSectorInfomation();         // 新建空闲扇区信息对象
+			stream.RootIdleInfomation = new IdleSectorInfomation()          // 新建空闲扇区信息对象
+			{
+				IsLast = false
+			};
 			stream.RootIdleInfomation.PushIdleSector(sectorIndex, stream);  // 将该扇区索引压入新建的空闲扇区信息对象中
 		}
 
@@ -205,8 +192,7 @@ namespace NagaisoraFramework
 				return sector;
 			}
 
-			// 如果没有空闲扇区信息，则返回-1
-			return -1;
+			return -1; // 如果没有空闲扇区信息，则返回-1
 		}
 
 		public byte[] ToBinary()
@@ -227,7 +213,7 @@ namespace NagaisoraFramework
 
 			binaryWriter.Close();                       // 关闭二进制写入器
 
-			return memoryStream.ToArray();	// 返回二进制数据
+			return memoryStream.ToArray();				// 返回二进制数据
 		}
 
 		public static IdleSectorInfomation FromBinary(byte[] binary)
@@ -244,7 +230,7 @@ namespace NagaisoraFramework
 			MemoryStream memoryStream = new MemoryStream(binary);						// 新建内存流
 			BinaryReader binaryReader = new BinaryReader(memoryStream, Encoding.UTF8);  // 新建二进制读取器
 
-			string ReadedHeader = new string(binaryReader.ReadChars(4));                      // 读取4个字节的标识
+			string ReadedHeader = new string(binaryReader.ReadChars(4));                // 读取4字节标识
 
 			// 检查标识是否正确
 			if (ReadedHeader != Header)
@@ -474,13 +460,77 @@ namespace NagaisoraFramework
 		}
 	}
 
+	public class NRFSInfomation
+	{
+		public ulong Version;           // 版本号
+		public DateTime CreateTime;     // 创建时间
+		public Guid Guid;               // 文件系统GUID
+		public long ExpandSectorLength; // 已拓展扇区长度
+
+		public NRFSInfomation(ulong version, DateTime dateTime, Guid guid, long expandSectorLength)
+		{
+			Version = version;
+			CreateTime = dateTime;
+			Guid = guid;
+			ExpandSectorLength = expandSectorLength;
+		}
+
+		public static NRFSInfomation CreateNew()
+		{
+			return new NRFSInfomation(1, DateTime.Now, Guid.NewGuid(), 0);
+		}
+
+		public byte[] ToSectorBinary()
+		{
+			MemoryStream memoryStream = new MemoryStream(new byte[512]);
+			BinaryWriter binaryWriter = new BinaryWriter(memoryStream, Encoding.UTF8, true);
+
+			binaryWriter.Write("NRFS".ToCharArray());	// 4字节标识
+			binaryWriter.Seek(4, SeekOrigin.Current);	// 4字节保留
+			binaryWriter.Write(Version);				// 8字节版本号
+			binaryWriter.Write(Guid.ToByteArray());		// 16字节GUID
+			binaryWriter.Write(CreateTime.ToBinary());	// 8字节创建时间
+			binaryWriter.Write(ExpandSectorLength);		// 8字节已拓展扇区长度
+
+			binaryWriter.Close();
+
+			return memoryStream.ToArray();
+		}
+
+		public static NRFSInfomation FromSectorBinary(byte[] binary)
+		{
+			if (binary.Length < 512 || binary.Length > 512)
+			{
+				throw new ArgumentException("二进制数据的长度必须是一个扇区的长度");
+			}
+
+			MemoryStream memoryStream = new MemoryStream(binary);
+			BinaryReader binaryReader = new BinaryReader(memoryStream, Encoding.UTF8);
+			string header = new string(binaryReader.ReadChars(4)); // 读取4字节标识
+			if (header != "NRFS") // 如果标识不正确，则需要新建数据
+			{
+				return null;
+			}
+			
+			binaryReader.BaseStream.Seek(4, SeekOrigin.Current); // 跳过4字节保留
+			
+			ulong version = binaryReader.ReadUInt64(); // 读取版本号
+			Guid guid = new Guid(binaryReader.ReadBytes(16)); // 读取GUID
+			DateTime createTime = DateTime.FromBinary(binaryReader.ReadInt64()); // 读取创建时间
+			long expandSectorLength = binaryReader.ReadInt64(); // 读取已拓展扇区长度
+			
+			binaryReader.Close();
+
+			return new NRFSInfomation(version, createTime, guid, expandSectorLength);
+		}
+	}
+
 	// NRFS文件系统读写流
 	public class NRFStream : Stream, IDisposable
 	{
 		public const int SectorSize = 512;
-		public ulong Version;
-		public DateTime CreateTime;
-		public Guid Guid;
+
+		public NRFSInfomation NRFSInfomation;
 
 		public Stream Stream;
 
@@ -514,27 +564,39 @@ namespace NagaisoraFramework
 		{
 			get
 			{
-				return (Stream.Length / SectorSize) - DataSectorLength;
+				return TotalSectorCount - NRFSInfomation.ExpandSectorLength;
+			}
+		}
+
+		public long TotalSectorCount
+		{
+			get
+			{
+				return Stream.Length / SectorSize;
 			}
 		}
 
 		public long IdleSectorsCount => GetIdleSectorCount(RootIdleInfomation); // 空闲扇区数量
 
-		public long DataSectorLength; // 数据扇区长度
-
 		public IdleSectorInfomation RootIdleInfomation; // 根空闲扇区信息
 
-		public NRFStream(Stream stream)
+		public NRFStream(Stream stream, bool create)
 		{
 			Stream = stream; // 设置底层流
 
 			DataWriter = new BinaryWriter(Stream, Encoding.UTF8, true); // 初始化二进制写入器
 			DataReader = new BinaryReader(Stream, Encoding.UTF8, true); // 初始化二进制读取器
 
-			ReadHeaderSector();
+			if (create)
+			{
+				NRFSInfomation = NRFSInfomation.CreateNew(); // 新建NRFS信息对象
+				WriteHeaderSector(); // 写入文件系统信息
+			}
+
+			ReadHeaderSector(); // 读取文件系统信息
 		}
 
-		/*MUFS结构
+		/*NRFS结构
 		 * +---+---+---+-------+------------------+
 		 * | 0 | 1 | 2 | 3 - 9 | 10 20 30 40 More |
 		 * +---+---+---+-------+------------------+
@@ -548,40 +610,51 @@ namespace NagaisoraFramework
 
 		public void ReadHeaderSector()
 		{
-			read:
+			NRFSInfomation = NRFSInfomation.FromSectorBinary(ReadSector(0)); // 读取并解析0号扇区的二进制数据为NRFS信息对象
 
-			SetSector(0); // 定位到0号扇区
-			
-			string Header = new string(DataReader.ReadChars(4)); // 读取4字节标识
-
-			if (Header != "NRFS") // 如果标识不正确，则需要新建数据
+			if (NRFSInfomation is null)
 			{
-				WriteHeaderSector(this);
-				goto read;
+				throw new Exception("不存在NRFS文件系统的特征信息");
 			}
 
-			Stream.Seek(4, SeekOrigin.Current); // 跳过4字节保留
-
-			Version = DataReader.ReadUInt64(); // 读取版本号
-			Guid = new Guid(DataReader.ReadBytes(16)); // 读取GUID
-			CreateTime = DateTime.FromBinary(DataReader.ReadInt64()); // 读取创建时间
-			DataSectorLength = DataReader.ReadInt64(); // 读取数据扇区长度
-
-
-
-			SetSector(1); // 定位到1号扇区 (超级扇区)
-			byte[] binary = DataReader.ReadBytes(512); // 读取超级扇区的二进制数据
+			byte[] binary = ReadSector(1); // 读取超级扇区的二进制数据
 			RootIdleInfomation = IdleSectorInfomation.FromBinary(binary); // 解析二进制数据为空闲扇区信息对象
+
+			SetSector(2); // 定位到2号扇区 (根文件夹扇区)
+			binary = DataReader.ReadBytes(512); // 读取根文件夹扇区的二进制数据
 
 		}
 
-		public static void WriteHeaderSector(NRFStream stream)
+		public void WriteHeaderSector()
 		{
+			if (TotalSectorCount < 10)
+			{
+				ExpandSectors(10);
+			}
 
+			WriteSector(0, NRFSInfomation.ToSectorBinary()); // 写入0号扇区 (标识以及基本数据扇区)
+
+			if(RootIdleInfomation is null)
+			{
+				RootIdleInfomation = new IdleSectorInfomation();
+			}
+			byte[] binary = RootIdleInfomation.ToBinary(); // 获取空闲扇区信息对象的二进制数据
+			WriteSector(1, binary);
+
+			binary = NRFSHeaderToBinary(new NRFolder("Root")); // 获取根文件夹对象的二进制数据
+			WriteSector(2, binary);
+
+			DataWriter.Flush(); // 刷新写入器
+			Flush(); // 刷新底层流
 		}
 
 		public NRFile AddFile(NRFolder folder, FileStream data)
 		{
+			if (!CanWrite)
+			{
+				throw new NotSupportedException("只读模式下不允许添加文件和文件夹");
+			}
+
 			string name = Path.GetFileName(data.Name);
 			data.Position = 0;
 
@@ -641,6 +714,11 @@ namespace NagaisoraFramework
 
 		public NRFile[] AddFileRange(NRFolder folder, params FileStream[] datas)
 		{
+			if (!CanWrite)
+			{
+				throw new NotSupportedException("只读模式下不允许添加文件和文件夹");
+			}
+
 			List<NRFile> files = new List<NRFile>();
 
 			foreach (FileStream data in datas)
@@ -653,6 +731,11 @@ namespace NagaisoraFramework
 
 		public void RemoveFile(NRFolder folder, params NRFile[] files)
 		{
+			if (!CanWrite)
+			{
+				throw new NotSupportedException("只读模式下不允许删除文件和文件夹");
+			}
+
 			foreach (NRFile file in files)
 			{
 				foreach (IStoreInformation infomation in file.StoreInformations)
@@ -680,6 +763,11 @@ namespace NagaisoraFramework
 
 		public NRFolder AddFolder(NRFolder folder, string name)
 		{
+			if (!CanWrite)
+			{
+				throw new NotSupportedException("只读模式下不允许添加文件和文件夹");
+			}
+
 			NRFolder Folder = new NRFolder(name);
 			
 			folder.SubItems.Add(Folder);
@@ -689,6 +777,11 @@ namespace NagaisoraFramework
 
 		public NRFolder[] AddFolderRange(NRFolder folder, params string[] names)
 		{
+			if (!CanWrite)
+			{
+				throw new NotSupportedException("只读模式下不允许添加文件和文件夹");
+			}
+
 			List<NRFolder> folders = new List<NRFolder>();
 
 			foreach (string foldername in names)
@@ -701,6 +794,11 @@ namespace NagaisoraFramework
 
 		public void RemoveFolder(NRFolder folder, params NRFolder[] folders)
 		{
+			if (!CanWrite)
+			{
+				throw new NotSupportedException("只读模式下不允许删除文件和文件夹");
+			}
+
 			foreach (NRFolder folder1 in folders)
 			{
 				folder.SubItems.Remove(folder1);
@@ -957,6 +1055,11 @@ namespace NagaisoraFramework
 		/// <returns>使用过但已空闲的扇区索引数组</returns>
 		public (long[], long) AllocateIdleSectors(long SectorCount)
 		{
+			if (RootIdleInfomation is null)
+			{
+				return (null, SectorCount);
+			}
+
 			List<long> idleSectors = new List<long>(); // 新建空闲扇区列表
 
 			for (long i = SectorCount; i > 0 ; i--)
@@ -1010,37 +1113,32 @@ namespace NagaisoraFramework
 		{
 			List<IStoreInformation> storeInformations = new List<IStoreInformation>(); // 新建存储分配信息列表
 
+			long ExpandSectorCurrent = NRFSInfomation.ExpandSectorLength; // 记录扩展扇区的索引
+
 			long filesize = size; // 内部设定文件大小
 
 			long RequiredSectorsCount = GetRequiredSectorsCount(filesize); // 计算所需的扇区数量
 			(long[] IdleSectors, long ExpandSectorCount) = AllocateIdleSectors(RequiredSectorsCount); // 分配空闲的扇区和需要扩展的扇区数量
 
-			Array.Sort(IdleSectors); // 对空闲扇区进行升序排序，优先使用前面的扇区
+			if (!(IdleSectors is null))
+			{
+				Array.Sort(IdleSectors); // 对空闲扇区进行升序排序，优先使用前面的扇区
+			}
 
 			// 如果需要拓展扇区，则根据实际情况处理
 			if (ExpandSectorCount > 0)
 			{
-				if (Stream is FileStream)
-				{
-					// 如果是文件流，则扩展文件长度
-					Stream.SetLength(Stream.Length + (SectorSize * ExpandSectorCount)); // 扩展文件长度
-					Stream.Flush(); // 刷新文件流
-				}
-				else if (Stream is DiskStream diskStream)
-				{
-					// 如果是物理硬盘流，则不支持扩展，计算还未使用过的扇区数量决定是否可以存储数据
-					long UnusedSectorsCount = (diskStream.Length / SectorSize) - DataSectorLength; // 获取未使用的扇区数量
-
-					if (UnusedSectorsCount < ExpandSectorCount)
-					{
-						throw new NotSupportedException($"磁盘\"{diskStream.DiskInfo.Name}\"的剩余空间不足以存放该文件");
-					}
-				}
+				ExpandSectors(ExpandSectorCount); // 扩展扇区
 			}
 
 			// 使用空闲扇区分配存储信息
 			long ContinueSectoCount = 0; // 连续扇区起始索引
 			long LastSector = 0; // 上一个扇区索引
+
+			if (IdleSectors is null)
+			{
+				goto AllocateExpand; // 如果没有空闲扇区，则跳转到扩展分配
+			}
 
 			foreach (long sector in IdleSectors)
 			{
@@ -1098,6 +1196,8 @@ namespace NagaisoraFramework
 				goto res; // 重新判断当前扇区
 			}
 
+			AllocateExpand: // 扩展分配
+
 			// 如果分配已经完成
 			if (filesize <= 0)
 			{
@@ -1105,37 +1205,80 @@ namespace NagaisoraFramework
 			}
 
 			// 如果还需要分配信息
-			long sectorcount = filesize / SectorSize; // 计算还需要分配的扇区数量
+			long sectorcount = filesize / SectorSize;  // 计算还需要分配的扇区数量
 			int remian = (int)(filesize % SectorSize); // 计算还需要分配的剩余数据大小
 
 			// 如果需要分配连续存储信息
 			if (sectorcount > 0)
 			{
-				storeInformations.Add(new ContinuousSectorStorageInformation(DataSectorLength, DataSectorLength + sectorcount - 1)); // 分配连续扇区存储信息
-				DataSectorLength += sectorcount; // 增加数据扇区长度
+				storeInformations.Add(new ContinuousSectorStorageInformation(ExpandSectorCurrent, ExpandSectorCurrent + sectorcount - 1)); // 分配连续扇区存储信息
+				ExpandSectorCurrent += sectorcount; // 增加当前扩展扇区索引
 			}
 
 			// 如果需要分配单扇区存储信息
 			if (remian > 0)
 			{
-				storeInformations.Add(new SingleSectorStorageInformation(DataSectorLength, remian)); // 分配单扇区存储信息
-				DataSectorLength++; // 增加数据扇区长度
+				storeInformations.Add(new SingleSectorStorageInformation(ExpandSectorCurrent, remian)); // 分配单扇区存储信息
 			}
 
 			ret:
 			return storeInformations.ToArray();
 		}
 
+		public void ExpandSectors(long ExpandSectorCount)
+		{
+			if (Stream is FileStream)
+			{
+				// 如果是文件流，则扩展文件长度
+				Stream.SetLength(Stream.Length + (SectorSize * ExpandSectorCount)); // 扩展文件长度
+				Stream.Flush(); // 刷新文件流
+			}
+			else if (Stream is DiskStream diskStream)
+			{
+				// 如果是物理硬盘流，则不支持扩展，计算还未使用过的扇区数量决定是否可以存储数据
+				long UnusedSectorsCount = (diskStream.Length / SectorSize) - NRFSInfomation.ExpandSectorLength; // 获取未使用的扇区数量
+
+				if (UnusedSectorsCount < ExpandSectorCount)
+				{
+					throw new NotSupportedException($"磁盘\"{diskStream.DiskInfo.Name}\"的剩余空间不足以拓展");
+				}
+			}
+
+			NRFSInfomation.ExpandSectorLength += ExpandSectorCount; // 增加数据扇区长度
+		}
+
 		public void SetSector(long SectorIndex)
 		{
 			long position = SectorIndex * SectorSize;
 
-			if (position < 0 || position + SectorSize > Stream.Length)
+			if (position < 0 || (position > 0 && position + SectorSize > Stream.Length))
 			{
 				throw new ArgumentOutOfRangeException(nameof(SectorIndex), "扇区索引超出范围");
 			}
 
 			Stream.Position = position;
+		}
+
+		public byte[] ReadSector(long SectorIndex)
+		{
+			SetSector(SectorIndex);
+
+			return DataReader.ReadBytes(SectorSize);
+		}
+
+		public void WriteSector(long SectorIndex, byte[] data)
+		{
+			if (data.Length < SectorSize)
+			{
+				Array.Resize(ref data, SectorSize);
+			}
+			if (data.Length > SectorSize)
+			{
+				throw new ArgumentOutOfRangeException(nameof(data), "写入数据长度超出扇区大小");
+			}
+
+			SetSector(SectorIndex);
+			DataWriter.Write(data);
 		}
 	}
 

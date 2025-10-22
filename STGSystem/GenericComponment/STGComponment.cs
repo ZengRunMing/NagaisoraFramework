@@ -60,15 +60,15 @@ namespace NagaisoraFramework.STGSystem
 				}
 			}
 		}
-		public float Angle
+		public float ViewAngle
 		{
 			get
 			{
-				return m_Angle;
+				return m_ViewAngle;
 			}
 			set
 			{
-				m_Angle = value;
+				m_ViewAngle = value;
 				m_RotationChanged = true;
 			}
 		}
@@ -237,15 +237,15 @@ namespace NagaisoraFramework.STGSystem
 				m_MoveVectorWithDirection = value;
 			}
 		}
-		public bool AngleWithDirection
+		public bool ViewAngleWithDirection
 		{
 			get
 			{
-				return m_AngleWithDirection;
+				return m_ViewAngleWithDirection;
 			}
 			set
 			{
-				m_AngleWithDirection = value;
+				m_ViewAngleWithDirection = value;
 			}
 		}
 		public bool CheckOutSize
@@ -337,7 +337,7 @@ namespace NagaisoraFramework.STGSystem
 		[SerializeField]
 		protected int m_Order;
 		[SerializeField]
-		protected float m_Angle;
+		protected float m_ViewAngle;
 		[SerializeField]
 		protected float m_AngleOffsetCompensation;
 		[SerializeField]
@@ -371,7 +371,7 @@ namespace NagaisoraFramework.STGSystem
 		[SerializeField]
 		protected uint m_ThisTime;
 		[SerializeField]
-		protected bool m_AngleWithDirection;
+		protected bool m_ViewAngleWithDirection;
 		[SerializeField]
 		protected bool m_CheckOutSize;
 		[SerializeField]
@@ -399,7 +399,7 @@ namespace NagaisoraFramework.STGSystem
 		public Vector2 VelocityVector => DirectionVector * Velocity;
 		public Vector2 DirectionVector => new Vector2(Sin(ADSDitection), Cos(ADSDitection));
 		public float ADSDitection => EulerAngles_ADS(Direction);
-		public float SpriteRotation => !AngleWithDirection ? Angle : Direction + Angle;
+		public float SpriteRotation => !ViewAngleWithDirection ? ViewAngle : Direction + ViewAngle;
 
 		//系统引用
 		public uint GameTime
@@ -892,7 +892,7 @@ namespace NagaisoraFramework.STGSystem
 			DetermineOffset = Vector2.zero;
 
 			Order = 0;
-			Angle = 0f;
+			ViewAngle = 0f;
 			AngleOffsetCompensation = 0f;
 			Transparent = MaxTransparent;
 

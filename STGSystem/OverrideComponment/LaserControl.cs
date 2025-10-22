@@ -52,7 +52,7 @@ namespace NagaisoraFramework.STGSystem
 				SpriteRender.drawMode = SpriteDrawMode.Sliced;
 				SpriteRender.sprite = STGControler.STGSystemData.EnemyLongLaser.Info[Color].Sprite;
 				SpriteRender.size = STGControler.STGSystemData.EnemyLongLaser.Normoal_Size;
-				SpriteRender.sortingLayerName = "StageMain";
+				SpriteRender.sortingLayerName = "EnemyBullet";
 				SpriteRender.sortingOrder = Order;
 
 				Transform.localPosition = HeadPosition;
