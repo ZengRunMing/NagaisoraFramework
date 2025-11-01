@@ -23,6 +23,8 @@ namespace NagaisoraFramework
 		public int second;
 		public int millisecond;
 
+		public TimeSpan LastGameTime;
+
 		public void Awake()
 		{
 			RunTimeStopwatch = Stopwatch.StartNew();
@@ -69,6 +71,13 @@ namespace NagaisoraFramework
 			millisecond = (int)((timeSpend - (int)timeSpend) * 1000);
 
 			MainSystem.SystemTime = new TimeSpan(0, hour, minute, second, millisecond);
+
+			if (MainSystem.SystemTime.Ticks != LastGameTime.Ticks)
+			{
+				LastGameTime = MainSystem.SystemTime;
+
+				MainSystem.CallGameTimeUpdate(MainSystem.SystemTime);
+			}
 		}
 	}
 }

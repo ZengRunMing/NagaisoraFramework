@@ -1,9 +1,8 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace NagaisoraFramework.STGSystem
 {
-	public class EnemyControl : STGComponment
+	public class Enemy : STGComponent
 	{
 		EnemyInfo EnemyInfo;
 
@@ -24,6 +23,12 @@ namespace NagaisoraFramework.STGSystem
 			set
 			{
 				m_HealthValue = value;
+
+				if (HealthValue < 0f)
+				{
+					Delete_Effect = true;
+					BaseDelete();
+				}
 			}
 		}
 
@@ -69,16 +74,10 @@ namespace NagaisoraFramework.STGSystem
 		{
 			base.OnUpdate();
 
-			if (HealthValue < 0f)
-			{
-				Delete_Effect = true;
-				BaseDelete();
-			}
-
 			Check(STGControler.Player);
 		}
 
-		public virtual void Check(STGComponment Target)
+		public virtual void Check(STGComponent Target)
 		{
 			if (Target == null || Target.Disposed)
 			{

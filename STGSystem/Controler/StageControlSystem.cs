@@ -1,22 +1,19 @@
-﻿using NagaisoraFramework;
-using NagaisoraFramework.STGSystem;
-
-namespace NagaisoraFramework.STGSystem
+﻿namespace NagaisoraFramework.STGSystem
 {
 	public class StageControlSystem : CommMonoScriptObject
 	{
 		public STGControler STGControler;
 
-		public ECLControler[] ECLControlers;
+		public NFEMain[] ECLControlers;
 
-		public void Init(STGControler stgControler, ECLControler[] eclControlers)
+		public void Init(STGControler stgControler, NFEMain[] eclControlers)
 		{
 			STGControler = stgControler;
 			ECLControlers = eclControlers;
 
-			foreach (ECLControler ECLcontroler in ECLControlers)
+			foreach (NFEMain ECLcontroler in ECLControlers)
 			{
-				ECLcontroler.STGControler = STGControler;
+				//ECLcontroler.STGControler = STGControler;
 			}
 		}
 
@@ -24,7 +21,7 @@ namespace NagaisoraFramework.STGSystem
 		{
 			if (ECLControlers != null)
 			{
-				foreach (ECLControler controler in ECLControlers)
+				foreach (NFEMain controler in ECLControlers)
 				{
 					controler.OnUpdate();
 				}

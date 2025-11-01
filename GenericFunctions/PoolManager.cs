@@ -7,7 +7,15 @@ namespace NagaisoraFramework
 {
 	public class PoolManager
 	{
-		public Dictionary<Type, List<GameObject>> Stack = new Dictionary<Type, List<GameObject>>();
+		public string Name;
+
+		public Dictionary<Type, List<GameObject>> Stack;
+
+		public PoolManager(string name)
+		{
+			Name = name;
+			Stack = new Dictionary<Type, List<GameObject>>();
+		}
 
 		public GameObject NewObject(Type Type)
 		{
@@ -62,7 +70,7 @@ namespace NagaisoraFramework
 			return;
 		}
 
-		public void ALLClear()
+		public void Clear()
 		{
 			foreach (var item in Stack.Values)
 			{

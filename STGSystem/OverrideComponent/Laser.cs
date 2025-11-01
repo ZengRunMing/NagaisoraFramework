@@ -9,7 +9,7 @@ namespace NagaisoraFramework.STGSystem
 	using static MainSystem;
 	using static FrameworkMath;
 
-	public class LaserControl : STGComponment
+	public class Laser : STGComponent
 	{
 		public LaserType Type;
 		public int Color;
@@ -95,7 +95,7 @@ namespace NagaisoraFramework.STGSystem
 			}
 		}
 
-		public override void Move()
+		public override void OnMove()
 		{
 			if (MoveVector == Vector2.zero)
 			{
@@ -127,12 +127,12 @@ namespace NagaisoraFramework.STGSystem
 			}
 		}
 
-		public override bool HitCheck(STGComponment Target)
+		public override bool HitCheck(STGComponent Target)
 		{
 			return HitCheck(Target, DetermineRadius);
 		}
 
-		public override bool HitCheck(STGComponment Target, float DetermineRadius)
+		public override bool HitCheck(STGComponent Target, float DetermineRadius)
 		{
 			if (Target == null || Target.Disposed)
 			{
@@ -205,7 +205,7 @@ namespace NagaisoraFramework.STGSystem
 			return false;
 		}
 
-		public virtual bool GrazeCheck(STGComponment Target)
+		public virtual bool GrazeCheck(STGComponent Target)
 		{
 			return HitCheck(STGControler.Player, DetermineRadius + 4f);
 		}
@@ -240,7 +240,7 @@ namespace NagaisoraFramework.STGSystem
 
 			if (Delete_Effect)
 			{
-				STGControler.NewEnemyShootEffect<EnemyShootEffectControl>(Color, Order - 21, TransformPosition);
+				STGControler.NewEnemyShootEffect(Color, Order - 21, TransformPosition);
 			}
 
 			STGControler.EnemyLasers.Remove(this);

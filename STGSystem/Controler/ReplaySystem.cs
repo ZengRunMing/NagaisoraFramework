@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -7,13 +6,9 @@ using UnityEngine;
 
 namespace NagaisoraFramework.STGSystem
 {
-	using static MainSystem;
-
-	public class ReplaySystem : CommMonoScriptObject
+	public class ReplaySystem : IDisposable
 	{
 		public STGControler STGControler;
-
-		public bool IsGolbal;
 
 		public uint GameTime;
 
@@ -28,19 +23,18 @@ namespace NagaisoraFramework.STGSystem
 		public ushort LastKeys;
 		public ushort DownKeys;
 
-		public void Awake()
-		{
-			if (IsGolbal)
-			{
-				GolbalReplaySystem = this;
+		public InputKey InputKey;
 
-				MainSystem.KeyDown += KeyDown;
-			}
+		public ReplaySystem(STGControler controler)
+		{
+			STGControler = controler;
+
+			STGControler.KeyDown += KeyDown;
 		}
 
-		public void OnDisable()
+		public void Dispose()
 		{
-			MainSystem.KeyDown -= KeyDown;
+			STGControler.KeyDown -= KeyDown;
 		}
 
 		public void OnUpdate()
@@ -51,13 +45,16 @@ namespace NagaisoraFramework.STGSystem
 				{
 					ReplayActionData data = Actions[GameTime];
 					DownKeys = data.DownKeys;
+
+					InputKey = new InputKey();
+					InputKey.FromHex(DownKeys);
 				}
 
-				STGControler.CallKeyDown(DownKeys);
+				STGControler.CallKeyDown(InputKey);
 			}
 		}
 
-        public void KeyDown(bool[] keys)
+        public void KeyDown(InputKey inputKey)
         {
 			if (IsRecording)
 			{
@@ -66,11 +63,7 @@ namespace NagaisoraFramework.STGSystem
 					return;
 				}
 
-				BitArray bitArray = new BitArray(keys);
-
-				byte[] data = new byte[bitArray.Count / 8];
-				bitArray.CopyTo(data, 0);
-				ushort nowkeys = BitConverter.ToUInt16(data, 0);
+				ushort nowkeys = inputKey.ToHex();
 
 				if (nowkeys == LastKeys)
 				{

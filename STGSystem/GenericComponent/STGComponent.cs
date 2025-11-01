@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Reflection;
 using System.Runtime.Remoting.Messaging;
+
 using UnityEngine;
 
 namespace NagaisoraFramework.STGSystem
@@ -8,19 +10,20 @@ namespace NagaisoraFramework.STGSystem
 	using static FrameworkMath;
 
 	[Serializable]
-	public class STGComponment : CommMonoScriptObject
+	public class STGComponent : CommMonoScriptObject
 	{
-		public ECLControler ECLControler;
-
 		[Header("系统引用 (必须)")]
 		public STGControler STGControler;
 
 		public Transform Transform;
 		public SpriteRenderer SpriteRender;
 
-		public STGComponment Parent;
+		public STGComponent Parent;
 
-		//显示设定
+		public List<Condition> Conditions;
+
+		//public ExecuteSystem ExecuteSystem;
+
 		public Sprite Sprite
 		{
 			get
@@ -132,30 +135,6 @@ namespace NagaisoraFramework.STGSystem
 				m_ScaleChanged = true;
 			}
 		}
-
-		//程序设定
-		public float DetermineRadius
-		{
-			get
-			{
-				return m_DetermineRadius;
-			}
-			set
-			{
-				m_DetermineRadius = value;
-			}
-		}
-		public Vector2 DetermineOffset
-		{
-			get
-			{
-				return m_DetermineOffset;
-			}
-			set
-			{
-				m_DetermineOffset = value;
-			}
-		}
 		public float Direction
 		{
 			get
@@ -169,19 +148,6 @@ namespace NagaisoraFramework.STGSystem
 			}
 		}
 
-		private float Accelerate;
-
-		public Vector2 MoveVector
-		{
-			get
-			{
-				return m_MoveVector;
-			}
-			set
-			{
-				m_MoveVector = value;
-			}
-		}
 		public float Velocity
 		{
 			get
@@ -204,118 +170,6 @@ namespace NagaisoraFramework.STGSystem
 				}
 			}
 		}
-		public float MaxVelocity
-		{
-			get
-			{
-				return m_MaxVelocity;
-			}
-			set
-			{
-				m_MaxVelocity = value;
-			}
-		}
-		public float MinVelocity
-		{
-			get
-			{
-				return m_MinVelocity;
-			}
-			set
-			{
-				m_MinVelocity = value;
-			}
-		}
-		public bool MoveVectorWithDirection
-		{
-			get
-			{
-				return m_MoveVectorWithDirection;
-			}
-			set
-			{
-				m_MoveVectorWithDirection = value;
-			}
-		}
-		public bool ViewAngleWithDirection
-		{
-			get
-			{
-				return m_ViewAngleWithDirection;
-			}
-			set
-			{
-				m_ViewAngleWithDirection = value;
-			}
-		}
-		public bool CheckOutSize
-		{
-			get
-			{
-				return m_CheckOutSize;
-			}
-			set
-			{
-				m_CheckOutSize = value;
-			}
-		}
-		public bool OnMoveToPoint
-		{
-			get
-			{
-				return m_OnMoveToPoint;
-			}
-			set
-			{
-				m_OnMoveToPoint = value;
-			}
-		}
-		public Vector2 DestPoint
-		{
-			get
-			{
-				return m_DestPoint;
-			}
-			set
-			{
-				m_DestPoint = value;
-			}
-		}
-
-		//当前状态
-		public uint ThisTime
-		{
-			get
-			{
-				return m_ThisTime;
-			}
-			set
-			{
-				m_ThisTime = value;
-			}
-		}
-		public bool Disposed
-		{
-			get
-			{
-				return m_Disposed;
-			}
-			set
-			{
-				m_Disposed = value;
-			}
-		}
-		public Vector2 StartPosition
-		{
-			get
-			{
-				return m_StartPosition;
-			}
-			internal set
-			{
-				m_StartPosition = value;
-			}
-		}
 		public Vector2 TransformPosition
 		{
 			get
@@ -328,6 +182,19 @@ namespace NagaisoraFramework.STGSystem
 				m_PositionChanged = true;
 			}
 		}
+
+		[SerializeField]
+		protected bool m_PositionChanged;
+		[SerializeField]
+		protected bool m_RotationChanged;
+		[SerializeField]
+		protected bool m_ScaleChanged;
+		[SerializeField]
+		protected bool m_SpriteChanged;
+		[SerializeField]
+		protected bool m_ColorChanged;
+		[SerializeField]
+		protected bool m_FlipXChanged;
 
 		[Header("系统状态")]
 		[SerializeField]
@@ -349,52 +216,34 @@ namespace NagaisoraFramework.STGSystem
 		[SerializeField]
 		protected float m_RenderScale = 1f;
 		[SerializeField]
-		protected float m_DetermineRadius;
-		[SerializeField]
-		protected Vector2 m_DetermineOffset;
-		[SerializeField]
 		protected float m_Direction;
 		[SerializeField]
-		protected Vector2 m_MoveVector;
+		private float m_velocity;
 		[SerializeField]
-		protected float m_velocity;
-		[SerializeField]
-		protected float m_MaxVelocity = 1000f;
-		[SerializeField]
-		protected float m_MinVelocity = 0f;
-		[SerializeField]
-		protected Vector2 m_DestPoint;
-		[SerializeField]
-		protected Vector2 m_StartPosition;
-		[SerializeField]
-		protected Vector2 m_TransformPosition;
-		[SerializeField]
-		protected uint m_ThisTime;
-		[SerializeField]
-		protected bool m_ViewAngleWithDirection;
-		[SerializeField]
-		protected bool m_CheckOutSize;
-		[SerializeField]
-		protected bool m_OnMoveToPoint;
-		[SerializeField]
-		protected bool m_Disposed = false;
-		[SerializeField]
-		protected bool m_PositionChanged;
-		[SerializeField]
-		protected bool m_RotationChanged;
-		[SerializeField]
-		protected bool m_ScaleChanged;
-		[SerializeField]
-		protected bool m_SpriteChanged;
-		[SerializeField]
-		protected bool m_ColorChanged;
-		[SerializeField]
-		protected bool m_FlipXChanged;
-		[SerializeField]
-		protected bool m_MoveVectorWithDirection;
+		private Vector2 m_TransformPosition;
+
+		public bool ViewAngleWithDirection;
+		public bool CheckOutSize;
+		public bool OnMoveToPoint;
+		public bool Disposed = false;
+		public bool MoveVectorWithDirection;
+
+		public Vector2 DestPoint;
+		public Vector2 StartPosition;
+		public Vector2 MoveVector;
+
+		public float MaxVelocity = 1000f;
+		public float MinVelocity = 0f;
+
+		public float DetermineRadius;
+		public Vector2 DetermineOffset;
+
+		public uint ThisTime = 0;
 
 		public Vector2[] LastPositions;
 		public readonly float MaxTransparent = 255f;
+
+		private float Accelerate;
 
 		public Vector2 VelocityVector => DirectionVector * Velocity;
 		public Vector2 DirectionVector => new Vector2(Sin(ADSDitection), Cos(ADSDitection));
@@ -410,7 +259,6 @@ namespace NagaisoraFramework.STGSystem
 			}
 		}
 
-		//
 		Action MoveToPointAction;
 
 		/// <summary>
@@ -455,44 +303,15 @@ namespace NagaisoraFramework.STGSystem
 			Disposed = false;
 		}
 
-		/// <summary>
-		/// 初始化自身的函数，带ECL程序数据传入
-		/// </summary>
-		/// <param name="ECLData">ECL控制程序的数据</param>
-		public virtual void Init(ECLData ECLData)
-		{
-			if (!(ECLData is null))
-			{
-				ECLControler = new ECLControler(ECLData, STGControler, this);
-			}
+		//public virtual void Init(ExecuteSystem system)
+		//{
+		//	ExecuteSystem = system;
+		//}
 
-			Init();
-		}
-
-		/// <summary>
-		/// 初始化自身的函数，带ECL控制器传入
-		/// </summary>
-		/// <param name="controler">ECL控制器</param>
-		public virtual void Init(ECLControler controler)
-		{
-			ECLControler = controler;
-
-			Init();
-		}
-
-		/// <summary>
-		/// 初始化自身的函数，带ECL程序集传入
-		/// </summary>
-		/// <param name="assembly"></param>
-		public virtual void Init(Assembly assembly)
-		{
-			if (!(assembly is null))
-			{
-				ECLControler = new ECLControler(assembly, STGControler, this);
-			}
-
-			Init();
-		}
+		//public virtual void Init(Assembly assembly)
+		//{
+		//	Init(new ExecuteSystem(assembly, STGControler, this));
+		//}
 
 		/// <summary>
 		/// 初始化自身SpriteRender引用的函数
@@ -563,10 +382,10 @@ namespace NagaisoraFramework.STGSystem
 				GetMoveVectorWithDirection();
 			}
 
-			Move();
+			OnMove();
 			Velocity += Accelerate;
 
-			ECLControler?.OnUpdate();
+			OnCondition();
 
 			if (ThisTime < 5)
 			{
@@ -585,6 +404,9 @@ namespace NagaisoraFramework.STGSystem
 			ThisTime++;
 		}
 
+		/// <summary>
+		/// 子线程更新函数，用于重写
+		/// </summary>
 		public virtual void OnSubThreadUpdate()
 		{
 			if (Disposed)
@@ -596,6 +418,18 @@ namespace NagaisoraFramework.STGSystem
 			// 在此处的执行不涉及Unity API的计算
 
 		}
+
+		/// <summary>
+		/// Condition检查与执行函数
+		/// </summary>
+		public void OnCondition()
+		{
+			foreach (Condition condition in Conditions)
+			{
+				condition.ConditionExecute();
+			}
+		}
+
 
 		/// <summary>
 		/// 清除Unity属性更新的Flag
@@ -611,10 +445,10 @@ namespace NagaisoraFramework.STGSystem
 		}
 
 		/// <summary>
-		/// 按键事件，用于重写函数，不需要调用
+		/// 按键事件，用于重写
 		/// </summary>
 		/// <param name="keys">采集的按键</param>
-		public virtual void KeyDown(bool[] keys)
+		public virtual void OnKeyDown(InputKey keys)
 		{
 
 		}
@@ -622,7 +456,7 @@ namespace NagaisoraFramework.STGSystem
 		/// <summary>
 		/// 移动自身
 		/// </summary>
-		public virtual void Move()
+		public virtual void OnMove()
 		{
 			if (MoveVector == Vector2.zero || Velocity == 0)
 			{
@@ -631,7 +465,7 @@ namespace NagaisoraFramework.STGSystem
 
 			if (OnMoveToPoint)
 			{
-				MovePoint();
+				OnMovePoint();
 			}
 
 			TransformPosition += MoveVector * Velocity;
@@ -640,7 +474,7 @@ namespace NagaisoraFramework.STGSystem
 		/// <summary>
 		/// 根据设定的目标点计算移动速度和方向
 		/// </summary>
-		public void MovePoint()
+		public void OnMovePoint()
 		{
 			float distance = GetDistance(DestPoint);
 			if (distance > Mathf.Abs(Velocity))
@@ -666,6 +500,13 @@ namespace NagaisoraFramework.STGSystem
 			}
 		}
 
+		/// <summary>
+		/// 注册移动到指定点的控制
+		/// </summary>
+		/// <param name="destPoint">指定点位</param>
+		/// <param name="maxVelocity">最大速度</param>
+		/// <param name="defaultVelovity">默认速度</param>
+		/// <param name="action">执行完成时执行的动作</param>
 		public void RegisterMoveToPointAction(Vector2 destPoint, float maxVelocity, float defaultVelovity, Action action = null)
 		{
 			if (action is null)
@@ -698,7 +539,7 @@ namespace NagaisoraFramework.STGSystem
 		/// </summary>
 		/// <param name="Target">指定的STGComponment</param>
 		/// <returns>返回一个布尔值，True则为满足碰撞</returns>
-		public virtual bool HitCheck(STGComponment Target)
+		public virtual bool HitCheck(STGComponent Target)
 		{
 			return HitCheck(Target, DetermineRadius);
 		}
@@ -709,9 +550,9 @@ namespace NagaisoraFramework.STGSystem
 		/// <param name="Target">指定的STGComponment</param>
 		/// <param name="DetermineRadius">判定的半径</param>
 		/// <returns>返回一个布尔值，True则为满足碰撞</returns>
-		public virtual bool HitCheck(STGComponment Target, float DetermineRadius)
+		public virtual bool HitCheck(STGComponent Target, float DetermineRadius)
 		{
-			if (Target == null || Target.m_Disposed)
+			if (Target == null || Target.Disposed)
 			{
 				return false;
 			}
@@ -773,9 +614,9 @@ namespace NagaisoraFramework.STGSystem
 		/// 诱导系统
 		/// </summary>
 		/// <param name="Target">指定的STGComponment</param>
-		public virtual void GuidanceControl(STGComponment Target)
+		public virtual void GuidanceControl(STGComponent Target)
 		{
-			if (Target == null || Target.m_Disposed)
+			if (Target == null || Target.Disposed)
 			{
 				return;
 			}
@@ -806,7 +647,7 @@ namespace NagaisoraFramework.STGSystem
 		/// </summary>
 		/// <param name="Target"></param>
 		/// <returns>返回方向角度</returns>
-		public float GetDirection(STGComponment Target)
+		public float GetDirection(STGComponent Target)
 		{
 			return GetDirection(Target.TransformPosition);
 		}
@@ -826,7 +667,7 @@ namespace NagaisoraFramework.STGSystem
 		/// </summary>
 		/// <param name="Target">指定的STGComponment</param>
 		/// <returns>返回距离</returns>
-		public float GetDistance(STGComponment Target)
+		public float GetDistance(STGComponent Target)
 		{
 			return GetDistance(Target.TransformPosition);
 		}
@@ -846,7 +687,7 @@ namespace NagaisoraFramework.STGSystem
 		/// </summary>
 		public void RegisterKeyEvent()
 		{
-			STGControler.KeyDown += KeyDown;
+			STGControler.KeyDown += OnKeyDown;
 		}
 
 		/// <summary>
@@ -854,7 +695,56 @@ namespace NagaisoraFramework.STGSystem
 		/// </summary>
 		public void UnRegisterKeyEvent()
 		{
-			STGControler.KeyDown -= KeyDown;
+			STGControler.KeyDown -= OnKeyDown;
+		}
+
+		/// <summary>
+		/// 注册Condition
+		/// </summary>
+		/// <param name="Condition">条件</param>
+		/// <param name="ExecuteAction">执行动作</param>
+		/// <param name="LoopExecution">是否循环执行</param>
+		/// <returns>返回注册的Condition</returns>
+		public Condition RegisterCondition(Func<bool> Condition, Action ExecuteAction, bool LoopExecution = false)
+		{
+			Condition condition = new Condition(Condition, ExecuteAction, LoopExecution);
+			RegisterCondition(condition);
+
+			return condition;
+		}
+
+		/// <summary>
+		/// 注册Condition
+		/// </summary>
+		/// <param name="condition">指定的Condition</param>
+		public void RegisterCondition(Condition condition)
+		{
+			lock (Conditions)
+			{
+				if (Conditions.Contains(condition))
+				{
+					Debug.LogWarning($"[{GetType()}] Condition already registered.");
+					return;
+				}
+				Conditions.Add(condition);
+			}
+		}
+
+		/// <summary>
+		/// 注销Condition
+		/// </summary>
+		/// <param name="condition">指定的Condition</param>
+		public void UnRegisterCondition(Condition condition)
+		{
+			lock (Conditions)
+			{
+				if (!Conditions.Contains(condition))
+				{
+					return;
+				}
+
+				Conditions.Remove(condition);
+			}
 		}
 
 		/// <summary>
@@ -864,13 +754,10 @@ namespace NagaisoraFramework.STGSystem
 		{
 			TransformPosition = STGControler.DisablePosition;
 
-			ECLControler?.Stop();
-			ECLControler?.Dispose();
-
 			UpdateUnityProperty();
 			ClearUnityPropertyUpdateFlags();
 
-			ALLReset();
+			Reset();
 			Disposed = true;
 
 			STGControler.PoolManager.DeleteObject(GetType(), gameObject);
@@ -879,7 +766,7 @@ namespace NagaisoraFramework.STGSystem
 		/// <summary>
 		/// 将所有属性复位
 		/// </summary>
-		public virtual void ALLReset()
+		public virtual void Reset()
 		{
 			OnMoveToPoint = false;
 			CheckOutSize = false;
@@ -903,6 +790,8 @@ namespace NagaisoraFramework.STGSystem
 			Velocity = 0f;
 			MaxVelocity = 0f;
 			MinVelocity = 0f;
+
+			//ExecuteSystem?.Dispose();
 		}
 
 		public override bool Equals(object obj)
@@ -912,7 +801,7 @@ namespace NagaisoraFramework.STGSystem
 				return false;
 			}
 
-			var other = obj as STGComponment;
+			var other = obj as STGComponent;
 			return GUIDMD5String == other.GUIDMD5String;
 		}
 

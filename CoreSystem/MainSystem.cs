@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Reflection;
 using System.Collections;
+using System.Collections.Generic;
 
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -13,19 +14,14 @@ namespace NagaisoraFramework
 	using DataFileSystem;
 	using LogSystem;
 	using Miedia;
-	using STGSystem; 
+	using STGSystem;
+	using UnityEngine.UI;
 
 	public static class MainSystem
 	{
 		public static string Name;
 
 		public static string DataPath = GetDataPath();
-
-		public static STGControler GolbalSTGControler;
-
-		public static PoolManager GolbalPoolManager;
-
-		public static ReplaySystem GolbalReplaySystem;
 
 		public static BGMControl BGMControl;
 		public static AudioControl AudioControl;
@@ -59,20 +55,35 @@ namespace NagaisoraFramework
 		public static TimeSpan TotalRunTime;
 		public static TimeSpan PlayerTime;
 
-		public delegate void SelectControl(int STMA);
-
-		public delegate void KeyDownEvent(bool[] bools);
+		public delegate void KeyDownEvent(InputKey inputKey);
 		public static event KeyDownEvent KeyDown;
 
-		//public static event SelectControl SelMove;
+		public delegate void TimeUpdateEvent(TimeSpan timeSpan);
+		public static event TimeUpdateEvent GameTimeUpdate;
 
 		public static event EventHandler OnApplicationQuit;
 
 		public static LogSystem LogSystem;
 
+		public static ClockSystem ClockSystem;
+
+		public static GameObject STGControlerPrefab;
+
+		public static Dictionary<string, STGControler> STGControlers;
+		public static Dictionary<string, PoolManager> PoolManagers;
+		public static Dictionary<string, ReplaySystem> ReplaySystems;
+
+		public static PoolManager GolbalPoolManager => PoolManagers["Golbal"];
+
 		static MainSystem()
 		{
 			AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
+
+			STGControlers = new Dictionary<string, STGControler>();
+			PoolManagers = new Dictionary<string, PoolManager>();
+			ReplaySystems = new Dictionary<string, ReplaySystem>();
+
+			AddPoolManager("Golbal");
 		}
 
 		public static void InitLogSystem(string path)
@@ -87,11 +98,6 @@ namespace NagaisoraFramework
 			LogSystem = new LogSystem(outLivel, path);
 
 			Application.logMessageReceived += OnLogCallBack;
-		}
-
-		public static void InitGolbalPoolManager()
-		{
-			GolbalPoolManager = new PoolManager();
 		}
 
 		public static void MainSystemInit(string name)
@@ -173,28 +179,21 @@ namespace NagaisoraFramework
 		#region Event
 		public static void CallKeyDown(ushort keys)
 		{
-			BitArray bitArray = new BitArray(BitConverter.GetBytes(keys));
+			InputKey inputKey = new InputKey();
+			inputKey.FromHex(keys);
 
-			bool[] bools = new bool[bitArray.Count];
-			bitArray.CopyTo(bools, 0);
-
-			CallKeyDown(bools);
+			CallKeyDown(inputKey);
 		}
 
-		public static void CallKeyDown(bool[] keys)
+		public static void CallKeyDown(InputKey inputKey)
 		{
-			if (KeyDown == null)
-			{
-				return;
-			}
-
-			KeyDown(keys);
+			KeyDown?.Invoke(inputKey);
 		}
 
-		//public static void CallSelMove(int i)
-		//{
-		//	SelMove?.Invoke(i);
-		//}
+		public static void CallGameTimeUpdate(TimeSpan timeSpan)
+		{
+			GameTimeUpdate?.Invoke(timeSpan);
+		}
 		#endregion
 
 		#region Convert
@@ -324,6 +323,37 @@ namespace NagaisoraFramework
 		public static EventTriggerListener AddEventTriggerListener(GameObject Object)
 		{
 			return EventTriggerListener.Get(Object);
+		}
+
+		public static STGControler AddSTGControler(string name, KeyConfig keyConfig, RawImage renderTarget)
+		{
+			GameObject gameObject = GameObject.Instantiate(STGControlerPrefab);
+			gameObject.name = $"{name}_STGControler";
+			gameObject.transform.localScale = Vector3.one;
+			gameObject.transform.localPosition = (new Vector3(-1000, 0) * STGControlers.Count) + new Vector3(-1000, 0);
+
+			STGControlerInterface @interface = gameObject.GetComponent<STGControlerInterface>();
+
+			STGControler controler = new STGControler(name, @interface, ClockSystem, keyConfig, renderTarget);
+			STGControlers.Add(name, controler);
+
+			return controler;
+		}
+
+		public static PoolManager AddPoolManager(string name)
+		{
+			PoolManager poolManager = new PoolManager(name);
+			PoolManagers.Add(name, poolManager);
+
+			return poolManager;
+		}
+
+		public static ReplaySystem AddReplaySystem(string name, STGControler controler)
+		{
+			ReplaySystem replaySystem = new ReplaySystem(controler);
+			ReplaySystems.Add(name, replaySystem);
+
+			return replaySystem;
 		}
 
 		public static IEnumerator MoveToPosition(Transform transform, Vector3 position, float Speed)

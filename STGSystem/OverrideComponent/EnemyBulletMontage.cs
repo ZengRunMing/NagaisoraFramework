@@ -4,9 +4,9 @@ namespace NagaisoraFramework.STGSystem
 {
 	using static FrameworkMath;
 
-	public class EnemyBulletMontageControl : EnemyBulletControl
+	public class EnemyBulletMontage : EnemyBullet
 	{
-		public EnemyBulletControl[] Bullets;
+		public EnemyBullet[] Bullets;
 
 		public Vector2[] BulletVectors;
 
@@ -31,9 +31,9 @@ namespace NagaisoraFramework.STGSystem
 			}
 		}
 
-		public override void Move()
+		public override void OnMove()
 		{
-			base.Move();
+			base.OnMove();
 
 			float ADSAngle = EulerAngles_ADS(ViewAngle);
 

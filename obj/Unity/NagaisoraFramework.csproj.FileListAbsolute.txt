@@ -30,3 +30,35 @@ F:\Visual Studio Project\source\Nagaisora FrameWork Editor\NagaisoraFramework\bi
 F:\Visual Studio Project\source\Nagaisora FrameWork Editor\NagaisoraFramework\bin\Unity\System.Security.AccessControl.xml
 F:\Visual Studio Project\source\Nagaisora FrameWork Editor\NagaisoraFramework\bin\Unity\System.Security.Principal.Windows.xml
 F:\Visual Studio Project\source\Nagaisora FrameWork Editor\NagaisoraFramework\bin\Unity\LogSystem.dll
+F:\Visual Studio Project\source\Nagaisora Framework\NagaisoraFramework\bin\Unity\Melanchall_DryWetMidi_Native32.dll
+F:\Visual Studio Project\source\Nagaisora Framework\NagaisoraFramework\bin\Unity\Melanchall_DryWetMidi_Native64.dll
+F:\Visual Studio Project\source\Nagaisora Framework\NagaisoraFramework\bin\Unity\netstandard.dll
+F:\Visual Studio Project\source\Nagaisora Framework\NagaisoraFramework\bin\Unity\Melanchall_DryWetMidi_Native64.dylib
+F:\Visual Studio Project\source\Nagaisora Framework\NagaisoraFramework\bin\Unity\NagaisoraFramework.dll.config
+F:\Visual Studio Project\source\Nagaisora Framework\NagaisoraFramework\bin\Unity\NagaisoraFramework.dll
+F:\Visual Studio Project\source\Nagaisora Framework\NagaisoraFramework\bin\Unity\LogSystem.dll
+F:\Visual Studio Project\source\Nagaisora Framework\NagaisoraFramework\bin\Unity\Melanchall.DryWetMidi.dll
+F:\Visual Studio Project\source\Nagaisora Framework\NagaisoraFramework\bin\Unity\Microsoft.Win32.Registry.dll
+F:\Visual Studio Project\source\Nagaisora Framework\NagaisoraFramework\bin\Unity\System.Buffers.dll
+F:\Visual Studio Project\source\Nagaisora Framework\NagaisoraFramework\bin\Unity\System.ComponentModel.Annotations.dll
+F:\Visual Studio Project\source\Nagaisora Framework\NagaisoraFramework\bin\Unity\System.Data.SQLite.dll
+F:\Visual Studio Project\source\Nagaisora Framework\NagaisoraFramework\bin\Unity\System.Data.SQLite.EF6.dll
+F:\Visual Studio Project\source\Nagaisora Framework\NagaisoraFramework\bin\Unity\System.Data.SQLite.Linq.dll
+F:\Visual Studio Project\source\Nagaisora Framework\NagaisoraFramework\bin\Unity\System.Memory.dll
+F:\Visual Studio Project\source\Nagaisora Framework\NagaisoraFramework\bin\Unity\System.Numerics.Vectors.dll
+F:\Visual Studio Project\source\Nagaisora Framework\NagaisoraFramework\bin\Unity\System.Runtime.CompilerServices.Unsafe.dll
+F:\Visual Studio Project\source\Nagaisora Framework\NagaisoraFramework\bin\Unity\System.Security.AccessControl.dll
+F:\Visual Studio Project\source\Nagaisora Framework\NagaisoraFramework\bin\Unity\System.Security.Principal.Windows.dll
+F:\Visual Studio Project\source\Nagaisora Framework\NagaisoraFramework\bin\Unity\Melanchall.DryWetMidi.xml
+F:\Visual Studio Project\source\Nagaisora Framework\NagaisoraFramework\bin\Unity\Microsoft.Win32.Registry.xml
+F:\Visual Studio Project\source\Nagaisora Framework\NagaisoraFramework\bin\Unity\System.Buffers.xml
+F:\Visual Studio Project\source\Nagaisora Framework\NagaisoraFramework\bin\Unity\System.Data.SQLite.xml
+F:\Visual Studio Project\source\Nagaisora Framework\NagaisoraFramework\bin\Unity\System.Memory.xml
+F:\Visual Studio Project\source\Nagaisora Framework\NagaisoraFramework\bin\Unity\System.Numerics.Vectors.xml
+F:\Visual Studio Project\source\Nagaisora Framework\NagaisoraFramework\bin\Unity\System.Runtime.CompilerServices.Unsafe.xml
+F:\Visual Studio Project\source\Nagaisora Framework\NagaisoraFramework\bin\Unity\System.Security.AccessControl.xml
+F:\Visual Studio Project\source\Nagaisora Framework\NagaisoraFramework\bin\Unity\System.Security.Principal.Windows.xml
+F:\Visual Studio Project\source\Nagaisora Framework\NagaisoraFramework\obj\Unity\NagaisoraFramework.csproj.AssemblyReference.cache
+F:\Visual Studio Project\source\Nagaisora Framework\NagaisoraFramework\obj\Unity\NagaisoraFramework.csproj.CoreCompileInputs.cache
+F:\Visual Studio Project\source\Nagaisora Framework\NagaisoraFramework\obj\Unity\Nagaisor.D32D1065.Up2Date
+F:\Visual Studio Project\source\Nagaisora Framework\NagaisoraFramework\obj\Unity\NagaisoraFramework.dll

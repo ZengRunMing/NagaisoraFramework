@@ -5,7 +5,7 @@ namespace NagaisoraFramework.STGSystem
 	using static MainSystem;
 
 	//敌机子弹控制系统
-	public class EnemyBulletControl : BulletControl
+	public class EnemyBullet : Bullet
 	{
 		/// <summary>
 		/// 子弹的数据
@@ -106,7 +106,7 @@ namespace NagaisoraFramework.STGSystem
 		/// 敌机子弹的全判定函数，可以被重写
 		/// </summary>
 		/// <param name="Target">自机的STGComponment</param>
-		public override void Check(STGComponment Target)                      //基于父类派生重写的判定检查方法
+		public override void Check(STGComponent Target)                      //基于父类派生重写的判定检查方法
 		{
 			if (Target == null || Target.Disposed)
 			{
@@ -144,7 +144,7 @@ namespace NagaisoraFramework.STGSystem
 		/// </summary>
 		/// <param name="Target">自机的STGComponment</param>
 		/// <returns></returns>
-		public virtual bool GrazeCheck(STGComponment Target)                 //Graze判定方法，原理与标准判定类似
+		public virtual bool GrazeCheck(STGComponent Target)                 //Graze判定方法，原理与标准判定类似
 		{
 			if (Target == null || Target.Disposed)
 			{
@@ -180,7 +180,7 @@ namespace NagaisoraFramework.STGSystem
 		{
 			if (Delete_Effect)
 			{
-				STGControler.NewEnemyShootEffect<EnemyShootEffectControl>(Color, Order - 21, TransformPosition);
+				STGControler.NewEnemyShootEffect(Color, Order - 21, TransformPosition);
 			}
 
 			STGControler.EnemyBullets.Remove(this);

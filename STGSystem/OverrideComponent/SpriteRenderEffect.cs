@@ -3,7 +3,7 @@
 namespace NagaisoraFramework.STGSystem
 {
 	//敌机发射效果控制系统
-	public class SpriteRenderEffectControl : EffectControl
+	public class SpriteRenderEffect : Effect
 	{
 		public Vector2 Size;
 

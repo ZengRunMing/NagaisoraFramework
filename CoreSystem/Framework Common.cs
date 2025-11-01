@@ -1,136 +1,59 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.Collections;
 
 namespace NagaisoraFramework
 {
-	public enum BlendMode
+	public class InputKey
 	{
-		[Description("Alpha混合")]
-		AlphaBlend,
-		[Description("叠加 (高光)")]
-		Additive
-	}
+		public bool Up;
+		public bool Down;
+		public bool Left;
+		public bool Right;
 
-	//按需求添加
-	public enum SEType
-	{
-		AsName,
-		Select,
-		Ok,
-		Cancel,
-		Warning,
-		Pause,
-		Big,
-		Bonus,
-		Bonus2,
-		Bonus4,
-		Boon00,
-		Boon01,
-		CardGet,
-		Cat00,
-		Ch00,
-		Ch01,
-		Ch02,
-		Ch03,
-		Danmege00,
-		Danmege01,
-		Don00,
-		Enep00,
-		Enep01,
-		Enep02,
-		Etbreak,
-		Extend,
-		Extend2,
-		Fault,
-		Graze,
-		Gun00,
-		Heal,
-		Invalid,
-		Item00,
-		Item01,
-		Kira00,
-		Kira01,
-		Kira02,
-		Lazer00,
-		Lazer01,
-		Lazer02,
-		Lgods1,
-		Lgods2,
-		Lgods3,
-		Lgods4,
-		LgodsGet,
-		Msl,
-		Msl2,
-		Msl3,
-		Nep00,
-		Nodamage,
-		Noise,
-		Pin00,
-		Pin01,
-		Pidead00,
-		Pidead01,
-		Plst00,
-		Power0,
-		Power1,
-		Powerup,
-		Slash,
-		Tan00,
-		Tan01,
-		Tan02,
-		Tan03,
-		Timeout,
-		Timeout2,
-		Wolf,
-	}
+		public bool Shoot;
+		public bool Bomb;
 
-	public enum LaserType
-	{
-		Long,
-		Segmental,
-	}
+		public bool Slow;
 
-	public enum LSLogType
-	{
-		Info,
-		Warning,
-		Error,
-		Default,
-	}
+		public ushort ToHex()
+		{
+			BitArray bitArray = new BitArray(16);
 
-	public enum ClockMode
-	{
-		Internal = 0,
-		External = 1,
-	}
+			WriteBitarray(bitArray);
 
-	public enum IMMType
-	{
-		Int = 0,
-		Long = 1,
-		Float = 2,
-		Double = 3,
-		Bool = 4,
-		String = 5,
-		Char = 6,
-		Time = 7,
-		Vector2 = 8,
-		Vector3 = 9,
-		Vector6 = 10,
-	}
+			byte[] data = new byte[bitArray.Count / 8];
+			bitArray.CopyTo(data, 0);
 
-	public enum ShowFormType
-	{
-		CenterScene = 0,
-		WindowsDefaultLocation = 1,
+			return BitConverter.ToUInt16(data, 0);
+		}
 
-		Top = 2,
-		Bottom = 3,
-		Left = 4,
-		Right = 5,
+		public void FromHex(ushort i)
+		{
+			BitArray bitArray = new BitArray(BitConverter.GetBytes(i));
 
-		LeftBottom = 6,
-		LeftTop = 7,
+			ReadBitarray(bitArray);
+		}
 
-		RightBottom = 8,
-		RightTop = 9,
+		public virtual void WriteBitarray(BitArray bitArray)
+		{
+			Up = bitArray[0];
+			Down = bitArray[1];
+			Left = bitArray[2];
+			Right = bitArray[3];
+			Slow = bitArray[4];
+			Shoot = bitArray[5];
+			Bomb = bitArray[6];
+		}
+
+		public virtual void ReadBitarray(BitArray bitArray)
+		{
+			bitArray[0] = Up;
+			bitArray[1] = Down;
+			bitArray[2] = Left;
+			bitArray[3] = Right;
+			bitArray[4] = Slow;
+			bitArray[5] = Shoot;
+			bitArray[6] = Bomb;
+		}
 	}
 }

@@ -20,7 +20,7 @@ namespace NagaisoraFramework
 
 	public interface ISTGComponmentFlag : IFlag
 	{
-		STGComponment Componment { get; set; }
+		STGComponent Componment { get; set; }
 	}
 
 	public interface ITimeLineFlag<T>

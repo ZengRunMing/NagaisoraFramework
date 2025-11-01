@@ -2,7 +2,7 @@
 
 namespace NagaisoraFramework.STGSystem
 {
-	public class BossControl : EnemyControl
+	public class Boss : Enemy
 	{
 
 	}

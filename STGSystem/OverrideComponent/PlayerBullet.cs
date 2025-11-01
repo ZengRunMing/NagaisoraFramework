@@ -3,7 +3,7 @@
 namespace NagaisoraFramework.STGSystem
 {
 	//玩家子弹控制系统
-	public class PlayerBulletControl : BulletControl
+	public class PlayerBullet : Bullet
 	{
 		public PlayerBulletInfo BulletData
 		{
@@ -67,7 +67,7 @@ namespace NagaisoraFramework.STGSystem
 		{
 			base.OnUpdate();
 
-			EnemyControl[] enemys = STGControler.Enemys.ToArray();
+			Enemy[] enemys = STGControler.Enemys.ToArray();
 			foreach (var enemy in enemys)
 			{
 				Check(enemy);
@@ -100,7 +100,7 @@ namespace NagaisoraFramework.STGSystem
 			m_BulletDataChanged = false;
 		}
 
-		public override void Check(STGComponment Target)
+		public override void Check(STGComponent Target)
 		{
 			if (Target == null || Target.Disposed)
 			{
@@ -110,7 +110,7 @@ namespace NagaisoraFramework.STGSystem
 			if (HitCheck(Target))
 			{
 				BaseDelete();
-				Target.GetComponent<EnemyControl>().OnDamage(DamageValue);
+				Target.GetComponent<Enemy>().OnDamage(DamageValue);
 				return;
 			}
 		}

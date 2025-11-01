@@ -2,7 +2,7 @@
 
 namespace NagaisoraFramework.STGSystem
 {
-	public class PlayerControl : STGComponment
+	public class Player : STGComponent
 	{
 		[Header("系统参数 (PlayerControl)")]
 		public Animator Animator;
@@ -51,9 +51,9 @@ namespace NagaisoraFramework.STGSystem
 			AxisMove(MoveVectorX, MoveVectorY);
 		}
 
-		public override void Move()
+		public override void OnMove()
 		{
-			base.Move();
+			base.OnMove();
 
 			Vector2 position = TransformPosition;
 
@@ -78,7 +78,7 @@ namespace NagaisoraFramework.STGSystem
 			TransformPosition = position;
 		}
 
-		public override void KeyDown(bool[] keys)
+		public override void OnKeyDown(InputKey inputKey)
 		{
 			if (!STGControler.IsRunning)
 			{
@@ -88,11 +88,11 @@ namespace NagaisoraFramework.STGSystem
 			float x;
 			float y;
 
-			if (keys[0])
+			if (inputKey.Up)
 			{
 				y = 1;
 			}
-			else if (keys[1])
+			else if (inputKey.Down)
 			{
 				y = -1;
 			}
@@ -101,11 +101,11 @@ namespace NagaisoraFramework.STGSystem
 				y = 0;
 			}
 
-			if (keys[2])
+			if (inputKey.Left)
 			{
 				x = -1;
 			}
-			else if (keys[3])
+			else if (inputKey.Right)
 			{
 				x = 1;
 			}
@@ -114,7 +114,7 @@ namespace NagaisoraFramework.STGSystem
 				x = 0;
 			}
 
-			if (keys[4])
+			if (inputKey.Shoot)
 			{
 				IsShoot = true;
 			}
@@ -123,7 +123,7 @@ namespace NagaisoraFramework.STGSystem
 				IsShoot = false;
 			}
 
-			if (keys[6])
+			if (inputKey.Slow)
 			{
 				IsSolt = true;
 			}

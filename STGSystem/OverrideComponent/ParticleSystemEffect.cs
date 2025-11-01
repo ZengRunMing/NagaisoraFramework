@@ -3,7 +3,7 @@
 namespace NagaisoraFramework.STGSystem
 {
 	// 敌机击破效果控制系统
-	public class ParticleSystemEffectControl : EffectControl
+	public class ParticleSystemEffect : Effect
 	{
 		public bool Inited = false; // 是否已初始化
 
@@ -26,12 +26,12 @@ namespace NagaisoraFramework.STGSystem
 				ParticleSystemRenderer render = particleSystem.GetComponentInChildren<ParticleSystemRenderer>(); // 获取粒子系统渲染器组件
 
 				render.sortingLayerName = RenderLayerName;	// 设置粒子系统的渲染图层
-				render.sortingOrder = Order;			// 设置粒子系统的渲染顺序
+				render.sortingOrder = Order;				// 设置粒子系统的渲染顺序
 			}
 
 			Play();			// 播放粒子效果
 
-			Inited = true; // 标记为已初始化
+			Inited = true;	// 标记为已初始化
 		}
 
 		public void Play()

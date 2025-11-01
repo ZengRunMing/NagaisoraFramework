@@ -63,24 +63,20 @@ namespace NagaisoraFramework
 			StoryFaceControl.Clear();
 		}
 
-		public void KeyDown(bool[] keys)
+		public void KeyDown(InputKey keys)
 		{
 			if (!KeyEnable)
 			{
 				return;
 			}
 
-			BitArray bitArray = new BitArray(keys);
-
-			byte[] data = new byte[bitArray.Count / 8];
-			bitArray.CopyTo(data, 0);
-			ushort nowkey = BitConverter.ToUInt16(data, 0);
+			ushort nowkey = keys.ToHex();
 
 			if (nowkey != lastkey)
 			{
 				lastkey = nowkey;
 
-				if (keys[4])
+				if (keys.Shoot)
 				{
 					KeyEnable = false;
 					StoryCtrl();

@@ -1,6 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Reflection;
+﻿using System.Collections.Generic;
+
 using UnityEngine;
 
 namespace NagaisoraFramework.STGSystem
@@ -12,7 +11,7 @@ namespace NagaisoraFramework.STGSystem
 			Left, Middle, Right
 		}
 
-		public static (GameObject, T)[] NewCircularBullet<T>(string identifier, int order, int count, int type, int color, Vector2 position, float initialAngle, Assembly ECLAssembly, STGControler controler) where T : EnemyBulletControl
+		public static (GameObject, T)[] NewCircularBullet<T>(string identifier, int order, int count, int type, int color, Vector2 position, float initialAngle, STGControler controler) where T : EnemyBullet
 		{
 			initialAngle = FrameworkMath.EulerAngles_ADS(initialAngle);
 
@@ -21,16 +20,15 @@ namespace NagaisoraFramework.STGSystem
 
 			List<(GameObject, T)> results = new List<(GameObject, T)>();
 
-			controler.NewEnemyShootEffect<EnemyShootEffectControl>(color, 0, position, true, BlendMode.AlphaBlend);
+			controler.NewEnemyShootEffect(color, 0, position, true, BlendMode.AlphaBlend);
 
 			for (int i = 0; i < count; i++)
 			{
-				(GameObject obj, T Componment) = controler.NewEnemyBullet<T>(type, color, $"CircularBullet_{identifier}_{i}", order, position, Angle, false);
+				(GameObject obj, T Component) = controler.NewEnemyBullet<T>(type, color, $"CircularBullet_{identifier}_{i}", order, position, Angle, false);
 
-				Componment.Init(ECLAssembly);
-				Componment.ECLControler?.Run();
+				Component.Init();
 
-				results.Add((obj, Componment));
+				results.Add((obj, Component));
 
 				Angle += AngleStep;
 			}
@@ -38,7 +36,7 @@ namespace NagaisoraFramework.STGSystem
 			return results.ToArray();
 		}
 
-		public static (GameObject, T)[] NewPolygonalRingBullet<T>(string identifier, int order, int count, int type, int color, Vector2 position, float initialAngle, Assembly ECLAssembly, STGControler controler) where T : EnemyBulletControl
+		public static (GameObject, T)[] NewPolygonalRingBullet<T>(string identifier, int order, int count, int type, int color, Vector2 position, float initialAngle, STGControler controler) where T : EnemyBullet
 		{
 			initialAngle = FrameworkMath.EulerAngles_ADS(initialAngle);
 
@@ -47,16 +45,15 @@ namespace NagaisoraFramework.STGSystem
 
 			List<(GameObject, T)> results = new List<(GameObject, T)>();
 
-			controler.NewEnemyShootEffect<EnemyShootEffectControl>(color, 0, position, true, BlendMode.AlphaBlend);
+			controler.NewEnemyShootEffect(color, 0, position, true, BlendMode.AlphaBlend);
 
 			for (int i = 0; i < count; i++)
 			{
-				(GameObject obj, T Componment) = controler.NewEnemyBullet<T>(type, color, $"PolygonalRingBullet_{identifier}_{i}", order, position, Angle, false);
+				(GameObject obj, T Component) = controler.NewEnemyBullet<T>(type, color, $"PolygonalRingBullet_{identifier}_{i}", order, position, Angle, false);
+				
+				Component.Init();
 
-				Componment.Init(ECLAssembly);
-				Componment.ECLControler?.Run();
-
-				results.Add((obj, Componment));
+				results.Add((obj, Component));
 
 				Angle += AngleStep;
 			}
@@ -64,7 +61,7 @@ namespace NagaisoraFramework.STGSystem
 			return results.ToArray();
 		}
 
-		public static (GameObject, T)[] NewSectorBullet<T>(string identifier, int order, int count, int type, int color, Vector2 position, float unilateralAngle, float initialAngle, AlignmentMode mode, Assembly ECLAssembly, STGControler controler) where T : EnemyBulletControl
+		public static (GameObject, T)[] NewSectorBullet<T>(string identifier, int order, int count, int type, int color, Vector2 position, float unilateralAngle, float initialAngle, AlignmentMode mode, STGControler controler) where T : EnemyBullet
 		{
 			initialAngle = FrameworkMath.EulerAngles_ADS(initialAngle);
 
@@ -87,16 +84,15 @@ namespace NagaisoraFramework.STGSystem
 
 			List<(GameObject, T)> results = new List<(GameObject, T)>();
 
-			controler.NewEnemyShootEffect<EnemyShootEffectControl>(color, 0, position, true, BlendMode.AlphaBlend);
+			controler.NewEnemyShootEffect(color, 0, position, true, BlendMode.AlphaBlend);
 
 			for (int i = 0; i < count; i++)
 			{
-				(GameObject obj, T Componment) = controler.NewEnemyBullet<T>(type, color, $"SectorBullet_{identifier}_{i}", order, position, Angle, false);
-				
-				Componment.Init(ECLAssembly);
-				Componment.ECLControler?.Run();
+				(GameObject obj, T Component) = controler.NewEnemyBullet<T>(type, color, $"SectorBullet_{identifier}_{i}", order, position, Angle, false);
 
-				results.Add((obj, Componment));
+				Component.Init();
+
+				results.Add((obj, Component));
 
 				Angle += AngleStep;
 			}
@@ -104,21 +100,20 @@ namespace NagaisoraFramework.STGSystem
 			return results.ToArray();
 		}
 
-		public static (GameObject, T) NewRandomDirectionBullet<T>(string identifier, int order, int type, int color, Vector2 position, float angleMin, float angleMax, Assembly ECLAssembly, STGControler controler) where T : EnemyBulletControl
+		public static (GameObject, T) NewRandomDirectionBullet<T>(string identifier, int order, int type, int color, Vector2 position, float angleMin, float angleMax, STGControler controler) where T : EnemyBullet
 		{
 			float angle = MainSystem.RandomFloat(angleMin, angleMax);
 
-			controler.NewEnemyShootEffect<EnemyShootEffectControl>(color, 0, position, true, BlendMode.AlphaBlend);
+			controler.NewEnemyShootEffect(color, 0, position, true, BlendMode.AlphaBlend);
 			
-			(GameObject obj, T Componment) = controler.NewEnemyBullet<T>(type, color, $"RandomDirectionBullet_{identifier}", order, position, angle, false);
-			
-			Componment.Init(ECLAssembly);
-			Componment.ECLControler?.Run();
-			
-			return (obj, Componment);
+			(GameObject obj, T Component) = controler.NewEnemyBullet<T>(type, color, $"RandomDirectionBullet_{identifier}", order, position, angle, false);
+
+			Component.Init();
+
+			return (obj, Component);
 		}
 
-		public static (GameObject, T) NewAimedBullet<T>(string identifier, int order, int type, int color, Vector2 position, Vector2 targetPosition, float initialAngle, Assembly ECLAssembly, STGControler controler) where T : EnemyBulletControl
+		public static (GameObject, T) NewAimedBullet<T>(string identifier, int order, int type, int color, Vector2 position, Vector2 targetPosition, float initialAngle, STGControler controler) where T : EnemyBullet
 		{
 			initialAngle = FrameworkMath.EulerAngles_ADS(initialAngle);
 
@@ -126,14 +121,13 @@ namespace NagaisoraFramework.STGSystem
 
 			float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg + initialAngle;
 			
-			controler.NewEnemyShootEffect<EnemyShootEffectControl>(color, 0, position, true, BlendMode.AlphaBlend);
+			controler.NewEnemyShootEffect(color, 0, position, true, BlendMode.AlphaBlend);
 			
-			(GameObject obj, T Componment) = controler.NewEnemyBullet<T>(type, color, $"AimedBullet_{identifier}", order, position, angle, false);
-			
-			Componment.Init(ECLAssembly);
-			Componment.ECLControler?.Run();
-			
-			return (obj, Componment);
+			(GameObject obj, T Component) = controler.NewEnemyBullet<T>(type, color, $"AimedBullet_{identifier}", order, position, angle, false);
+
+			Component.Init();
+
+			return (obj, Component);
 		}
 
 		public static T[] RandomArrayArrangement<T>(T[] i)

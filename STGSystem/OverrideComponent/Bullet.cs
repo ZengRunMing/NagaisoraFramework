@@ -2,7 +2,7 @@
 
 namespace NagaisoraFramework.STGSystem
 {
-    public class BulletControl : STGComponment
+    public class Bullet : STGComponent
 	{
 		public bool Determing = true;
 		public bool Delete_Effect = false;
@@ -17,7 +17,7 @@ namespace NagaisoraFramework.STGSystem
 		/// 子弹组件的全判定函数，可以通过重写添加需要执行的判定程序，不需要回调父类的函数
 		/// </summary>
 		/// <param name="Target">针对的STGComponment</param>
-		public virtual void Check(STGComponment Target)
+		public virtual void Check(STGComponent Target)
 		{
 
 		}
