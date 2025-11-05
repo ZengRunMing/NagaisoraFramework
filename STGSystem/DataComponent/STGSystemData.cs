@@ -23,9 +23,9 @@ namespace NagaisoraFramework.STGSystem
 	[Serializable]
 	public struct PlayerInfo
 	{
-		public string Name;
+		public int Type;
 
-		public GameObject Prefabricate;
+		public RuntimeAnimatorController AnimatorController;
 		public Vector2 DetermineOffset;
 		public float AngleOffsetCompensation;
 		public float DetermineRadius;
