@@ -31,7 +31,9 @@ namespace NagaisoraFramework.STGSystem
 
 		public Thread SubUpdateThread;
 
-		public static List<Timer> Timers;
+		public List<Timer> Timers;
+		public List<Condition> Conditions;
+		public Dictionary<string, SpellCard> SpellCards;
 
 		public Camera Camera { get { return Interface.Camera; } set { Interface.Camera = value; } }
 		public GameObject Parent { get { return Interface.Parent; } set { Interface.Parent = value; } }
@@ -125,6 +127,12 @@ namespace NagaisoraFramework.STGSystem
 
 			// 创建定时器列表
 			Timers = new List<Timer>();
+
+			// 创建判断程序列表
+			Conditions = new List<Condition>();
+
+			// 创建符卡注册表
+			SpellCards = new Dictionary<string, SpellCard>();
 
 			// 创建对象栈列表
 			Enemys = new List<Enemy>();
@@ -433,6 +441,19 @@ namespace NagaisoraFramework.STGSystem
 			IsRunning = false;
 		}
 
+		public Timer RegisterTimer(TimeSpan setTime, Action executeAction)
+		{
+			Timer timer = new Timer()
+			{
+				SetTime = setTime,
+				Action = executeAction
+			};
+
+			RegisterTimer(timer);
+
+			return timer;
+		}
+
 		public void RegisterTimer(Timer timer)
 		{
 			Timers.Add(timer);
@@ -441,6 +462,35 @@ namespace NagaisoraFramework.STGSystem
 		public void UnRegisterTimer(Timer timer)
 		{
 			Timers.Remove(timer);
+		}
+
+		public Condition RegisterCondition(Func<bool> condition, Action executeAction, bool loopExecution)
+		{
+			Condition Condition = new Condition(condition, executeAction, loopExecution);
+
+			RegisterCondition(Condition);
+
+			return Condition;
+		}
+
+		public void RegisterCondition(Condition condition)
+		{
+			Conditions.Add(condition);
+		}
+
+		public void UnRegisterCondition(Condition condition)
+		{
+			Conditions.Remove(condition);
+		}
+
+		public void RegisterSpellCard(SpellCard spellCard)
+		{
+			SpellCards.Add(spellCard.Name, spellCard);
+		}
+
+		public void UnRegisterSpellCard(string name)
+		{
+			SpellCards.Remove(name);
 		}
 
 		public GameObject NewObject(Type type, string name, GameObject parent)
@@ -655,9 +705,9 @@ namespace NagaisoraFramework.STGSystem
 			return (Object, component);
 		}
 
-		public void SpellCardAttack(string name, uint score)
+		public void SpellCardAttack(string name)
 		{
-
+			SpellCard spellCard = SpellCards[name];
 		}
 	}
 }

@@ -520,6 +520,7 @@
     <Compile Include="STGSystem\Controler\STGControlerInterface.cs" />
     <Compile Include="STGSystem\GenericComponent\BendLaserMesh.cs" />
     <Compile Include="STGSystem\Controler\ExecuteSystem.cs" />
+    <Compile Include="STGSystem\GenericComponent\SpellCard.cs" />
     <Compile Include="STGSystem\GenericComponent\STGComponent.cs" />
     <Compile Include="STGSystem\Controler\STGControlerTimeLineControler.cs" />
     <Compile Include="STGSystem\OverrideComponent\Boss.cs" />
